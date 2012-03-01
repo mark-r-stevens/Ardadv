@@ -15,32 +15,87 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// Define the Pins for the LED lights
+//
 #define LedPinR 10
 #define LedPinG 11
 #define LedPinY 12
 
-void setup() {                
-  // initialize the digital pin as an output.
-  // Pin 13 has an LED connected on most Arduino boards:
+// Define the Pin for the button
+//
+#define Button 2
+
+// The count of the number of button presses
+//
+int count = 0;
+
+// Used to detect the pressed event
+//
+enum ButtonState {ButtonPressed=0, ButtonReleased=1};
+ButtonState state = ButtonReleased;
+
+// Initialize the Led pins to be output. Initialize the button to
+// be input. Set the red led on. This is a one time call on startup.
+//
+void setup() 
+{                
+
+  // Setup the serial connection to see output
+  //
+  Serial.begin(9600);
+  Serial.flush();
+
+  // Sepcify pin usage
+  //
   pinMode(LedPinR, OUTPUT);     
   pinMode(LedPinG, OUTPUT);     
   pinMode(LedPinY, OUTPUT);     
+  pinMode(Button,  INPUT);
+
+  // Turn the red led on
+  //
+  digitalWrite(LedPinR, HIGH);
 }
 
-void loop() {
-  digitalWrite(LedPinG, HIGH);   // set the LED on
-  delay(1000);              // wait for a second
-  digitalWrite(LedPinG, LOW);    // set the LED off
-  delay(1000);              // wait for a second
+// This is called repeatedly in an event loop. The loop checks
+// for the button press event. When it is pressed, the next light
+// in the sequence is turned on (and the others are turned off).
+//
+void loop() 
+{
 
-  digitalWrite(LedPinY, HIGH);   // set the LED on
-  delay(1000);              // wait for a second
-  digitalWrite(LedPinY, LOW);    // set the LED off
-  delay(1000);              // wait for a second
+  // Will be true if the button was pressed
+  //
+  bool trigger = false;
+  
+  // Check if the button is pressed
+  //
+  if (digitalRead(Button) == HIGH)
+  {
+    if (state == ButtonReleased)
+    {
+      state = ButtonPressed;
+      trigger = true;
+    }
+  }
+  else
+  {
+    state = ButtonReleased;
+  }
 
-  digitalWrite(LedPinR, HIGH);   // set the LED on
-  delay(1000);              // wait for a second
-  digitalWrite(LedPinR, LOW);    // set the LED off
-  delay(1000);              // wait for a second
+  // If the button was pressed, turn on the next light 
+  // in the sequence (wrap back around)
+  //
+  if (trigger)
+  {
+    digitalWrite(count % 3 + LedPinR, LOW);
+    digitalWrite(++count % 3 + LedPinR, HIGH);
+    Serial.print("Event triggered. Count=");
+    Serial.println(count);
+    Serial.flush();
+    delay(100);
+  }  
 
 }
+
+
