@@ -15,17 +15,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Setup for Qt
 #
-set(Accelerometer_SRCS  Accelerometer.cpp)
-set(Accelerometer_HDRS  Accelerometer.h)
-set(Accelerometer_BOARD uno)
+include(${QT_USE_FILE})
 
-## Generate the library
+## Make sure qt is in the header path
 #
-generate_arduino_library(Accelerometer)
+include_directories(${QT_INCLUDES})
+include_directories(${OPENGL_INCLUDE_DIR})
 
-## Add the subdirectory
+## The qt files
 #
-add_subdirectory(test)
+QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
+  Serial.h
+)
 
+## Add the executable
+#
+add_executable(AccViewer
+  Main.cpp
+  ${ACCVIEWER_MOC_HDRS}
+  ${ACCVIEWER_RCC_SRCS}
+)
+
+## Add the link libraries
+#
+target_link_libraries(AccViewer
+  ${QT_LIBRARIES}
+)

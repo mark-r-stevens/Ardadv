@@ -125,19 +125,24 @@ function(GENERATE_ARDUINO_LIBRARY TARGET_NAME)
         set(INPUT_AUTOLIBS False)
     endif()
 
-    message(STATUS "Generating ${TARGET_NAME}")
+    #message(STATUS "Generating TARGET_NAME=${TARGET_NAME}")
+    #message(STATUS "Generating INPUT_AUTOLIBS=${INPUT_AUTOLIBS}")
     
     set(ALL_LIBS)
     set(ALL_SRCS ${INPUT_SRCS} ${INPUT_HDRS})
 
     setup_arduino_compiler(${INPUT_BOARD})
-    setup_arduino_core(CORE_LIB ${INPUT_BOARD})
+    setup_arduino_core(CORE_LIB ${TARGET_NAME} ${INPUT_BOARD})
 
     if(INPUT_AUTOLIBS)
         setup_arduino_libraries(ALL_LIBS  ${INPUT_BOARD} "${ALL_SRCS}")
     endif()
 
     list(APPEND ALL_LIBS ${CORE_LIB} ${INPUT_LIBS})
+    #message(STATUS "GENERATE_ARDUINO_LIBRARY ALL_LIBS=${ALL_LIBS}")
+    #message(STATUS "GENERATE_ARDUINO_LIBRARY CORE_LIB=${CORE_LIB}")
+    #message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_LIBS=${INPUT_LIBS}")
+    #message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_BOARD=${INPUT_BOARD}")
         
     add_library(${TARGET_NAME} ${ALL_SRCS})
     target_link_libraries(${TARGET_NAME} ${ALL_LIBS})
@@ -161,13 +166,13 @@ function(GENERATE_ARDUINO_FIRMWARE TARGET_NAME)
         set(INPUT_AUTOLIBS False)
     endif()
 
-    message(STATUS "Generating ${TARGET_NAME}")
+    #message(STATUS "Generating ${TARGET_NAME}")
 
     set(ALL_LIBS)
     set(ALL_SRCS ${INPUT_SRCS} ${INPUT_HDRS})
 
     setup_arduino_compiler(${INPUT_BOARD})
-    setup_arduino_core(CORE_LIB ${INPUT_BOARD})
+    setup_arduino_core(CORE_LIB ${TARGET_NAME} ${INPUT_BOARD})
 
     #setup_arduino_sketch(SKETCH_SRCS ${INPUT_SKETCHES})
 
@@ -177,6 +182,7 @@ function(GENERATE_ARDUINO_FIRMWARE TARGET_NAME)
 
     
     list(APPEND ALL_LIBS ${CORE_LIB} ${INPUT_LIBS})
+    #message(STATUS "GENERATE_ARDUINO_FIRMWARE CORE_LIB=${CORE_LIB}")
     
     setup_arduino_target(${TARGET_NAME} "${ALL_SRCS}" "${ALL_LIBS}")
     
@@ -255,20 +261,23 @@ macro(setup_arduino_compiler BOARD_ID)
     endif()
 endmacro()
 
-# setup_arduino_core(VAR_NAME BOARD_ID)
+# setup_arduino_core(VAR_NAME TARGET_NAME BOARD_ID)
 #
 #        VAR_NAME    - Variable name that will hold the generated library name
+#        TARGET_NAME - Target name that will hold the generated library name
 #        BOARD_ID    - Arduino board id
 #
 # Creates the Arduino Core library for the specified board,
 # each board gets it's own version of the library.
 #
-function(setup_arduino_core VAR_NAME BOARD_ID)
-    set(CORE_LIB_NAME ${BOARD_ID}_CORE)
+function(setup_arduino_core VAR_NAME TARGET_NAME BOARD_ID)
+    set(CORE_LIB_NAME ${TARGET_NAME}_${BOARD_ID}_CORE)
     set(BOARD_CORE ${${BOARD_ID}.build.core})
     if(BOARD_CORE AND NOT TARGET ${CORE_LIB_NAME})
         set(BOARD_CORE_PATH ${ARDUINO_CORES_PATH}/${BOARD_CORE})
         find_sources(CORE_SRCS ${BOARD_CORE_PATH} True)
+        #message(STATUS "setup_arduino_core BOARD_CORE=${BOARD_CORE}")
+        #message(STATUS "setup_arduino_core VAR_NAME=${VAR_NAME}")
         # Debian/Ubuntu fix
         list(REMOVE_ITEM CORE_SRCS "${BOARD_CORE_PATH}/main.cxx")
         add_library(${CORE_LIB_NAME} ${CORE_SRCS})

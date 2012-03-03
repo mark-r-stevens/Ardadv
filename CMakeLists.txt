@@ -45,4 +45,5 @@ include_directories(.)
 ## Add the subdirectory
 #
 add_subdirectory(sensors)
+add_subdirectory(host)
 

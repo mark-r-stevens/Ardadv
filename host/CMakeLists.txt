@@ -15,17 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Add the qt dependency
 #
-set(Accelerometer_SRCS  Accelerometer.cpp)
-set(Accelerometer_HDRS  Accelerometer.h)
-set(Accelerometer_BOARD uno)
+find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtOpenGL QtNetwork QtTest QtSql)
+if(QT_FOUND)
+  message(FATAL_ERROR "Qt 4.8.0 not found")
+endif()
 
-## Generate the library
+## Add the subdirectories
 #
-generate_arduino_library(Accelerometer)
-
-## Add the subdirectory
-#
-add_subdirectory(test)
+add_subdirectory(accviewer)
 

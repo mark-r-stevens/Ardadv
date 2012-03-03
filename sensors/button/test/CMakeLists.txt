@@ -15,17 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Arduino Target board
-#
-set(Test_BOARD uno)              
-set(Test_SRCS  Test.cpp)  
-set(Test_LIBS  Button)
-
 ## Serial upload port
 #
-set(Test_PORT /dev/cu.usbmodem621)          
+set(ButtonTest_PORT /dev/cu.usbmodem621)      
+
+## Arduino Target board
+#
+set(ButtonTest_BOARD uno)              
+set(ButtonTest_SRCS  Test.cpp)  
+set(ButtonTest_LIBS  Button)
 
 ##  Target generation
 #
-generate_arduino_firmware(Test)
+generate_arduino_firmware(ButtonTest)
 

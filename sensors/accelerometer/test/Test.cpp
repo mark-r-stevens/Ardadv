@@ -19,30 +19,13 @@
 //
 #include "Arduino.h"
 
-// The button include
+// The accelerometer
 //
-#include <sensors/button/Button.h>
+#include <sensors/accelerometer/Accelerometer.h>
+ardadv::sensors::accelerometer::Accelerometer accelerometer;
 
-// Define the Pins for the LED lights
-//
-#define LedPinR 10
-#define LedPinG 11
-#define LedPinY 12
-
-// Define the Pin for the button
-//
-#define ButtonPin 2
-
-// The count of the number of button presses
-//
-int count = 0;
-
-// Used to detect the pressed event
-//
-ardadv::sensors::button::Button button;
-
-// Initialize the Led pins to be output. Initialize the button to
-// be input. Set the red led on. This is a one time call on startup.
+// Initialize the accelerometer pins to be output. Initialize the button to
+// be input. This is a one time call on startup.
 //
 void setup() 
 {                
@@ -52,19 +35,21 @@ void setup()
   Serial.begin(9600);
   Serial.flush();
 
-  // Sepcify pin usage
+  // Initialize the accelerometer
   //
-  pinMode(LedPinR, OUTPUT);     
-  pinMode(LedPinG, OUTPUT);     
-  pinMode(LedPinY, OUTPUT);
+  typedef ardadv::sensors::accelerometer::Accelerometer Accelerometer;
+  accelerometer.setup(Accelerometer::X(A5),
+                      Accelerometer::Y(A4),
+                      Accelerometer::Z(A3),
+                      Accelerometer::S(4));
 
-  // Initialize the button
+  // Log a header for debugging output
   //
-  button.setPin(ButtonPin);
-
-  // Turn the red led on
-  //
-  digitalWrite(LedPinR, HIGH);
+  Serial.print("%% ");
+  Serial.print(Accelerometer::Vendor());
+  Serial.print("\t");
+  Serial.println(Accelerometer::PartNumber());
+  Serial.println("%% Time, X, Y, Z");
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -74,18 +59,17 @@ void setup()
 void loop() 
 {
 
-  // If the button was pressed, turn on the next light 
-  // in the sequence (wrap back around)
+  // Update the state
   //
-  if (button.check() == ardadv::sensors::button::Button::Pressed)
-  {
-    digitalWrite(  count % 3 + LedPinR, LOW);
-    digitalWrite(++count % 3 + LedPinR, HIGH);
-    Serial.print("Event triggered. Count=");
-    Serial.println(count);
-    Serial.flush();
-    delay(100);
-  }  
+  accelerometer.update();
+
+  // Log debugging output
+  //
+  Serial.println(millis());
+
+  // Add a small delay
+  //
+  delay(100);
 
 }
 

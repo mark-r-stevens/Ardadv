@@ -1,68 +1,76 @@
-/*############### VIRTUABOTIX BASIC ACCELEROMETER CODE #########################
-This code is meant to serve as the most basic example of how to read out
-from the X Y and Z axis as raw sensor readings.
+// Demonstration of using LED and pushbuttons on an Arduino UNO
+//
+// Copyright (C) 2012 Mark R. Stevens
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-            ######################################################
- TO PIN A0  #                                                    # To 5 Volts
-       ######                                                    ######
-       #    #     X Axis                              5 Volt     #    #
-       ######                                                    ######
- TO PIN A1  #                                                    #
-       ######                                                    ######
-       #    #     Y Axis                              3.3 Volt   #    #
-       ######                                                    ######
- TO PIN A2  #                                                    # To Ground
-       ######                                                    ######
-       #    #     Z Axis                              Ground     #    #
-       ######                                                    ######
- TO PIN 4   #                                                    #
-       ######                                                    ######
-       #    #     Sleep                 GS (Sensitivity Select)  #    #
-       ######                                                    ######
-            #                                                    #
-       ######                                                    ######
-       #    #     0G                             ST (Self Test)  #    #
-       ######                                                    ######
-            #                                                    #
-            ######################################################
-    
- * Find more free code, and great products at http://www.virtuabotix.com/
- * ------------------------------------------------------------------------------
- * $Author: Mr. Joe $
- * $Date: 2011-11-5 $
- * $Revision: 0     $
- * ------------------------------------------------------------------------------
-################################################################################*/
+#include <sensors/accelerometer/Accelerometer.h>
 
-int sleepPin= 4; //Turning sleep high turns on the Accelerometer
-int xpin= A0;
-int ypin = A1;
-int zpin = A2;
+#include "Arduino.h"
 
-void setup()
+namespace ardadv
 {
-  Serial.begin(9600);
-  
-  pinMode(sleepPin,OUTPUT);
-  digitalWrite(sleepPin, HIGH);//turns off sleep mode and activates device
-  
-  pinMode(xpin, INPUT);//input mode
-  digitalWrite(xpin, HIGH);//turn on pull up resistor
-  
-  pinMode(ypin, INPUT);//input mode
-  digitalWrite(ypin, HIGH);//turn on pull up resistor
-  
-  pinMode(zpin, INPUT);//input mode
-  digitalWrite(zpin, HIGH);//turn on pull up resistor
+  namespace sensors
+  {
+    namespace accelerometer
+    {
+      Accelerometer::Accelerometer()
+      : mPinX(-1)
+      , mPinY(-1)
+      , mPinZ(-1)
+      , mPinSleep(-1)
+      {
+      }
+      void Accelerometer::setup(const X& x, const Y& y, const Z& z, const S& s)
+      {
+
+        // Store the pins
+        //
+        mPinX     = x;
+        mPinY     = y;
+        mPinZ     = z;
+        mPinSleep = s;
+
+        // Set the sleep pin to high activating the device
+        //
+        ::pinMode(mPinSleep,OUTPUT);
+        ::digitalWrite(mPinSleep, HIGH);
+
+        // Activate the x pin
+        //
+        ::pinMode(mPinX, INPUT);
+        ::digitalWrite(mPinX, HIGH);
+
+        // Activate the y pin
+        //
+        ::pinMode(mPinY, INPUT);
+        ::digitalWrite(mPinY, HIGH);
+
+        // Activate the z pin
+        //
+        ::pinMode(mPinZ, INPUT);
+        ::digitalWrite(mPinZ, HIGH);
+
+
+      }
+      void Accelerometer::update()
+      {
+        mValueX = analogRead(mPinX);
+        mValueY = analogRead(mPinY);
+        mValueZ = analogRead(mPinZ);
+      }
+    }
+  }
 }
 
-void loop()
-{
-delay(2000); //Delay for readability
-Serial.print("X Reading: "); 
-Serial.println(analogRead(xpin), DEC);
-Serial.print("Y Reading: "); 
-Serial.println(analogRead(ypin), DEC);
-Serial.print("Z Reading: "); 
-Serial.println(analogRead(zpin), DEC);
-}
