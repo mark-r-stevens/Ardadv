@@ -17,8 +17,12 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMainWindow>
+#include <QTextEdit>
 
 #include <accviewer/MainWindow.h>
+#include <accviewer/CentralWidget.h>
+#include <accviewer/Serial.h>
 
 namespace ardadv
 {
@@ -27,45 +31,38 @@ namespace ardadv
     MainWindow::MainWindow()
     {
 
-      // Grab keyboard events
+      // Set the central widget
       //
-      setFocusPolicy(Qt::StrongFocus);
+      mCentralWidget = new CentralWidget(this);
+      setCentralWidget(mCentralWidget);
 
       // Create the controls docking area
       //
       QDockWidget *qDockWidget = new QDockWidget(tr("Raw input"), this);
       qDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-      //mControls = new Controls(qDockWidget);
-      //qDockWidget->setWidget(mControls);
-      qDockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+      mTextEdit = new QTextEdit(qDockWidget);
+      qDockWidget->setWidget(mTextEdit);
       addDockWidget(Qt::BottomDockWidgetArea, qDockWidget);
 
-      // Set the central widget
+      // Create the serial reader
       //
-      //mCentralWidget = new CentralWidget;
-      //setCentralWidget(mCentralWidget);
-
-      // Create the file menu
-      //
-      QAction* qAction = new QAction(tr("&Quit"), this);
-      qAction->setShortcuts(QKeySequence::Quit);
-      qAction->setStatusTip(tr("Quit the application"));
-      connect(qAction, SIGNAL(triggered()), this, SLOT(close()));
-      QMenu *qMenu = menuBar()->addMenu(tr("&File"));
-      qMenu->addAction(qAction);
+      mSerial = new Serial;
+      connect(mSerial,
+              SIGNAL(line(const QString&)),
+              this,
+              SLOT(line(const QString&)));
 
       // Create the status bar
       //
       statusBar()->showMessage(tr("Ready"));
 
-      // Unified title and toolbar
-      //
-      setUnifiedTitleAndToolBarOnMac(true);
-
       // Set the window title
       //
       setWindowTitle(tr("Accelerometer Viewer"));
 
+    }
+    void MainWindow::line(const QString& str)
+    {
     }
   }
 }

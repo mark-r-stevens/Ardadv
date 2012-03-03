@@ -25,6 +25,7 @@ include(${QT_USE_FILE})
 ## The qt files
 #
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
+  CentralWidget.h
   MainWindow.h
   Serial.h
 )
@@ -32,6 +33,8 @@ QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
 ## Add the executable
 #
 add_executable(AccViewer
+  CentralWidget.cpp
+  CentralWidget.h
   Main.cpp
   MainWindow.cpp
   MainWindow.h
@@ -43,4 +46,5 @@ add_executable(AccViewer
 #
 target_link_libraries(AccViewer
   ${QT_LIBRARIES}
+  ${OPENGL_LIBRARIES}
 )

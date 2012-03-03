@@ -30,6 +30,13 @@ if(NOT QT_FOUND)
   message(FATAL_ERROR "Error: Qt 4.8.0 not found.")
 endif()
 
+## Add the opengl dependency
+#
+find_package(OpenGL)
+if(NOT OPENGL_FOUND)
+  message(FATAL_ERROR "ERROR: opengl not found")   
+endif()
+
 ## Make sure the top level directory is set up in the include path
 #
 include_directories(.)

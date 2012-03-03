@@ -29,9 +29,12 @@ namespace ardadv
     //!
     class Serial : public QThread
     {
+      Q_OBJECT
     public:
 
       //! @brief Constructor
+      //!
+      //! @param[in] parent the parent widget
       //!
       inline Serial()
       {
@@ -51,6 +54,14 @@ namespace ardadv
       inline void run()
       {
       }
+
+    signals:
+
+      //! @brief Emitted when new data is available on the terminal
+      //!
+      //! @param[in] str The string read
+      //
+      void line(const QString& str);
 
     private:
 

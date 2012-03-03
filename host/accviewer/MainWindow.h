@@ -18,10 +18,14 @@
 
 #include <QMainWindow>
 
+class QTextEdit;
+
 namespace ardadv
 {
   namespace accviewer
   {
+    class CentralWidget;
+    class Serial;
 
     //! @class MainWindow
     //!
@@ -39,10 +43,27 @@ namespace ardadv
       //!
       MainWindow();
 
-    protected:
+    public slots:
+
+      //! @brief Emitted when new data is available on the terminal
+      //!
+      //! @param[in] str The string read
+      //
+      void line(const QString& str);
 
     private:
 
+      //! @brief The raw output text stream
+      //!
+      QTextEdit* mTextEdit;
+
+      //! @brief The central widget
+      //!
+      CentralWidget* mCentralWidget;
+
+      //! @brief The listener for serial data
+      //!
+      Serial* mSerial;
     };
   }
 }
