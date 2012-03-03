@@ -15,14 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+## Minimum cmake required
+#
+cmake_minimum_required(VERSION 2.8)
+
+## The default project
+#
+project(ArdAdvHost C CXX)
+
 ## Add the qt dependency
 #
 find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtOpenGL QtNetwork QtTest QtSql)
-if(QT_FOUND)
-  message(FATAL_ERROR "Qt 4.8.0 not found")
+if(NOT QT_FOUND)
+  message(FATAL_ERROR "Error: Qt 4.8.0 not found.")
 endif()
 
-## Add the subdirectories
+## Make sure the top level directory is set up in the include path
+#
+include_directories(.)
+
+## Add the subdirectory
 #
 add_subdirectory(accviewer)
 

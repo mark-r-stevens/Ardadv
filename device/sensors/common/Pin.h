@@ -1,5 +1,3 @@
-// Demonstration of using LED and pushbuttons on an Arduino UNO
-//
 // Copyright (C) 2012 Mark R. Stevens
 //
 // This program is free software: you can redistribute it and/or modify

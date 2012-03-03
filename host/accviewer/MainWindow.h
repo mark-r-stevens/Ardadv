@@ -13,33 +13,38 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <accviewer/MainWindow.h>
+#ifndef ardadv_accviewer_MainWindow_h
+#define ardadv_accviewer_MainWindow_h
 
-#include <QtGui/QApplication>
-#include <QSettings>
+#include <QMainWindow>
 
-int main(int argc, char *argv[])
+namespace ardadv
 {
+  namespace accviewer
+  {
 
-  // Qt initialization
-  //
-  QApplication app(argc, argv);
+    //! @class MainWindow
+    //!
+    //! @brief A simple gui to visualize serial data from an accelerometer
+    //!
+    class MainWindow : public QMainWindow
+    {
+      Q_OBJECT
 
-  // Set up the default settings
-  //
-  QCoreApplication::setOrganizationName("RTS");
-  QCoreApplication::setOrganizationDomain("redticksoftware.com");
-  QCoreApplication::setApplicationName("AccViewer");
+    public:
 
-  // construct the window
-  //
-  ardadv::accviewer::MainWindow iMainWindow;
+      //! @brief Constructor
+      //!
+      //! Set up the main window and associated children widgets
+      //!
+      MainWindow();
 
-  // Show the main window on the screen
-  //
-  iMainWindow.show();
+    protected:
 
-  // Enter the event loop
-  //
-  return app.exec();
+    private:
+
+    };
+  }
 }
+
+#endif

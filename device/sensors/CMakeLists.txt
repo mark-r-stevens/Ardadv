@@ -1,5 +1,3 @@
-# CMakeLists.txt for building the code for Adventures in Arduino
-#
 # Copyright (C) 2012 Mark R. Stevens
 #
 # This program is free software: you can redistribute it and/or modify

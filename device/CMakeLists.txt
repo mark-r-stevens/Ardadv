@@ -1,5 +1,3 @@
-# CMakeLists.txt for building the code for Adventures in Arduino
-#
 # Copyright (C) 2012 Mark R. Stevens
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,7 +27,7 @@ cmake_minimum_required(VERSION 2.8)
 
 ## The default project
 #
-project(ArdAdv C CXX)
+project(ArdAdvDevice C CXX)
 
 ## Require the Arduino development environment
 #
@@ -45,5 +43,4 @@ include_directories(.)
 ## Add the subdirectory
 #
 add_subdirectory(sensors)
-add_subdirectory(host)
 

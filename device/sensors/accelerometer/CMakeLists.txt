@@ -1,5 +1,3 @@
-# CMakeLists.txt for building the code for Adventures in Arduino
-#
 # Copyright (C) 2012 Mark R. Stevens
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,17 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Serial upload port
+## Setup the library parameters
 #
-set(ButtonTest_PORT /dev/cu.usbmodem621)      
+set(Accelerometer_SRCS  Accelerometer.cpp)
+set(Accelerometer_HDRS  Accelerometer.h)
+set(Accelerometer_BOARD uno)
 
-## Arduino Target board
+## Generate the library
 #
-set(ButtonTest_BOARD uno)              
-set(ButtonTest_SRCS  Test.cpp)  
-set(ButtonTest_LIBS  Button)
+generate_arduino_library(Accelerometer)
 
-##  Target generation
+## Add the subdirectory
 #
-generate_arduino_firmware(ButtonTest)
+add_subdirectory(test)
 
