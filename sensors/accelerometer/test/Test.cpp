@@ -15,6 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// The Arduino include
+//
+#include "Arduino.h"
+
+// The button include
+//
+#include <sensors/button/Button.h>
+
 // Define the Pins for the LED lights
 //
 #define LedPinR 10
@@ -23,7 +31,7 @@
 
 // Define the Pin for the button
 //
-#define Button 2
+#define ButtonPin 2
 
 // The count of the number of button presses
 //
@@ -31,8 +39,7 @@ int count = 0;
 
 // Used to detect the pressed event
 //
-enum ButtonState {ButtonPressed=0, ButtonReleased=1};
-ButtonState state = ButtonReleased;
+ardadv::sensors::button::Button button;
 
 // Initialize the Led pins to be output. Initialize the button to
 // be input. Set the red led on. This is a one time call on startup.
@@ -49,8 +56,11 @@ void setup()
   //
   pinMode(LedPinR, OUTPUT);     
   pinMode(LedPinG, OUTPUT);     
-  pinMode(LedPinY, OUTPUT);     
-  pinMode(Button,  INPUT);
+  pinMode(LedPinY, OUTPUT);
+
+  // Initialize the button
+  //
+  button.setPin(ButtonPin);
 
   // Turn the red led on
   //
@@ -64,31 +74,12 @@ void setup()
 void loop() 
 {
 
-  // Will be true if the button was pressed
-  //
-  bool trigger = false;
-  
-  // Check if the button is pressed
-  //
-  if (digitalRead(Button) == HIGH)
-  {
-    if (state == ButtonReleased)
-    {
-      state = ButtonPressed;
-      trigger = true;
-    }
-  }
-  else
-  {
-    state = ButtonReleased;
-  }
-
   // If the button was pressed, turn on the next light 
   // in the sequence (wrap back around)
   //
-  if (trigger)
+  if (button.check() == ardadv::sensors::button::Button::Pressed)
   {
-    digitalWrite(count % 3 + LedPinR, LOW);
+    digitalWrite(  count % 3 + LedPinR, LOW);
     digitalWrite(++count % 3 + LedPinR, HIGH);
     Serial.print("Event triggered. Count=");
     Serial.println(count);
