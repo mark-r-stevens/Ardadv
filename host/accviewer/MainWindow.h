@@ -16,9 +16,8 @@
 #ifndef ardadv_accviewer_MainWindow_h
 #define ardadv_accviewer_MainWindow_h
 
-#include <QMainWindow>
-
-class QTextEdit;
+#include <QDialog>
+#include <QStringList>
 
 namespace ardadv
 {
@@ -26,13 +25,14 @@ namespace ardadv
   {
     class CentralWidget;
     class RawDataWidget;
+    class AxisWidget;
     class Serial;
 
     //! @class MainWindow
     //!
     //! @brief A simple gui to visualize serial data from an accelerometer
     //!
-    class MainWindow : public QMainWindow
+    class MainWindow : public QDialog
     {
       Q_OBJECT
 
@@ -54,18 +54,19 @@ namespace ardadv
 
     private:
 
-      //! @brief The raw output text stream
-      //!
-      QTextEdit* mTextEdit;
-
       //! @brief The central widget
       //!
       CentralWidget* mCentralWidget;
       RawDataWidget* mRawDataWidget;
+      AxisWidget*    mAxisWidget;
 
       //! @brief The listener for serial data
       //!
       Serial* mSerial;
+
+      //! @brief The currently being parsed string
+      //!
+      QStringList mList;
     };
   }
 }

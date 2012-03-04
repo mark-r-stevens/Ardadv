@@ -25,6 +25,7 @@ include(${QT_USE_FILE})
 ## The qt files
 #
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
+  AxisWidget.h
   CentralWidget.h
   MainWindow.h
   RawDataWidget.h
@@ -34,6 +35,8 @@ QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
 ## Add the executable
 #
 add_executable(AccViewer
+  AxisWidget.cpp
+  AxisWidget.h
   CentralWidget.cpp
   CentralWidget.h
   Main.cpp

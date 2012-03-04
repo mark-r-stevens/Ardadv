@@ -26,11 +26,10 @@ namespace ardadv
     }
     void RawDataWidget::add(float x, float y, float z)
     {
-      std::cout << "RawDataWidget::add(" << x << "," << y << "," << z << ")" << std::endl;
       Rx.push_back(x);
       Ry.push_back(y);
       Rz.push_back(z);
-      while (Rx.size() > 1000)
+      while (Rx.size() > width())
       {
         Rx.pop_front();
         Ry.pop_front();
@@ -88,7 +87,7 @@ namespace ardadv
       for (int t = 0; curr != end; ++curr, ++t)
       {
         const float val = *curr;
-        ::glVertex2i(t, val * s2 + s1);
+        ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();
 
@@ -101,7 +100,7 @@ namespace ardadv
       for (int t = 0; curr != end; ++curr, ++t)
       {
         const float val = *curr;
-        ::glVertex2i(t, val * s2 + s1);
+        ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();
 
@@ -114,7 +113,7 @@ namespace ardadv
       for (int t = 0; curr != end; ++curr, ++t)
       {
         const float val = *curr;
-        ::glVertex2i(t, val * s2 + s1);
+        ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();
 

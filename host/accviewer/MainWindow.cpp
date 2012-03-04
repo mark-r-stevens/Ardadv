@@ -24,6 +24,7 @@
 #include <accviewer/MainWindow.h>
 #include <accviewer/CentralWidget.h>
 #include <accviewer/RawDataWidget.h>
+#include <accviewer/AxisWidget.h>
 #include <accviewer/Serial.h>
 
 #include <fstream>
@@ -36,21 +37,25 @@ namespace ardadv
     MainWindow::MainWindow()
     {
 
+      // The layout
+      //
+      QGridLayout *layout = new QGridLayout;
+
       // Set the central widget
       //
       //mCentralWidget = new CentralWidget(this);
       //setCentralWidget(mCentralWidget);
       mRawDataWidget = new RawDataWidget(this);
-      setCentralWidget(mRawDataWidget);
+      mAxisWidget = new AxisWidget(this);
 
-      // Create the controls docking area
+      // Add the raw data widget
       //
-      QDockWidget *qDockWidget = new QDockWidget(tr("Raw input"), this);
-      qDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-      mTextEdit = new QTextEdit(qDockWidget);
-      qDockWidget->setWidget(mTextEdit);
-      addDockWidget(Qt::BottomDockWidgetArea, qDockWidget);
+      layout->addWidget(mRawDataWidget, 0, 0);
+      layout->addWidget(mAxisWidget,    0, 1);
 
+      // Store the layout
+      //
+      setLayout(layout);
       // Create the serial reader
       //
       mSerial = new Serial;
@@ -58,10 +63,6 @@ namespace ardadv
               SIGNAL(line(const QString&)),
               this,
               SLOT(line(const QString&)));
-
-      // Create the status bar
-      //
-      statusBar()->showMessage(tr("Ready"));
 
       // Set the window title
       //
@@ -75,34 +76,68 @@ namespace ardadv
     void MainWindow::line(const QString& str)
     {
 
-      // Parse the string
+      // Add the string to the list
       //
-      QStringList list = str.split(' ');
-      if (list.size() != 7)
+      mList.append(str.split(' '));
+
+      // If there is no stop in the list, we are done
+      //
+      if (mList.indexOf("Stop") == -1)
       {
-        std::cout << "1 Parsing(" << str.toStdString() << ")" << std::endl;
-        return;
-      }
-      if (list.at(0) != "Start")
-      {
-        std::cout << "2 Parsing(" << str.toStdString() << ")" << std::endl;
-        return;
-      }
-      if (list.at(5) != "Stop")
-      {
-        std::cout << "3 Parsing(" << str.toStdString() << ")" << std::endl;
         return;
       }
 
-      // Get the raw values
+      // Try to parse what we can
       //
-      const float x = list.at(2).toFloat();
-      const float y = list.at(3).toFloat();
-      const float z = list.at(4).toFloat();
+      while (mList.size() > 7)
+      {
 
-      // Update the display
-      //
-      mRawDataWidget->add(x, y, z);
+        // Strip off everything until a start
+        //
+        while (mList.size() > 0 && (mList.first() != "Start"))
+        {
+          mList.pop_front();
+        }
+
+        // See if there is enough left
+        //
+        if (mList.size() < 7)
+        {
+          return;
+        }
+
+        // Get the tokens
+        //
+        const QString v0 = mList.takeFirst();
+        const int     v1 = mList.takeFirst().toInt();
+        const float   v2 = mList.takeFirst().toFloat();
+        const float   v3 = mList.takeFirst().toFloat();
+        const float   v4 = mList.takeFirst().toFloat();
+        const QString v5 = mList.takeFirst();
+
+        //std::cout << "v0=" << v0.toStdString() << std::endl;
+        //std::cout << "v1=" << v1 << std::endl;
+        //std::cout << "v2=" << v2 << std::endl;
+        //std::cout << "v3=" << v3 << std::endl;
+        //std::cout << "v4=" << v4 << std::endl;
+        //std::cout << "v5=" << v5.toStdString() << std::endl;
+
+        // Check
+        //
+        if (v0 != "Start")
+        {
+          return;
+        }
+        if (v5 != "Stop")
+        {
+          return;
+        }
+
+        // Update the display
+        //
+        mRawDataWidget->add(v2, v3, v4);
+        mAxisWidget->add(v2, v3, v4);
+      }
     }
   }
 }

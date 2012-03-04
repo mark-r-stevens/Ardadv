@@ -56,7 +56,7 @@ void loop()
 
   // Log debugging output
   //
-  Serial.print("Start ");
+  Serial.print(" Start ");
   Serial.print(millis());
   Serial.print(" ");
   Serial.print(accelerometer.x());
@@ -64,7 +64,8 @@ void loop()
   Serial.print(accelerometer.y());
   Serial.print(" ");
   Serial.print(accelerometer.z());
-  Serial.println(" Stop ");
+  Serial.print(" Stop ");
+  Serial.flush();
 
   // Add a small delay
   //
