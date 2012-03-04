@@ -39,6 +39,7 @@ namespace ardadv
         typedef common::Pin Y;
         typedef common::Pin Z;
         typedef common::Pin S;
+        typedef common::Pin P;
 
         //! @brief Constructor
         //!
@@ -56,6 +57,33 @@ namespace ardadv
         //! @brief Update the state
         //!
         void update();
+
+        //! @brief Access the raw data
+        //!
+        //! @return the position
+        //!
+        inline float x() const
+        {
+          return mValueX;
+        }
+
+        //! @brief Access the raw data
+        //!
+        //! @return the position
+        //!
+        inline float y() const
+        {
+          return mValueY;
+        }
+
+        //! @brief Access the raw data
+        //!
+        //! @return the position
+        //!
+        inline float z() const
+        {
+          return mValueZ;
+        }
 
         //! @brief Return the part number
         //!
@@ -82,7 +110,6 @@ namespace ardadv
         common::Pin mPinX;
         common::Pin mPinY;
         common::Pin mPinZ;
-        common::Pin mPinSleep;
 
         //! @brief The pin values
         //!

@@ -38,6 +38,8 @@ add_executable(AccViewer
   Main.cpp
   MainWindow.cpp
   MainWindow.h
+  detail/SerialPort.cpp
+  detail/SerialPort.h
   ${ACCVIEWER_MOC_HDRS}
   ${ACCVIEWER_RCC_SRCS}
 )

@@ -18,6 +18,8 @@
 
 #include <QThread>
 
+#include <accviewer/detail/SerialPort.h>
+
 namespace ardadv
 {
   namespace accviewer
@@ -36,7 +38,7 @@ namespace ardadv
       //!
       //! @param[in] parent the parent widget
       //!
-      inline Serial()
+      inline Serial() : fd(-1)
       {
       }
 
@@ -44,15 +46,42 @@ namespace ardadv
       //!
       //! @return true if port opened properly
       //!
-      inline bool open()
+      inline bool open(const std::string& iPort)
       {
-       return true;
+
+        // Open the port
+        //
+        fd = detail::OpenAdrPort(iPort.c_str());
+        if (fd < 0)
+        {
+          return false;
+        }
+
+        // Done
+        //
+        return true;
       }
 
       //! @brief Start running
       //!
       inline void run()
       {
+
+        // The data read
+        //
+        char data[4096];
+
+        // Keep running
+        //
+        while (true)
+        {
+          if (detail::ReadAdrPort(fd, data, 4096) >= 0)
+          {
+            QString send = data;
+            emit line(send);
+          }
+          this->msleep(100);
+        }
       }
 
     signals:
@@ -64,6 +93,10 @@ namespace ardadv
       void line(const QString& str);
 
     private:
+
+      //! @brief Raw descriptor
+      //!
+      int fd;
 
     };
   }

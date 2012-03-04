@@ -24,6 +24,8 @@
 #include <accviewer/CentralWidget.h>
 #include <accviewer/Serial.h>
 
+#include <ofstream>
+
 namespace ardadv
 {
   namespace accviewer
@@ -60,9 +62,17 @@ namespace ardadv
       //
       setWindowTitle(tr("Accelerometer Viewer"));
 
+      // Start the serial line running
+      //
+      mSerial->open("/dev/cu.usbmodem621");
+      mSerial->start();
     }
     void MainWindow::line(const QString& str)
     {
+      QTextCursor cursor(mTextEdit->textCursor());
+      cursor.insertText(str);
+      static std::ofstream out("Values");
+      out << str.toStdString() << std::endl;
     }
   }
 }

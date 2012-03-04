@@ -22,6 +22,25 @@
 #include <sensors/accelerometer/Accelerometer.h>
 ardadv::sensors::accelerometer::Accelerometer accelerometer;
 
+// prints val with number of decimal places determine by precision
+//
+void printFloat(float val, unsigned int precision)
+{
+
+  Serial.print (int(val));  //prints the int part
+  Serial.print("."); // print the decimal point
+  if(val >= 0)
+  {
+    const unsigned int frac = (val - int(val)) * precision;
+    Serial.print(frac, DEC) ;
+  }
+  else
+  {
+    const unsigned int frac = (int(val)- val ) * precision;
+    Serial.print(frac, DEC) ;
+  }
+}
+
 // Initialize the accelerometer pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
@@ -45,9 +64,9 @@ void setup()
   //
   Serial.print("%% ");
   Serial.print(Accelerometer::Vendor());
-  Serial.print("\t");
+  Serial.print(" ");
   Serial.println(Accelerometer::PartNumber());
-  Serial.println("%% Time, X, Y, Z");
+  Serial.println("%% Time X Y Z");
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -63,7 +82,13 @@ void loop()
 
   // Log debugging output
   //
-  Serial.println(millis());
+  Serial.print(millis());
+  Serial.print(" ");
+  printFloat(accelerometer.x(), 1000);
+  Serial.print(" ");
+  printFloat(accelerometer.y(), 1000);
+  Serial.print(" ");
+  printFloat(accelerometer.z(), 1000);
 
   // Add a small delay
   //

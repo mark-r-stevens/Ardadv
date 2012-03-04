@@ -44,7 +44,7 @@ namespace ardadv
         //!
         //! @return The pin id
         //!
-        inline operator int ()
+        inline operator int () const
         {
           return mId;
         }
