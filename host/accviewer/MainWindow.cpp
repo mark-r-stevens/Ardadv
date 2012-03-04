@@ -24,7 +24,7 @@
 #include <accviewer/CentralWidget.h>
 #include <accviewer/Serial.h>
 
-#include <ofstream>
+#include <fstream>
 
 namespace ardadv
 {

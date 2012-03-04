@@ -71,15 +71,15 @@ namespace ardadv
 
         // The calibration offsets
         //
-        const float CalibratedX = 648.0f;
-        const float CalibratedY = 658.0f;
-        const float CalibratedZ = 650.0f;
+        const float CalibratedX = 650.0f;
+        const float CalibratedY = 659.0f;
+        const float CalibratedZ = 642.0f;
 
         // Get the raw values
         //
-        const float AdcRx = analogRead(mPinX);// - CalibratedX;
-        const float AdcRy = analogRead(mPinY);// - CalibratedY;
-        const float AdcRz = analogRead(mPinZ);// - CalibratedZ;
+        const float AdcRx = analogRead(mPinX) - CalibratedX;
+        const float AdcRy = analogRead(mPinY) - CalibratedY;
+        const float AdcRz = analogRead(mPinZ) - CalibratedZ;
 
         // See http://www.starlino.com/imu_guide.html
 
