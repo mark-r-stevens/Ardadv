@@ -38,8 +38,8 @@ namespace ardadv
         typedef common::Pin X;
         typedef common::Pin Y;
         typedef common::Pin Z;
-        typedef common::Pin S;
-        typedef common::Pin P;
+        typedef common::Pin SL;
+        typedef common::Pin GS;
 
         //! @brief Constructor
         //!
@@ -51,8 +51,9 @@ namespace ardadv
         //! @param[in] y The pin number for y
         //! @param[in] z The pin number for z
         //! @param[in] s The pin number for sleep (turned high to activate)
+        //! @param[in] p The pin number for g-selection (turned high to use 6g)
         //!
-        void setup(const X& x, const Y& y, const Z& z, const S& s);
+        void setup(const X& x, const Y& y, const Z& z, const SL& s, const GS& p);
 
         //! @brief Update the state
         //!
@@ -103,6 +104,13 @@ namespace ardadv
           return "Virtuabotix";
         }
 
+      protected:
+
+        //! @brief Calibrate the offsets by observing the device sitting still
+        //!        for a second
+        //!
+        void calibrate();
+
       private:
 
         //! @brief The pins
@@ -116,6 +124,11 @@ namespace ardadv
         float mValueX;
         float mValueY;
         float mValueZ;
+
+        //! @brief The calibrated offset
+        //!
+        int mOffset;
+
       };
     }
   }

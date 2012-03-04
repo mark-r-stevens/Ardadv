@@ -27,6 +27,7 @@ include(${QT_USE_FILE})
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
   CentralWidget.h
   MainWindow.h
+  RawDataWidget.h
   Serial.h
 )
 
@@ -38,6 +39,8 @@ add_executable(AccViewer
   Main.cpp
   MainWindow.cpp
   MainWindow.h
+  RawDataWidget.cpp
+  RawDataWidget.h
   detail/SerialPort.cpp
   detail/SerialPort.h
   ${ACCVIEWER_MOC_HDRS}

@@ -22,25 +22,6 @@
 #include <sensors/accelerometer/Accelerometer.h>
 ardadv::sensors::accelerometer::Accelerometer accelerometer;
 
-// prints val with number of decimal places determine by precision
-//
-void printFloat(float val, unsigned int precision)
-{
-
-  Serial.print (int(val));  //prints the int part
-  Serial.print("."); // print the decimal point
-  if(val >= 0)
-  {
-    const unsigned int frac = (val - int(val)) * precision;
-    Serial.print(frac, DEC) ;
-  }
-  else
-  {
-    const unsigned int frac = (int(val)- val ) * precision;
-    Serial.print(frac, DEC) ;
-  }
-}
-
 // Initialize the accelerometer pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
@@ -58,15 +39,8 @@ void setup()
   accelerometer.setup(Accelerometer::X(A5),
                       Accelerometer::Y(A4),
                       Accelerometer::Z(A3),
-                      Accelerometer::S(4));
-
-  // Log a header for debugging output
-  //
-  Serial.print("%% ");
-  Serial.print(Accelerometer::Vendor());
-  Serial.print(" ");
-  Serial.println(Accelerometer::PartNumber());
-  Serial.println("%% Time X Y Z");
+                      Accelerometer::SL(5),
+                      Accelerometer::GS(4));
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -82,17 +56,19 @@ void loop()
 
   // Log debugging output
   //
+  Serial.print("Start ");
   Serial.print(millis());
   Serial.print(" ");
-  printFloat(accelerometer.x(), 1000);
+  Serial.print(accelerometer.x());
   Serial.print(" ");
-  printFloat(accelerometer.y(), 1000);
+  Serial.print(accelerometer.y());
   Serial.print(" ");
-  printFloat(accelerometer.z(), 1000);
+  Serial.print(accelerometer.z());
+  Serial.println(" Stop ");
 
   // Add a small delay
   //
-  delay(100);
+  delay(10);
 
 }
 

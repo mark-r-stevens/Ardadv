@@ -107,7 +107,7 @@ namespace ardadv
         else
         {
           psResponse[iIn<iMax?iIn:iMax] = '\0';
-          printf("read %d chars: %s\n", iIn, psResponse);
+          //printf("read %d chars: %s\n", iIn, psResponse);
         }
 
         return iIn;

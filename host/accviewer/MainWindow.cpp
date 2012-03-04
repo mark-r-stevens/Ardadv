@@ -19,12 +19,15 @@
 #include <QMessageBox>
 #include <QMainWindow>
 #include <QTextEdit>
+#include <QStringList>
 
 #include <accviewer/MainWindow.h>
 #include <accviewer/CentralWidget.h>
+#include <accviewer/RawDataWidget.h>
 #include <accviewer/Serial.h>
 
 #include <fstream>
+#include <iostream>
 
 namespace ardadv
 {
@@ -35,8 +38,10 @@ namespace ardadv
 
       // Set the central widget
       //
-      mCentralWidget = new CentralWidget(this);
-      setCentralWidget(mCentralWidget);
+      //mCentralWidget = new CentralWidget(this);
+      //setCentralWidget(mCentralWidget);
+      mRawDataWidget = new RawDataWidget(this);
+      setCentralWidget(mRawDataWidget);
 
       // Create the controls docking area
       //
@@ -69,10 +74,35 @@ namespace ardadv
     }
     void MainWindow::line(const QString& str)
     {
-      QTextCursor cursor(mTextEdit->textCursor());
-      cursor.insertText(str);
-      static std::ofstream out("Values");
-      out << str.toStdString() << std::endl;
+
+      // Parse the string
+      //
+      QStringList list = str.split(' ');
+      if (list.size() != 7)
+      {
+        std::cout << "1 Parsing(" << str.toStdString() << ")" << std::endl;
+        return;
+      }
+      if (list.at(0) != "Start")
+      {
+        std::cout << "2 Parsing(" << str.toStdString() << ")" << std::endl;
+        return;
+      }
+      if (list.at(5) != "Stop")
+      {
+        std::cout << "3 Parsing(" << str.toStdString() << ")" << std::endl;
+        return;
+      }
+
+      // Get the raw values
+      //
+      const float x = list.at(2).toFloat();
+      const float y = list.at(3).toFloat();
+      const float z = list.at(4).toFloat();
+
+      // Update the display
+      //
+      mRawDataWidget->add(x, y, z);
     }
   }
 }

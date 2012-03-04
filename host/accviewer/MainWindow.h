@@ -25,6 +25,7 @@ namespace ardadv
   namespace accviewer
   {
     class CentralWidget;
+    class RawDataWidget;
     class Serial;
 
     //! @class MainWindow
@@ -60,6 +61,7 @@ namespace ardadv
       //! @brief The central widget
       //!
       CentralWidget* mCentralWidget;
+      RawDataWidget* mRawDataWidget;
 
       //! @brief The listener for serial data
       //!

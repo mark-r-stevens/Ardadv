@@ -29,14 +29,26 @@ namespace ardadv
         {
           return x * x;
         }
+        inline int mapMMA7361V(int value)
+        {
+          return map(value, 0, 1024, 0, 5000);
+        }
+        inline int mapMMA7361G(int value)
+        {
+          return map(value, 0, 1024, -800, 1600);
+        }
       }
       Accelerometer::Accelerometer()
       : mPinX(-1)
       , mPinY(-1)
       , mPinZ(-1)
+      , mValueX(0.0f)
+      , mValueY(0.0f)
+      , mValueZ(0.0f)
+      , mOffset(0)
       {
       }
-      void Accelerometer::setup(const X& x, const Y& y, const Z& z, const S& s)
+      void Accelerometer::setup(const X& x, const Y& y, const Z& z, const SL& sl, const GS& gs)
       {
 
         // Store the pins
@@ -47,54 +59,74 @@ namespace ardadv
 
         // Set the sleep pin to high activating the device
         //
-        ::pinMode(s, OUTPUT);
-        ::digitalWrite(s, HIGH);
+        ::pinMode(sl, OUTPUT);
+        ::digitalWrite(sl, HIGH);
 
-        // Activate the x pin
+        // Set the precision for 6g mode
+        //
+        ::pinMode(gs, OUTPUT);
+        ::digitalWrite(gs, LOW);
+
+        // Activate the x/y/z pins
         //
         ::pinMode(mPinX, INPUT);
-        ::digitalWrite(mPinX, HIGH);
-
-        // Activate the y pin
-        //
         ::pinMode(mPinY, INPUT);
-        ::digitalWrite(mPinY, HIGH);
-
-        // Activate the z pin
-        //
         ::pinMode(mPinZ, INPUT);
-        ::digitalWrite(mPinZ, HIGH);
 
+        // Wait and then calibrate
+        //
+        calibrate();
+      }
+      void Accelerometer::calibrate()
+      {
+
+        // Wait to ensure device is powered and set
+        //
+        ::delay(100);
+
+        // How many measurements to use in calibration
+        const int count = 1000;
+
+        // Grab a 1000 measurements and average
+        //
+        float   sum  = 0;
+        for (int i = 0; i < count;i++)
+        {
+          sum += mapMMA7361G(analogRead(mPinX));
+          sum += mapMMA7361G(analogRead(mPinY));
+        }
+        mOffset = sum / (count * 2);
       }
       void Accelerometer::update()
       {
 
-        // The calibration offsets
-        //
-        const float CalibratedX = 650.0f;
-        const float CalibratedY = 659.0f;
-        const float CalibratedZ = 642.0f;
-
         // Get the raw values
         //
-        const float AdcRx = analogRead(mPinX) - CalibratedX;
-        const float AdcRy = analogRead(mPinY) - CalibratedY;
-        const float AdcRz = analogRead(mPinZ) - CalibratedZ;
+        const int AdcRx = analogRead(mPinX);
+        const int AdcRy = analogRead(mPinY);
+        const int AdcRz = analogRead(mPinZ);
+
+        // Remap to G
+        //
+        const float Gx = mapMMA7361G(AdcRx) - mOffset;
+        const float Gy = mapMMA7361G(AdcRy) - mOffset;
+        const float Gz = mapMMA7361G(AdcRz) - mOffset;
 
         // See http://www.starlino.com/imu_guide.html
 
-        // According to http://www.freescale.com/files/sensors/doc/data_sheet/MMA7361L.pdf
-        // the MMA7361 is factory corrected for zerog offset and sensitivity
+        // See http://code.google.com/p/mma7361-library/
+
+        // See http://www.freescale.com/files/sensors/doc/data_sheet/MMA7361L.pdf
 
         // Vector magnitude
         //
-        const float mag = ::sqrt(sqr(AdcRx) + sqr(AdcRy) + sqr(AdcRz));
+        const float mag = ::sqrt(sqr(Gx) + sqr(Gy) + sqr(Gz));
 
         // Make a unit vector
         //
-        mValueX = AdcRx / mag;
-        mValueY = AdcRy / mag;
-        mValueZ = AdcRz / mag;
+        mValueX = Gx / mag;
+        mValueY = Gy / mag;
+        mValueZ = Gz / mag;
       }
     }
   }
