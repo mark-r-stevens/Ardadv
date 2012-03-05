@@ -22,7 +22,7 @@
 #include <QStringList>
 
 #include <accviewer/MainWindow.h>
-#include <accviewer/CentralWidget.h>
+#include <accviewer/CameraWidget.h>
 #include <accviewer/RawDataWidget.h>
 #include <accviewer/AxisWidget.h>
 #include <accviewer/Serial.h>
@@ -43,19 +43,20 @@ namespace ardadv
 
       // Set the central widget
       //
-      //mCentralWidget = new CentralWidget(this);
-      //setCentralWidget(mCentralWidget);
+      mCameraWidget  = new CameraWidget(this);
       mRawDataWidget = new RawDataWidget(this);
-      mAxisWidget = new AxisWidget(this);
+      mAxisWidget    = new AxisWidget(this);
 
       // Add the raw data widget
       //
-      layout->addWidget(mRawDataWidget, 0, 0);
+      layout->addWidget(mCameraWidget,  0, 0);
       layout->addWidget(mAxisWidget,    0, 1);
+      layout->addWidget(mRawDataWidget, 1, 0, 1, 2);
 
       // Store the layout
       //
       setLayout(layout);
+
       // Create the serial reader
       //
       mSerial = new Serial;
@@ -114,13 +115,6 @@ namespace ardadv
         const float   v3 = mList.takeFirst().toFloat();
         const float   v4 = mList.takeFirst().toFloat();
         const QString v5 = mList.takeFirst();
-
-        //std::cout << "v0=" << v0.toStdString() << std::endl;
-        //std::cout << "v1=" << v1 << std::endl;
-        //std::cout << "v2=" << v2 << std::endl;
-        //std::cout << "v3=" << v3 << std::endl;
-        //std::cout << "v4=" << v4 << std::endl;
-        //std::cout << "v5=" << v5.toStdString() << std::endl;
 
         // Check
         //

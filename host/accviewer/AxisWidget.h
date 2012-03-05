@@ -46,7 +46,7 @@ namespace ardadv
       //!
       inline virtual QSize sizeHint() const
       {
-        return QSize(640, 480);
+        return QSize(480, 360);
       }
 
       //! @brief Provide a size hint
@@ -55,7 +55,7 @@ namespace ardadv
       //!
       inline virtual QSize minimumSizeHint() const
       {
-        return QSize(640, 480);
+        return QSize(480, 360);
       }
 
       //! @brief Add a measurement

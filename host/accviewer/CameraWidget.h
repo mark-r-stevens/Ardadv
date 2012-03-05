@@ -13,22 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ardadv_accviewer_RawDataWidget_h
-#define ardadv_accviewer_RawDataWidget_h
+#ifndef ardadv_accviewer_CameraWidget_h
+#define ardadv_accviewer_CameraWidget_h
 
 #include <QtGui>
 #include <QtOpenGL>
+
+class CvCapture;
 
 namespace ardadv
 {
   namespace accviewer
   {
 
-    //! @class RawDataWidget
+    //! @class CameraWidget
     //!
     //! @brief The opengl rendering surface to draw the frame
     //!
-    class RawDataWidget : public QGLWidget
+    class CameraWidget : public QGLWidget
     {
       Q_OBJECT
 
@@ -38,7 +40,20 @@ namespace ardadv
       //!
       //! @param[in] parent the parent widget
       //!
-      RawDataWidget(QWidget *parent = 0);
+      CameraWidget(QWidget *parent = 0);
+
+      //! @brief Destructor
+      //!
+      ~CameraWidget();
+
+      //! @brief Provide a size hint
+      //!
+      //! @return the size hint
+      //!
+      inline virtual QSize sizeHint() const
+      {
+        return QSize(480, 360);
+      }
 
       //! @brief Provide a size hint
       //!
@@ -46,18 +61,20 @@ namespace ardadv
       //!
       inline virtual QSize minimumSizeHint() const
       {
-        return QSize(960, 200);
+        return QSize(480, 360);
       }
 
-      //! @brief Add a measurement
+    public slots:
+
+      //! @brief Grab a camera image
       //!
-      //! @param[in] x The first value
-      //! @param[in] y The first value
-      //! @param[in] z The first value
-      //!
-      void add(float x, float y, float z);
+      void update();
 
     protected:
+
+      //! @brief Update the image texture
+      //!
+      void updateTexture();
 
       //! @brief Initialize opengl for rendering
       //!
@@ -69,12 +86,21 @@ namespace ardadv
 
     private:
 
-      //! @brief The values to draw
+      //! @brief The current image being rendered
       //!
-      std::list<float> Rx;
-      std::list<float> Ry;
-      std::list<float> Rz;
+      QImage   qImage;
 
+      //! @brief The image in gl format
+      //!
+      QImage   glImage;
+
+      //! @brief The image texture id
+      //!
+      GLuint mTextureId;
+
+      //! @brief The camera image
+      //!
+      CvCapture* capture;
     };
   }
 }

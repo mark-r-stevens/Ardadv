@@ -26,7 +26,7 @@ include(${QT_USE_FILE})
 #
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
   AxisWidget.h
-  CentralWidget.h
+  CameraWidget.h
   MainWindow.h
   RawDataWidget.h
   Serial.h
@@ -37,8 +37,8 @@ QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
 add_executable(AccViewer
   AxisWidget.cpp
   AxisWidget.h
-  CentralWidget.cpp
-  CentralWidget.h
+  CameraWidget.cpp
+  CameraWidget.h
   Main.cpp
   MainWindow.cpp
   MainWindow.h
@@ -55,4 +55,5 @@ add_executable(AccViewer
 target_link_libraries(AccViewer
   ${QT_LIBRARIES}
   ${OPENGL_LIBRARIES}
+  ${OpenCV_LIBS}
 )

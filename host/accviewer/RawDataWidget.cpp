@@ -86,7 +86,7 @@ namespace ardadv
       ::glBegin(GL_LINE_STRIP);
       for (int t = 0; curr != end; ++curr, ++t)
       {
-        const float val = *curr;
+        const float val = (*curr  + 1) / 2;
         ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();
@@ -99,7 +99,7 @@ namespace ardadv
       ::glBegin(GL_LINE_STRIP);
       for (int t = 0; curr != end; ++curr, ++t)
       {
-        const float val = *curr;
+        const float val = (*curr  + 1) / 2;
         ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();
@@ -112,7 +112,7 @@ namespace ardadv
       ::glBegin(GL_LINE_STRIP);
       for (int t = 0; curr != end; ++curr, ++t)
       {
-        const float val = *curr;
+        const float val = (*curr  + 1) / 2;
         ::glVertex2f(t, val * s2 + s1);
       }
       ::glEnd();

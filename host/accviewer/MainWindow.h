@@ -23,7 +23,7 @@ namespace ardadv
 {
   namespace accviewer
   {
-    class CentralWidget;
+    class CameraWidget;
     class RawDataWidget;
     class AxisWidget;
     class Serial;
@@ -54,9 +54,9 @@ namespace ardadv
 
     private:
 
-      //! @brief The central widget
+      //! @brief The widgets
       //!
-      CentralWidget* mCentralWidget;
+      CameraWidget*  mCameraWidget;
       RawDataWidget* mRawDataWidget;
       AxisWidget*    mAxisWidget;
 

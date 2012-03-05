@@ -23,6 +23,17 @@ cmake_minimum_required(VERSION 2.8)
 #
 project(ArdAdvHost C CXX)
 
+## CMake module search path
+#
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake) 
+
+## Add the opencv dependency
+#
+find_package(OpenCv REQUIRED)
+if(NOT OpenCV_FOUND)
+  message(FATAL_ERROR "Error: OpenCv not found.")
+endif()
+
 ## Add the qt dependency
 #
 find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtOpenGL QtNetwork QtTest QtSql)
