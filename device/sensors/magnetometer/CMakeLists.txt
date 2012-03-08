@@ -13,9 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Add the sub-directories
+## Setup the library parameters
 #
-add_subdirectory(accelerometer)
-add_subdirectory(button)
-add_subdirectory(magnetometer)
+set(Magnetometer_SRCS  Magnetometer.cpp)
+set(Magnetometer_HDRS  Magnetometer.h)
+set(Magnetometer_BOARD uno)
+
+## Generate the library
+#
+generate_arduino_library(Magnetometer)
+
+## Add the subdirectory
+#
+add_subdirectory(test)
 

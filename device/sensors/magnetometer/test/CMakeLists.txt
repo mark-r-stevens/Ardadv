@@ -13,9 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Add the sub-directories
+## Serial upload port
 #
-add_subdirectory(accelerometer)
-add_subdirectory(button)
-add_subdirectory(magnetometer)
+set(MagnetometerTest_PORT /dev/cu.usbmodem621)      
+   
+## Arduino Target board
+#
+set(MagnetometerTest_BOARD uno)              
+set(MagnetometerTest_SRCS  Test.cpp)  
+set(MagnetometerTest_LIBS  Magnetometer)
+
+##  Target generation
+#
+generate_arduino_firmware(MagnetometerTest)
 
