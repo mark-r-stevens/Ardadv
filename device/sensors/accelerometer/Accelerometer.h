@@ -35,11 +35,11 @@ namespace ardadv
 
         //! @brief Used to reduce ambiguity in pin assignment
         //!
-        typedef common::Pin X;
-        typedef common::Pin Y;
-        typedef common::Pin Z;
-        typedef common::Pin SL;
-        typedef common::Pin GS;
+        typedef common::Pin<0> X;
+        typedef common::Pin<1> Y;
+        typedef common::Pin<2> Z;
+        typedef common::Pin<3> SL;
+        typedef common::Pin<4> GS;
 
         //! @brief Constructor
         //!
@@ -115,9 +115,9 @@ namespace ardadv
 
         //! @brief The pins
         //!
-        common::Pin mPinX;
-        common::Pin mPinY;
-        common::Pin mPinZ;
+        common::Pin<0> mPinX;
+        common::Pin<1> mPinY;
+        common::Pin<2> mPinZ;
 
         //! @brief The pin values
         //!
