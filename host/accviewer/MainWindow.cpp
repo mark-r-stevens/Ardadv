@@ -138,7 +138,7 @@ namespace ardadv
 
         // Compute the heading
         //
-        const float heading = ::atan2(v3,v3) * 180.0 / 3.14159;
+        const float heading = ::atan2(v3,v2) * 180.0 / 3.14159;
 
         // Update the display
         //

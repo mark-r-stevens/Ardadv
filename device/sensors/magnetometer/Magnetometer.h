@@ -130,6 +130,15 @@ namespace ardadv
           return mValueZ;
         }
 
+        //! @brief Mark if the reading is valid or not
+        //!
+        //! @return true if valid
+        //!
+        inline bool isValid() const
+        {
+          return mValid;
+        }
+
         //! @brief Return the part number
         //!
         //! @return the part number
@@ -201,6 +210,9 @@ namespace ardadv
         float mValueY;
         float mValueZ;
 
+        //! @brief Indicate if valid
+        //!
+        bool mValid;
       };
     }
   }

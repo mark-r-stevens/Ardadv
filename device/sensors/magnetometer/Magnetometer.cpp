@@ -45,6 +45,7 @@ namespace ardadv
       , mValueX(0.0f)
       , mValueY(0.0f)
       , mValueZ(0.0f)
+      , mValid(false)
       {
       }
       bool Magnetometer::setup(const DRDY& drdy, const RESET& reset)
@@ -201,6 +202,7 @@ namespace ardadv
         int16_t result = 0;
         if (! read(axis, MM_PERIOD_128, result, 0))
         {
+          mValid = false;
           return 0.0f;
         }
 
@@ -235,6 +237,8 @@ namespace ardadv
         // send another command after the reset. In this case, keep SSNOT
         // low. If you will not be using the MicroMag3, set SSNOT to high to
         // disable the SPI port.
+
+        mValid  = true;
 
         mValueX = readAxis(0);
         mValueY = readAxis(1);

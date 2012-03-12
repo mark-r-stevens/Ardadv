@@ -53,16 +53,19 @@ void loop()
 
   // Log debugging output
   //
-  ::Serial.print(" Start ");
-  ::Serial.print(millis());
-  ::Serial.print(" ");
-  ::Serial.print(magnetometer.x());
-  ::Serial.print(" ");
-  ::Serial.print(magnetometer.y());
-  ::Serial.print(" ");
-  ::Serial.print(magnetometer.z());
-  ::Serial.print(" Stop ");
-  ::Serial.flush();
+  if (magnetometer.isValid())
+  {
+    ::Serial.print(" Start ");
+    ::Serial.print(millis());
+    ::Serial.print(" ");
+    ::Serial.print(magnetometer.x());
+    ::Serial.print(" ");
+    ::Serial.print(magnetometer.y());
+    ::Serial.print(" ");
+    ::Serial.print(magnetometer.z());
+    ::Serial.print(" Stop ");
+    ::Serial.flush();
+  }
 
   // Add a small delay
   //
