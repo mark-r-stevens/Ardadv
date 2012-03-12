@@ -16,6 +16,8 @@
 #ifndef ardadv_sensors_common_Pin_h
 #define ardadv_sensors_common_Pin_h
 
+#include <Arduino.h>
+
 namespace ardadv
 {
   namespace sensors
@@ -28,7 +30,7 @@ namespace ardadv
       //! @brief An immutable class used to reduce error in passing
       //!        pin ids in methods
       //!
-      class Pin
+      template<uint8_t N>class Pin
       {
       public:
 
@@ -36,15 +38,44 @@ namespace ardadv
         //!
         //! @param[in] iPinId The pin id
         //!
-        inline Pin(int iId) : mId(iId)
+        inline Pin(uint8_t iId = NOT_A_PIN) : mId(iId)
         {
+        }
+
+        //! @brief Reset the pin id
+        //!
+        //! @param[in] iPinId  The pin id
+        //! @param[in] iMode   The mode
+        //!
+        inline void reset(uint8_t iId, uint8_t iMode)
+        {
+          mId = iId;
+          ::pinMode(iId, iMode);
+        }
+
+        //! @brief Digital write to the pin
+        //!
+        //! @param[in] iValue The value to write
+        //!
+        inline void digitalWrite(uint8_t iValue) const
+        {
+          ::digitalWrite(mId, iValue);
+        }
+
+        //! @brief Digital read from the pin
+        //!
+        //! @return the value
+        //!
+        inline int digitalRead() const
+        {
+          return ::digitalRead(mId);
         }
 
         //! @brief Get the pin id
         //!
         //! @return The pin id
         //!
-        inline operator int () const
+        inline operator uint8_t () const
         {
           return mId;
         }
@@ -53,7 +84,7 @@ namespace ardadv
 
         //! @brief The pin id
         //!
-        int mId;
+        uint8_t mId;
 
       };
     }

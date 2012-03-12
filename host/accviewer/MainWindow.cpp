@@ -77,6 +77,8 @@ namespace ardadv
     void MainWindow::line(const QString& str)
     {
 
+      //std::cout << "str=(" << str.toStdString() << std::endl;
+
       // Add the string to the list
       //
       mList.append(str.split(' '));
@@ -129,6 +131,7 @@ namespace ardadv
 
         // Update the display
         //
+        std::cout << "vector (" << v2 << ", " << v3 << ", " << v4 << ")" << std::endl;
         mRawDataWidget->add(v2, v3, v4);
         mAxisWidget->add(v2, v3, v4);
       }

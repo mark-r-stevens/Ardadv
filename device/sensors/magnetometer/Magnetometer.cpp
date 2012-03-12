@@ -13,9 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// Code derived from:
+//   https://github.com/stevemarple/MicroMag/blob/master/MicroMag.cpp
+//
 #include <sensors/Magnetometer/Magnetometer.h>
 
-#include "Arduino.h"
+#include <Arduino.h>
+
+#include <vendor/Spi.h>
+
+#include <math.h>
+
+#define MM_PERIOD_32 0
+#define MM_PERIOD_64 1
+#define MM_PERIOD_128 2
+#define MM_PERIOD_256 3
+#define MM_PERIOD_512 4
+#define MM_PERIOD_1024 5
+#define MM_PERIOD_2048 6
+#define MM_PERIOD_4096 7
 
 namespace ardadv
 {
@@ -25,173 +41,178 @@ namespace ardadv
     {
       namespace
       {
-        inline float computeHeading(float x, float y, float z)
+        inline float sqr(float x)
         {
-          float heading = 0;
-          if ((x == 0) && (y < 0))
-          {
-            heading = M_PI / 2.0;
-          }
-          if ((x == 0) && (y > 0))
-          {
-            heading = 3.0 * M_PI / 2.0;
-          }
-          if (x < 0)
-          {
-            heading = M_PI - ::atan(y / x);
-          }
-          if ((x > 0) && (y < 0))
-          {
-            heading = -::atan(y / x);
-          }
-          if ((x > 0) && (y > 0))
-          {
-            heading = 2.0 * M_PI - ::atan(y / x);
-          }
-          return int(degrees(heading));
+          return x * x;
+        }
+        inline int computeHeading(float x, float y, float z)
+        {
+          float heading = ::atan2(y, x);
+          return  int(degrees(heading));
         }
       }
       Magnetometer::Magnetometer()
-      : mPinSclk(-1)
-      , mPinMiso(-1)
-      , mPinMosi(-1)
-      , mPinSsnot(-1)
-      , mPinDrdy(-1)
-      , mPinReset(-1)
+      : mSS(-1)
+      , mRESET(-1)
       , mValueX(0.0f)
       , mValueY(0.0f)
       , mValueZ(0.0f)
       , mHeading(0.0f)
       {
       }
-      void Magnetometer::setup(const SCLK&  sclk,
-                               const MISO&  miso,
-                               const MOSI&  mosi,
-                               const SSNOT& ssnot,
-                               const DRDY&  drdy,
-                               const RESET& reset)
+      bool Magnetometer::setup(const SS& ss, const RESET& reset)
       {
 
-        // Set the output pin mode
+        // Store the pins and their modes
         //
-        ::pinMode(ssnot, OUTPUT);
-        ::pinMode(reset, OUTPUT);
-        ::pinMode(mosi,  OUTPUT);
-        ::pinMode(sclk,  OUTPUT);
+        mSS.reset(ss,       OUTPUT);
+        mRESET.reset(reset, OUTPUT);
 
-        // Set the input pin mode
+        // Give the pins initial values
         //
-        ::pinMode(miso, INPUT);
-        ::pinMode(drdy, INPUT);
+        mSS.digitalWrite(HIGH);
+        mRESET.digitalWrite(LOW);
 
-        // ssnot is brought low (step 0 below)
+        // Set up the spi interface
         //
-        ::digitalWrite(ssnot, LOW);
+        SPI.begin();
+        SPI.setClockDivider(SPI_CLOCK_DIV32);
+        SPI.setDataMode(SPI_MODE0);
+        SPI.setBitOrder(MSBFIRST);
 
-        // Store
+        // Make one reading to switch device into low power mode
         //
-        mPinSclk  = sclk;
-        mPinMiso  = miso;
-        mPinMosi  = mosi;
-        mPinSsnot = ssnot;
-        mPinDrdy  = drdy;
-        mPinReset = reset;
+        int16_t tmp = 0;
+        return read(0, MM_PERIOD_32, tmp, 0);
 
       }
-      void Magnetometer::sendBit(int bit)
+      bool Magnetometer::convert(uint8_t axis, uint8_t period) const
       {
-        // send the bit on the RISING edge of the clock
 
-        ::digitalWrite(mPinMosi, bit);
-        ::delay(2);
-        ::digitalWrite(mPinSclk, HIGH);
-        ::delay(2);
-        ::digitalWrite(mPinSclk, LOW);
-        ::delay(2);
+        // Check if the period is valid
+        //
+        if (period > MM_PERIOD_4096)
+        {
+          return false;
+        }
+
+        // Build the command
+        //
+        uint8_t cmd = 0;
+        cmd |= (axis + 1);
+        cmd |= (period << 4);
+
+        // Select the device
+        //
+        mSS.digitalWrite(LOW);
+
+        // Pulse reset
+        //
+        pulseReset();
+
+        // Send the command byte
+        //
+        SPI.transfer(cmd);
+
+        // Done
+        //
+        return true;
       }
-      long Magnetometer::receiveBit()
+      int16_t Magnetometer::getResult() const
       {
-        // receive the data on the FALLING edge of the clock
+        // Read 2 bytes
+        //
+        const int16_t r0 = SPI.transfer(0);
+        const int16_t r1 = SPI.transfer(0);
 
-        ::digitalWrite(mPinSclk, HIGH);
-        ::delay(2);
-        const long bit = ::digitalRead(mPinMiso);
-        ::delay(2);
-        ::digitalWrite(mPinSclk, LOW);
-        ::delay(2);
+        // De-select the device
+        //
+        mSS.digitalWrite(HIGH);
 
-        return bit;
+        // Return result as a 16 bit number
+        //
+        return (r0 << 8) | r1;
+      }
+      bool Magnetometer::read(uint8_t axis, uint8_t period, int16_t& result, uint16_t timeout) const
+      {
+        // Issue the read command for the requested axis
+        //
+        if (! convert(axis, period))
+        {
+          return false;
+        }
+
+        // Wait for ready signal
+        //
+        // Set a default timeout which is appropriate for the selected
+        // period. See data sheet for details. Values used are 1us larger
+        // to account for +/-1 jitter.
+        //
+        if (timeout == 0)
+        {
+          switch (period)
+          {
+            case MM_PERIOD_32:
+              timeout = 501;
+              break;
+            case MM_PERIOD_64:
+              timeout = 1001;
+              break;
+            case MM_PERIOD_128:
+              timeout = 2001;
+              break;
+            case MM_PERIOD_256:
+              timeout = 4001;
+              break;
+            case MM_PERIOD_512:
+              timeout = 7501;
+              break;
+            case MM_PERIOD_1024:
+              timeout = 15001;
+              break;
+            case MM_PERIOD_2048:
+              timeout = 35501;
+              break;
+            case MM_PERIOD_4096:
+              timeout = 60001;
+              break;
+            default:
+              return false;
+          }
+        }
+
+        // Wait until device reports it is ready, or timeout is reached
+        //
+        ::delayMicroseconds(timeout);
+
+        // Get the result
+        //
+        result = getResult();
+
+        // Done
+        //
+        return true;
+      }
+      void Magnetometer::pulseReset() const
+      {
+        mRESET.digitalWrite(HIGH);
+        ::delayMicroseconds(1);
+        mRESET.digitalWrite(LOW);
       }
       float Magnetometer::readAxis(int axis)
       {
-        // send eight bits, wait until the data is ready then receive 16 bits
 
-        // pulse the reset
-
-        ::digitalWrite(mPinReset, LOW);
-        ::delay(2);
-        ::digitalWrite(mPinReset, HIGH);
-        ::delay(2);
-        ::digitalWrite(mPinReset, LOW);
-        ::delay(2);
-
-        // send the command byte
-
-        // set the time to read the magnetic sensors (ASIC period) as /2048
-
-        sendBit(LOW);
-        sendBit(HIGH);
-        sendBit(HIGH);
-        sendBit(LOW);
-        sendBit(LOW);
-        sendBit(LOW);
-
-        // the last two bits select the axis
-
-        if (axis == 0)  // x axis
-        {
-          sendBit(LOW);
-          sendBit(HIGH);
-        }
-        else if (axis == 1)  // y axis
-        {
-          sendBit(HIGH);
-          sendBit(LOW);
-        }
-        else  // z axis
-        {
-          sendBit(HIGH);
-          sendBit(HIGH);
-        }
-
-        // wait until the DRDY line is high
-
-        while (::digitalRead(mPinDrdy) == LOW)
-        {
-        }
-
-        long total = 0;
-
-        // receive result
-        // the leftmost bit mark the number as positive or negative
-
-        const long sign = receiveBit();
-
-        // the remaining bits are converted to an integer
-
-        for (int i = 14; i >= 0; i = i - 1)
-        {
-          total = total | (receiveBit() << i);
-        }
-
-        if (sign == 1)
-        {
-          total = total - 32768;
-        }
-
-        // set and return the appropriate variable
+        // Read
         //
-        return total;
+        int16_t result = 0;
+        if (! read(axis, MM_PERIOD_128, result, 0))
+        {
+          return 0.0f;
+        }
+
+        // Return the result
+        //
+        return result;
       }
       void Magnetometer::update()
       {

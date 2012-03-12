@@ -120,13 +120,13 @@ function(GENERATE_ARDUINO_LIBRARY TARGET_NAME)
                                                  _HDRS       # Headers
                                                  _LIBS       # Libraries to linked in
                                                  _BOARD)     # Board name (such as uno, mega2560, ...)
-    set(INPUT_AUTOLIBS True)
-    if(DEFINED ${TARGET_NAME}_NO_AUTOLIBS AND ${TARGET_NAME}_NO_AUTOLIBS)
-        set(INPUT_AUTOLIBS False)
-    endif()
+    set(INPUT_AUTOLIBS False)
+    #if(DEFINED ${TARGET_NAME}_NO_AUTOLIBS AND ${TARGET_NAME}_NO_AUTOLIBS)
+    #    set(INPUT_AUTOLIBS False)
+    #endif()
 
-    #message(STATUS "Generating TARGET_NAME=${TARGET_NAME}")
-    #message(STATUS "Generating INPUT_AUTOLIBS=${INPUT_AUTOLIBS}")
+    message(STATUS "Generating TARGET_NAME=${TARGET_NAME}")
+    message(STATUS "Generating INPUT_AUTOLIBS=${INPUT_AUTOLIBS}")
     
     set(ALL_LIBS)
     set(ALL_SRCS ${INPUT_SRCS} ${INPUT_HDRS})
@@ -139,13 +139,15 @@ function(GENERATE_ARDUINO_LIBRARY TARGET_NAME)
     endif()
 
     list(APPEND ALL_LIBS ${CORE_LIB} ${INPUT_LIBS})
-    #message(STATUS "GENERATE_ARDUINO_LIBRARY ALL_LIBS=${ALL_LIBS}")
-    #message(STATUS "GENERATE_ARDUINO_LIBRARY CORE_LIB=${CORE_LIB}")
-    #message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_LIBS=${INPUT_LIBS}")
-    #message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_BOARD=${INPUT_BOARD}")
+    
+    message(STATUS "GENERATE_ARDUINO_LIBRARY ALL_LIBS=${ALL_LIBS}")
+    message(STATUS "GENERATE_ARDUINO_LIBRARY CORE_LIB=${CORE_LIB}")
+    message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_LIBS=${INPUT_LIBS}")
+    message(STATUS "GENERATE_ARDUINO_LIBRARY INPUT_BOARD=${INPUT_BOARD}")
         
     add_library(${TARGET_NAME} ${ALL_SRCS})
     target_link_libraries(${TARGET_NAME} ${ALL_LIBS})
+    
 endfunction()
 
 # generate_arduino_firmware(TARGET_NAME)

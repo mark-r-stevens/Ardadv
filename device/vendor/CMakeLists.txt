@@ -13,34 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## CMake module search path
+## Setup the library parameters
 #
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules) 
+set(Vendor_SRCS  SPI.cpp)
+set(Vendor_HDRS  SPI.h)
+set(Vendor_BOARD uno)
 
-## Arduino Toolchain
+## Generate the library
 #
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/toolchains/Arduino.cmake)
+generate_arduino_library(Vendor)
 
-## Minimum cmake required
-#
-cmake_minimum_required(VERSION 2.8)
-
-## The default project
-#
-project(ArdAdvDevice C CXX)
-
-## Require the Arduino development environment
-#
-find_package(Arduino 1.0 REQUIRED)
-if(NOT ARDUINO_FOUND)
-  message(FATAL_ERROR "Arduino not found")
-endif()
-
-## Make sure the top level directory is set up in the include path
-#
-include_directories(.)
-
-## Add the sub directory
-#
-add_subdirectory(sensors)
-add_subdirectory(vendor)

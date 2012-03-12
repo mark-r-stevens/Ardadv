@@ -77,7 +77,7 @@ namespace ardadv
         {
           if (detail::ReadAdrPort(fd, data, 4096) >= 0)
           {
-            QString send = data;
+            const QString send = data;
             emit line(send);
           }
           this->msleep(100);

@@ -83,12 +83,8 @@ namespace ardadv
 
         //! @brief Used to reduce ambiguity in pin assignment
         //!
-        typedef common::Pin SCLK;
-        typedef common::Pin MISO;
-        typedef common::Pin MOSI;
-        typedef common::Pin SSNOT;
-        typedef common::Pin DRDY;
-        typedef common::Pin RESET;
+        typedef common::Pin<0> SS;
+        typedef common::Pin<1> RESET;
 
         //! @brief Constructor
         //!
@@ -96,19 +92,12 @@ namespace ardadv
 
         //! @brief Set the internal pin
         //!
-        //! @param[in] SCLK  Serial clock
-        //! @param[in] MISO  Master in slave out
-        //! @param[in] MOSI  Master out slave in
-        //! @param[in] SSNOT Slave select
-        //! @param[in] DRDY  Data ready
+        //! @param[in] SS    Slave select
         //! @param[in] RESET Reset
         //!
-        void setup(const SCLK&  sclk,
-                   const MISO&  miso,
-                   const MOSI&  mosi,
-                   const SSNOT& ssnot,
-                   const DRDY&  drdy,
-                   const RESET& reset);
+        //! @return true if setup successfully
+        //!
+        bool setup(const SS& ss, const RESET& reset);
 
         //! @brief Update the state
         //!
@@ -170,6 +159,36 @@ namespace ardadv
 
       protected:
 
+        //! @brief Send a command to take a measurement
+        //!
+        //! @param[in] axis   The requested axis
+        //! @param[in] period The time interval
+        //!
+        //! @return True if command was sent properly
+        //!
+        bool convert(uint8_t axis, uint8_t period) const;
+
+        //! @brief Request a measurement and convert
+        //!
+        //! @param[in]  axis    The requested axis
+        //! @param[in]  period  The time interval
+        //! @param[out] result  The measurement returned
+        //! @param[in]  timeout The time to wait on the request
+        //!
+        //! @return True if a measurement was made
+        //!
+        bool read(uint8_t axis, uint8_t period, int16_t& result, uint16_t timeout=0) const;
+
+        //! @brief Get the result of the command
+        //!
+        //! @return The result of the measurement taken
+        //!
+        int16_t getResult() const;
+
+        //! @brief Pulse the reset
+        //!
+        void pulseReset() const;
+
         //! @brief Read the axis
         //!
         //! @param[in] axis The axis to read
@@ -178,28 +197,12 @@ namespace ardadv
         //!
         float readAxis(int axis);
 
-        //! @brief Send a bit to the sensor
-        //!
-        //! @param[in] bit The bit value to send
-        //!
-        void sendBit(int bit);
-
-        //! @brief Receive a bit from the sensor
-        //!
-        //! @return the bit
-        //!
-        long receiveBit();
-
-      private:
+     private:
 
         //! @brief The pins
         //!
-        common::Pin mPinSclk;
-        common::Pin mPinMiso;
-        common::Pin mPinMosi;
-        common::Pin mPinSsnot;
-        common::Pin mPinDrdy;
-        common::Pin mPinReset;
+        SS    mSS;
+        RESET mRESET;
 
         //! @brief The pin values
         //!

@@ -56,7 +56,6 @@ namespace ardadv
       {
         return;
       }
-      std::cout << "Updating camera" << std::endl;
 
       // Grab a frame
       //

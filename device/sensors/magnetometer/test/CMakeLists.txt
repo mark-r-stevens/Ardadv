@@ -19,9 +19,10 @@ set(MagnetometerTest_PORT /dev/cu.usbmodem621)
    
 ## Arduino Target board
 #
-set(MagnetometerTest_BOARD uno)              
 set(MagnetometerTest_SRCS  Test.cpp)  
-set(MagnetometerTest_LIBS  Magnetometer)
+set(MagnetometerTest_LIBS  m Magnetometer Vendor m)
+set(MagnetometerTest_BOARD uno)              
+set(MagnetometerTest_NO_AUTOLIBS True)
 
 ##  Target generation
 #

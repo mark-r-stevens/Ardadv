@@ -36,12 +36,8 @@ void setup()
   // Initialize the Magnetometer
   //
   typedef ardadv::sensors::Magnetometer::Magnetometer Magnetometer;
-  magnetometer.setup(Magnetometer::SCLK(8),
-                     Magnetometer::MISO(9),
-                     Magnetometer::MOSI(10),
-                     Magnetometer::SSNOT(11),
-                     Magnetometer::DRDY(12),
-                     Magnetometer::RESET(13));
+  magnetometer.setup(Magnetometer::SS(A0),
+                     Magnetometer::RESET(8));
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -60,7 +56,7 @@ void loop()
   Serial.print(" Start ");
   Serial.print(millis());
   Serial.print(" ");
-  Serial.print(magnetometer.x());
+  Serial.print(magnetometer.heading());
   Serial.print(" ");
   Serial.print(magnetometer.y());
   Serial.print(" ");

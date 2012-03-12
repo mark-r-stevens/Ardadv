@@ -40,7 +40,7 @@ namespace ardadv
 
       int OpenAdrPort(const char* sPortName)
       {
-        int fd = open(sPortName, O_RDWR | O_NOCTTY | O_NDELAY);
+        int fd = open(sPortName, O_RDWR | O_NOCTTY);// | O_NDELAY);
         if (fd < 0)
         {
           printf("in OpenAdrPort port#=%s\n", sPortName);
