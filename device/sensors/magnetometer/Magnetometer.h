@@ -83,7 +83,7 @@ namespace ardadv
 
         //! @brief Used to reduce ambiguity in pin assignment
         //!
-        typedef common::Pin<0> SS;
+        typedef common::Pin<0> DRDY;
         typedef common::Pin<1> RESET;
 
         //! @brief Constructor
@@ -92,12 +92,12 @@ namespace ardadv
 
         //! @brief Set the internal pin
         //!
-        //! @param[in] SS    Slave select
+        //! @param[in] DRDY  Data ready
         //! @param[in] RESET Reset
         //!
         //! @return true if setup successfully
         //!
-        bool setup(const SS& ss, const RESET& reset);
+        bool setup(const DRDY& drdy, const RESET& reset);
 
         //! @brief Update the state
         //!
@@ -128,15 +128,6 @@ namespace ardadv
         inline float z() const
         {
           return mValueZ;
-        }
-
-        //! @brief Access the heading measure
-        //!
-        //! @return the heading
-        //!
-        inline float heading() const
-        {
-          return mHeading;
         }
 
         //! @brief Return the part number
@@ -201,7 +192,7 @@ namespace ardadv
 
         //! @brief The pins
         //!
-        SS    mSS;
+        DRDY  mDRDY;
         RESET mRESET;
 
         //! @brief The pin values
@@ -209,10 +200,6 @@ namespace ardadv
         float mValueX;
         float mValueY;
         float mValueZ;
-
-        //! @brief The heading
-        //!
-        float mHeading;
 
       };
     }

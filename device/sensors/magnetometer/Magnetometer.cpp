@@ -39,38 +39,25 @@ namespace ardadv
   {
     namespace Magnetometer
     {
-      namespace
-      {
-        inline float sqr(float x)
-        {
-          return x * x;
-        }
-        inline int computeHeading(float x, float y, float z)
-        {
-          float heading = ::atan2(y, x);
-          return  int(degrees(heading));
-        }
-      }
       Magnetometer::Magnetometer()
-      : mSS(-1)
+      : mDRDY(-1)
       , mRESET(-1)
       , mValueX(0.0f)
       , mValueY(0.0f)
       , mValueZ(0.0f)
-      , mHeading(0.0f)
       {
       }
-      bool Magnetometer::setup(const SS& ss, const RESET& reset)
+      bool Magnetometer::setup(const DRDY& drdy, const RESET& reset)
       {
 
         // Store the pins and their modes
         //
-        mSS.reset(ss,       OUTPUT);
+        mDRDY.reset(drdy,   INPUT);
         mRESET.reset(reset, OUTPUT);
 
         // Give the pins initial values
         //
-        mSS.digitalWrite(HIGH);
+        //mDRDY.digitalWrite(HIGH);
         mRESET.digitalWrite(LOW);
 
         // Set up the spi interface
@@ -102,9 +89,9 @@ namespace ardadv
         cmd |= (axis + 1);
         cmd |= (period << 4);
 
-        // Select the device
+        // Select the device (using the default SPI pins)
         //
-        mSS.digitalWrite(LOW);
+        ::digitalWrite(SS, LOW);
 
         // Pulse reset
         //
@@ -125,9 +112,9 @@ namespace ardadv
         const int16_t r0 = SPI.transfer(0);
         const int16_t r1 = SPI.transfer(0);
 
-        // De-select the device
+        // De-select the device (using the default SPI pins)
         //
-        mSS.digitalWrite(HIGH);
+        ::digitalWrite(SS, HIGH);
 
         // Return result as a 16 bit number
         //
@@ -183,7 +170,14 @@ namespace ardadv
 
         // Wait until device reports it is ready, or timeout is reached
         //
-        ::delayMicroseconds(timeout);
+        const unsigned long t = micros();
+        while (!mDRDY.digitalRead())
+        {
+          if (micros() - t > timeout)
+          {
+            return false;
+          }
+        }
 
         // Get the result
         //
@@ -242,15 +236,10 @@ namespace ardadv
         // low. If you will not be using the MicroMag3, set SSNOT to high to
         // disable the SPI port.
 
-        // Get the raw values
-        //
         mValueX = readAxis(0);
         mValueY = readAxis(1);
         mValueZ = readAxis(2);
 
-        // Compute the heading from the different axis
-        //
-        mHeading = computeHeading(mValueX, mValueY, mValueZ);
       }
     }
   }

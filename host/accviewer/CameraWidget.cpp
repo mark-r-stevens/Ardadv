@@ -27,6 +27,7 @@ namespace ardadv
     CameraWidget::CameraWidget(QWidget *parent)
     : QGLWidget(parent)
     , capture(0)
+    , mHeading(0)
     {
 
       // Set up the capture device
@@ -185,6 +186,41 @@ namespace ardadv
       }
       ::glEnd();
       ::glDisable(GL_TEXTURE_2D);
+
+      // Draw a circle
+      //
+      ::glColor3f(1,1,1);
+      ::glBegin(GL_LINE_LOOP);
+      for (int i = 0; i < 360; i += 10)
+      {
+        const float ang = i * 3.14159 / 180.0;
+        const float x = 30 * ::cos(ang) + glImage.width() - 30;
+        const float y = 30 * ::sin(ang) + glImage.height() - 30;
+        ::glVertex2f(x,y);
+      }
+      ::glEnd();
+
+      // Mark up
+      //
+      renderText(width() - 27, 10, "N");
+      renderText(width() -  8, 30, "E");
+      renderText(width() - 42, 30, "W");
+      renderText(width() - 27, 45, "S");
+
+      // Draw the compass arrow
+      //
+      ::glColor3f(1,0,0);
+      ::glBegin(GL_LINES);
+      const float ang = mHeading * 3.14159 / 180.0;
+      const float x1 = glImage.width() - 30;
+      const float y1 = glImage.height() - 30;
+      const float x2 = 30 * ::cos(ang) + x1;
+      const float y2 = 30 * ::sin(ang) + y1;
+      ::glVertex2f(x1,y1);
+      ::glVertex2f(x2,y2);
+      ::glEnd();
+      // Overlay the heading on the image
+      //
 
     }
   }

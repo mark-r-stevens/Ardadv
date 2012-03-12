@@ -36,7 +36,7 @@ void setup()
   // Initialize the Magnetometer
   //
   typedef ardadv::sensors::Magnetometer::Magnetometer Magnetometer;
-  magnetometer.setup(Magnetometer::SS(A0),
+  magnetometer.setup(Magnetometer::DRDY(9),
                      Magnetometer::RESET(8));
 }
 
@@ -53,20 +53,20 @@ void loop()
 
   // Log debugging output
   //
-  Serial.print(" Start ");
-  Serial.print(millis());
-  Serial.print(" ");
-  Serial.print(magnetometer.heading());
-  Serial.print(" ");
-  Serial.print(magnetometer.y());
-  Serial.print(" ");
-  Serial.print(magnetometer.z());
-  Serial.print(" Stop ");
-  Serial.flush();
+  ::Serial.print(" Start ");
+  ::Serial.print(millis());
+  ::Serial.print(" ");
+  ::Serial.print(magnetometer.x());
+  ::Serial.print(" ");
+  ::Serial.print(magnetometer.y());
+  ::Serial.print(" ");
+  ::Serial.print(magnetometer.z());
+  ::Serial.print(" Stop ");
+  ::Serial.flush();
 
   // Add a small delay
   //
-  delay(100);
+  ::delay(100);
 
 }
 

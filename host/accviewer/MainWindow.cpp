@@ -113,9 +113,9 @@ namespace ardadv
         //
         const QString v0 = mList.takeFirst();
         const int     v1 = mList.takeFirst().toInt();
-        const float   v2 = mList.takeFirst().toFloat();
-        const float   v3 = mList.takeFirst().toFloat();
-        const float   v4 = mList.takeFirst().toFloat();
+        float   v2 = mList.takeFirst().toFloat();
+        float   v3 = mList.takeFirst().toFloat();
+        float   v4 = mList.takeFirst().toFloat();
         const QString v5 = mList.takeFirst();
 
         // Check
@@ -129,11 +129,23 @@ namespace ardadv
           return;
         }
 
+        // Normalize
+        //
+        const float mag = ::sqrt(v2*v2 + v3*v3 + v4*v4);
+        v2 /= mag;
+        v3 /= mag;
+        v4 /= mag;
+
+        // Compute the heading
+        //
+        const float heading = ::atan2(v3,v3) * 180.0 / 3.14159;
+
         // Update the display
         //
-        std::cout << "vector (" << v2 << ", " << v3 << ", " << v4 << ")" << std::endl;
+        std::cout << "heading (" << heading << ")" << std::endl;
         mRawDataWidget->add(v2, v3, v4);
         mAxisWidget->add(v2, v3, v4);
+        mCameraWidget->setHeading(heading);
       }
     }
   }

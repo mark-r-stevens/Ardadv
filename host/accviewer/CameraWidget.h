@@ -64,6 +64,15 @@ namespace ardadv
         return QSize(480, 360);
       }
 
+      //! @brief Set the heading
+      //!
+      //! @param[in] val The new heading value
+      //!
+      inline void setHeading(float val)
+      {
+        mHeading = val;
+      }
+
     public slots:
 
       //! @brief Grab a camera image
@@ -101,6 +110,10 @@ namespace ardadv
       //! @brief The camera image
       //!
       CvCapture* capture;
+
+      //! @breif The heading
+      //!
+      float mHeading;
     };
   }
 }
