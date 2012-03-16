@@ -15,11 +15,15 @@
 
 ## Setup the library parameters
 #
-set(Vendor_SRCS  AFMotor.cpp SPI.cpp)
-set(Vendor_HDRS  AFMotor.h SPI.h)
-set(Vendor_BOARD uno)
+set(Motor_SRCS  Motor.cpp)
+set(Motor_HDRS  Motor.h)
+set(Motor_BOARD uno)
 
 ## Generate the library
 #
-generate_arduino_library(Vendor)
+generate_arduino_library(Motor)
+
+## Add the subdirectory
+#
+add_subdirectory(test)
 

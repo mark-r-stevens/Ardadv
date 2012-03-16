@@ -13,13 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Add the sub-directories
 #
-set(Vendor_SRCS  AFMotor.cpp SPI.cpp)
-set(Vendor_HDRS  AFMotor.h SPI.h)
-set(Vendor_BOARD uno)
-
-## Generate the library
-#
-generate_arduino_library(Vendor)
+add_subdirectory(motor)
 

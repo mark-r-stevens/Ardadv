@@ -13,13 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Serial upload port
 #
-set(Vendor_SRCS  AFMotor.cpp SPI.cpp)
-set(Vendor_HDRS  AFMotor.h SPI.h)
-set(Vendor_BOARD uno)
+set(MotorTest_PORT /dev/cu.usbmodem621)      
+   
+## Arduino Target board
+#
+set(MotorTest_SRCS  Test.cpp)  
+set(MotorTest_LIBS  m Motor Vendor m)
+set(MotorTest_BOARD uno)              
+set(MotorTest_NO_AUTOLIBS True)
 
-## Generate the library
+##  Target generation
 #
-generate_arduino_library(Vendor)
+generate_arduino_firmware(MotorTest)
 
