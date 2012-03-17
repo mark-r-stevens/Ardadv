@@ -15,14 +15,14 @@
 
 ## Setup the library parameters
 #
-set(Motor_SRCS  Motor.cpp)
-set(Motor_HDRS  Motor.h)
-set(Motor_BOARD uno)
-set(Motor_LIBS  Vendor)
+set(Manual_SRCS  Manual.cpp)
+set(Manual_HDRS  Manual.h)
+set(Manual_BOARD uno)
+set(Manual_LIBS  Motor Vendor)
 
 ## Generate the library
 #
-generate_arduino_library(Motor)
+generate_arduino_library(Manual)
 
 ## Add the subdirectory
 #

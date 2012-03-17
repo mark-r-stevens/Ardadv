@@ -24,7 +24,7 @@ namespace ardadv
 {
   namespace actuators
   {
-    namespace Motor
+    namespace motor
     {
 
       //! @class Motor

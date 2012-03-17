@@ -17,10 +17,10 @@
 //
 #include <Arduino.h>
 
-// The motor
+// The platform in manual control
 //
-#include <actuators/motor/Motor.h>
-ardadv::actuators::motor::Motor motor(3);
+#include <platform/dfrobot/manual/Manual.h>
+ardadv::platform::dfrobot::manual::Manual manual;
 
 // Initialize the Motor pins to be output.  This is a one time call on startup.
 //
@@ -34,7 +34,7 @@ void setup()
 
   // set the speed to 200/255
   //
-  motor.setup(200);
+  manual.setup(100);
 
 }
 
@@ -46,16 +46,65 @@ void loop()
 
   Serial.print("tick");
 
-  motor.forward();      // turn it on going forward
+  manual.forward();      // turn it on going forward
   delay(1000);
 
   Serial.print("tock");
-  motor.backward();     // the other way
+  manual.backward();     // the other way
   delay(1000);
 
   Serial.print("tack");
-  motor.stop();      // stopped
+  manual.stop();      // stopped
   delay(1000);
+
+  return;
+
+  // Ask for a command
+  //
+  Serial.print("command> ");
+
+  // Read the command
+  //
+  char command[50];
+  for (int i = 0; i < 25; ++i)
+  {
+    while (Serial.available() <= 0)
+    {
+      ::delay(1);
+    }
+    command[i] = Serial.read();
+    Serial.write(command[i]);
+    if (command[i] == '>')
+    {
+      command[i + 1] = '\0';
+      break;
+    }
+  }
+
+  // Based on the command issue the motor command
+  //
+  Serial.print("comparing (");
+  Serial.print(command);
+  Serial.println(")");
+  if (::strcmp(command, "<direction=forward>") == 0)
+  {
+    Serial.println("manual.forward()");
+    manual.forward();
+  }
+  else if (::strcmp(command, "<direction=stop>") == 0)
+  {
+    Serial.println("manual.stop()");
+    manual.stop();
+  }
+  Serial.println(command);
+
+  //Serial.print("tock");
+  //manual.backward();
+  //delay(1000);
+
+  //Serial.print("tack");
+  //manual.stop();
+  //delay(1000);
 
 }
 

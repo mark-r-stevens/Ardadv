@@ -13,18 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Add the sub-directories
 #
-set(Motor_SRCS  Motor.cpp)
-set(Motor_HDRS  Motor.h)
-set(Motor_BOARD uno)
-set(Motor_LIBS  Vendor)
-
-## Generate the library
-#
-generate_arduino_library(Motor)
-
-## Add the subdirectory
-#
-add_subdirectory(test)
+add_subdirectory(manual)
 

@@ -24,7 +24,7 @@ namespace ardadv
 {
   namespace actuators
   {
-    namespace Motor
+    namespace motor
     {
       Motor::Motor(uint8_t num, uint8_t freq) : mMotor(num, freq)
       {
@@ -36,6 +36,7 @@ namespace ardadv
       }
       void Motor::forward()
       {
+        Serial.println("Motor::forward()");
         mMotor.run(FORWARD);
       }
       void Motor::backward()

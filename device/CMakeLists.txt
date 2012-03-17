@@ -43,5 +43,6 @@ include_directories(.)
 ## Add the sub directory
 #
 add_subdirectory(actuators)
+add_subdirectory(platform)
 add_subdirectory(sensors)
 add_subdirectory(vendor)

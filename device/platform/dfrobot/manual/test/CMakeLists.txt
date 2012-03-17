@@ -13,18 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Serial upload port
 #
-set(Motor_SRCS  Motor.cpp)
-set(Motor_HDRS  Motor.h)
-set(Motor_BOARD uno)
-set(Motor_LIBS  Vendor)
+set(ManualTest_PORT /dev/cu.usbmodem621)      
+   
+## Arduino Target board
+#
+set(ManualTest_SRCS  Test.cpp)  
+set(ManualTest_LIBS  Motor Manual Vendor)
+set(ManualTest_BOARD uno)              
+set(ManualTest_NO_AUTOLIBS True)
 
-## Generate the library
+##  Target generation
 #
-generate_arduino_library(Motor)
-
-## Add the subdirectory
-#
-add_subdirectory(test)
+generate_arduino_firmware(ManualTest)
 
