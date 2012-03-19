@@ -26,18 +26,18 @@ namespace ardadv
       namespace manual
       {
         Manual::Manual()
-        : mFrontLeft (1, MOTOR12_64KHZ)
-        , mFrontRight(2, MOTOR12_64KHZ)
-        , mRearLeft  (3, MOTOR34_1KHZ)
-        //, mRearRight (4, MOTOR34_1KHZ)
+        : mFrontLeft (1, MOTOR12_8KHZ)
+        , mFrontRight(2, MOTOR12_8KHZ)
+        , mRearLeft  (3, MOTOR34_8KHZ)
+        , mRearRight (4, MOTOR34_8KHZ)
         {
         }
         bool Manual::setup(uint8_t speed)
         {
           mFrontLeft.setup(speed);
           mFrontRight.setup(speed);
-          //mRearLeft.setup(speed);
-          //mRearRight.setup(speed);
+          mRearLeft.setup(speed);
+          mRearRight.setup(speed);
           return true;
         }
         void Manual::forward()
@@ -45,21 +45,21 @@ namespace ardadv
           mFrontLeft.forward();
           mFrontRight.forward();
           mRearLeft.forward();
-          //mRearRight.forward();
+          mRearRight.forward();
         }
         void Manual::backward()
         {
           mFrontLeft.backward();
           mFrontRight.backward();
-          RmearLeft.backward();
-          //mRearRight.backward();
+          mRearLeft.backward();
+          mRearRight.backward();
         }
         void Manual::stop()
         {
           mFrontLeft.stop();
           mFrontRight.stop();
           mRearLeft.stop();
-          //mRearRight.stop();
+          mRearRight.stop();
         }
       }
     }

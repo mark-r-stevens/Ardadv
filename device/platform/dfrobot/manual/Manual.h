@@ -87,7 +87,7 @@ namespace ardadv
           actuators::motor::Motor mFrontLeft;
           actuators::motor::Motor mFrontRight;
           actuators::motor::Motor mRearLeft;
-          //actuators::motor::Motor mRearRight;
+          actuators::motor::Motor mRearRight;
 
         };
       }
