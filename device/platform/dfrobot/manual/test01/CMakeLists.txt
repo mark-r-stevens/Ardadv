@@ -15,16 +15,16 @@
 
 ## Serial upload port
 #
-set(ManualTest_PORT /dev/cu.usbmodem621)      
+set(ManualTest01_PORT /dev/cu.usbmodem621)      
    
 ## Arduino Target board
 #
-set(ManualTest_SRCS  Test.cpp)  
-set(ManualTest_LIBS  Motor Manual Vendor)
-set(ManualTest_BOARD uno)              
-set(ManualTest_NO_AUTOLIBS True)
+set(ManualTest01_SRCS  Test.cpp)  
+set(ManualTest01_LIBS  Motor Manual Vendor)
+set(ManualTest01_BOARD uno)              
+set(ManualTest01_NO_AUTOLIBS True)
 
 ##  Target generation
 #
-generate_arduino_firmware(ManualTest)
+generate_arduino_firmware(ManualTest01)
 

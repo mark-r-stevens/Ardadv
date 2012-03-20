@@ -26,10 +26,10 @@ namespace ardadv
       namespace manual
       {
         Manual::Manual()
-        : mFrontLeft (1, MOTOR12_8KHZ)
-        , mFrontRight(2, MOTOR12_8KHZ)
-        , mRearLeft  (3, MOTOR34_8KHZ)
-        , mRearRight (4, MOTOR34_8KHZ)
+        : mFrontLeft (1, MOTOR12_1KHZ)
+        , mFrontRight(2, MOTOR12_1KHZ)
+        , mRearLeft  (3, MOTOR34_1KHZ)
+        , mRearRight (4, MOTOR34_1KHZ)
         {
         }
         bool Manual::setup(uint8_t speed)
