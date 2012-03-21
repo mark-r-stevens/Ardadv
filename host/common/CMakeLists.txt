@@ -24,34 +24,16 @@ include(${QT_USE_FILE})
 
 ## The qt files
 #
-QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
-  AxisWidget.h
-  CameraWidget.h
-  MainWindow.h
-  RawDataWidget.h
+QT4_WRAP_CPP(COMMON_MOC_HDRS
+  Serial.h
 )
 
-## Add the executable
+## Add the library
 #
-add_executable(AccViewer
-  AxisWidget.cpp
-  AxisWidget.h
-  CameraWidget.cpp
-  CameraWidget.h
-  Main.cpp
-  MainWindow.cpp
-  MainWindow.h
-  RawDataWidget.cpp
-  RawDataWidget.h
-  ${ACCVIEWER_MOC_HDRS}
-  ${ACCVIEWER_RCC_SRCS}
-)
-
-## Add the link libraries
-#
-target_link_libraries(AccViewer
-  Common
-  ${QT_LIBRARIES}
-  ${OPENGL_LIBRARIES}
-  ${OpenCV_LIBS}
+add_library(Common
+  SerialPort.cpp
+  SerialPort.h
+  Serial.h
+  ${COMMON_MOC_HDRS}
+  ${COMMON_RCC_SRCS}
 )

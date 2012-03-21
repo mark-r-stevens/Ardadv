@@ -25,31 +25,28 @@ include(${QT_USE_FILE})
 ## The qt files
 #
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
-  AxisWidget.h
+  ControlsWidget.h
   CameraWidget.h
   MainWindow.h
-  RawDataWidget.h
 )
 
 ## Add the executable
 #
-add_executable(AccViewer
-  AxisWidget.cpp
-  AxisWidget.h
+add_executable(DfRobot
+  ControlsWidget.cpp
+  ControlsWidget.h
   CameraWidget.cpp
   CameraWidget.h
   Main.cpp
   MainWindow.cpp
   MainWindow.h
-  RawDataWidget.cpp
-  RawDataWidget.h
   ${ACCVIEWER_MOC_HDRS}
   ${ACCVIEWER_RCC_SRCS}
 )
 
 ## Add the link libraries
 #
-target_link_libraries(AccViewer
+target_link_libraries(DfRobot
   Common
   ${QT_LIBRARIES}
   ${OPENGL_LIBRARIES}

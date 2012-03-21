@@ -21,10 +21,9 @@
 #include <QTextEdit>
 #include <QStringList>
 
-#include <accviewer/MainWindow.h>
-#include <accviewer/CameraWidget.h>
-#include <accviewer/RawDataWidget.h>
-#include <accviewer/AxisWidget.h>
+#include <dfrobot/MainWindow.h>
+#include <dfrobot/CameraWidget.h>
+#include <dfrobot/ControlsWidget.h>
 
 #include <common/Serial.h>
 
@@ -33,29 +32,21 @@
 
 namespace ardadv
 {
-  namespace accviewer
+  namespace dfrobot
   {
     MainWindow::MainWindow()
     {
 
+      // Allocate the widgets
+      //
+      mCameraWidget   = new CameraWidget(this);
+      mControlsWidget = new ControlsWidget(this);
+
       // The layout
       //
       QGridLayout *layout = new QGridLayout;
-
-      // Set the central widget
-      //
-      mCameraWidget  = new CameraWidget(this);
-      mRawDataWidget = new RawDataWidget(this);
-      mAxisWidget    = new AxisWidget(this);
-
-      // Add the raw data widget
-      //
-      layout->addWidget(mCameraWidget,  0, 0);
-      layout->addWidget(mAxisWidget,    0, 1);
-      layout->addWidget(mRawDataWidget, 1, 0, 1, 2);
-
-      // Store the layout
-      //
+      layout->addWidget(mCameraWidget,   0, 0);
+      layout->addWidget(mControlsWidget, 0, 1);
       setLayout(layout);
 
       // Create the serial reader
@@ -68,12 +59,12 @@ namespace ardadv
 
       // Set the window title
       //
-      setWindowTitle(tr("Accelerometer Viewer"));
+      setWindowTitle(tr("DF Robot Controller"));
 
       // Start the serial line running
       //
       mSerial->open("/dev/cu.usbmodem621");
-      mSerial->start();
+      //mSerial->start();
     }
     void MainWindow::line(const QString& str)
     {
@@ -144,8 +135,6 @@ namespace ardadv
         // Update the display
         //
         std::cout << "heading (" << heading << ")" << std::endl;
-        mRawDataWidget->add(v2, v3, v4);
-        mAxisWidget->add(v2, v3, v4);
         mCameraWidget->setHeading(heading);
       }
     }

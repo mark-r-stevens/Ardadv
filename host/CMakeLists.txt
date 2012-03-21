@@ -55,4 +55,5 @@ include_directories(.)
 ## Add the subdirectory
 #
 add_subdirectory(accviewer)
-
+add_subdirectory(common)
+add_subdirectory(dfrobot)

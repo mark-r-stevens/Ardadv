@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ardadv_accviewer_MainWindow_h
-#define ardadv_accviewer_MainWindow_h
+#ifndef ardadv_dfrobot_MainWindow_h
+#define ardadv_dfrobot_MainWindow_h
 
 #include <QDialog>
 #include <QStringList>
@@ -25,15 +25,14 @@ namespace ardadv
   {
     class Serial;
   }
-  namespace accviewer
+  namespace dfrobot
   {
     class CameraWidget;
-    class RawDataWidget;
-    class AxisWidget;
+    class ControlsWidget;
 
     //! @class MainWindow
     //!
-    //! @brief A simple gui to visualize serial data from an accelerometer
+    //! @brief A simple gui to control the dfrobot
     //!
     class MainWindow : public QDialog
     {
@@ -49,7 +48,7 @@ namespace ardadv
 
     public slots:
 
-      //! @brief Emitted when new data is available on the terminal
+      //! @brief Called when new data is available on the terminal
       //!
       //! @param[in] str The string read
       //
@@ -59,9 +58,8 @@ namespace ardadv
 
       //! @brief The widgets
       //!
-      CameraWidget*  mCameraWidget;
-      RawDataWidget* mRawDataWidget;
-      AxisWidget*    mAxisWidget;
+      CameraWidget*    mCameraWidget;
+      ControlsWidget*  mControlsWidget;
 
       //! @brief The listener for serial data
       //!

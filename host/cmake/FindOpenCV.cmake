@@ -51,7 +51,7 @@
 #
 FIND_PATH(OPENCV_CONFIG
     NAMES OpenCVConfig.cmake
-    HINTS /usr/local/share/OpenCV/
+    HINTS /opt/local/share/OpenCV/
 )
 message ("OPENCV_CONFIG=${OPENCV_CONFIG}")
 
