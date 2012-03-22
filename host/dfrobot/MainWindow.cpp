@@ -49,6 +49,11 @@ namespace ardadv
       layout->addWidget(mControlsWidget, 0, 1);
       setLayout(layout);
 
+      // Connect the controls
+      //
+      connect(this, SIGNAL(enableRobotControl()), mControlsWidget, SLOT(enableRobotControl()));
+      connect(this, SIGNAL(disableRobotControl()), mControlsWidget, SLOT(disableRobotControl()));
+
       // Create the serial reader
       //
       mSerial = new common::Serial;
@@ -65,6 +70,28 @@ namespace ardadv
       //
       mSerial->open("/dev/cu.usbmodem621");
       //mSerial->start();
+    }
+    void MainWindow::keyPressEvent(QKeyEvent* event)
+    {
+      if (event->key() == Qt::Key_Meta)
+      {
+        emit enableRobotControl();
+      }
+      else
+      {
+        QDialog::keyPressEvent(event);
+      }
+    }
+    void MainWindow::keyReleaseEvent(QKeyEvent* event)
+    {
+      if (event->key() == Qt::Key_Meta)
+      {
+        emit disableRobotControl();
+      }
+      else
+      {
+        QDialog::keyReleaseEvent(event);
+      }
     }
     void MainWindow::line(const QString& str)
     {

@@ -58,6 +58,24 @@ namespace ardadv
         return QSize(360, 360);
       }
 
+    public slots:
+
+      //! @brief Enable control of the robot through the gui
+      //!
+      void enableRobotControl();
+
+      //! @brief Disable control of the robot through the gui
+      //!
+      void disableRobotControl();
+
+    signals:
+
+      //! @brief Emmitted whenever a request to change speed is needed
+      //!
+      //! @param[in] message The message to send
+      //!
+      void changeRobotSpeed(const QString& message);
+
     protected:
 
       //! @brief Initialize opengl for rendering
@@ -73,6 +91,13 @@ namespace ardadv
       //! @param[in] event The event
       //!
       virtual void mouseMoveEvent(QMouseEvent * event);
+
+      //! @brief Process the change in mouse location
+      //!
+      //! @param[in] iMouseX The mouse location in x
+      //! @param[in] iMouseY The mouse location in y
+      //!
+      void process(float iMouseX, float iMouseY);
 
       //! @brief Draw the grid
       //!
@@ -91,6 +116,10 @@ namespace ardadv
       //! @brief The mouse position
       //!
       float mMouseY;
+
+      //! @brief True if the controls are active (key pressed)
+      //!
+      bool mEnabled;
 
     };
   }

@@ -15,6 +15,8 @@
 
 #include <dfrobot/ControlsWidget.h>
 
+#include <iostream>
+
 namespace ardadv
 {
   namespace dfrobot
@@ -23,12 +25,9 @@ namespace ardadv
     : QGLWidget(parent)
     , mMouseX(0)
     , mMouseY(0)
+    , mEnabled(false)
     {
-
-      // Enable mouse tracking
-      //
       setMouseTracking(true);
-
     }
     void ControlsWidget::mouseMoveEvent(QMouseEvent * event)
     {
@@ -36,16 +35,35 @@ namespace ardadv
       // The position in normalized pixels
       //
       const float x = event->x() / static_cast<float>(width());
-      const float y = event->y() / static_cast<float>(width());
+      const float y = 1.0 - event->y() / static_cast<float>(height());
 
       // rescale to -1 to 1
       //
-      mMouseX = 2 * x - 1;
-      mMouseY = 2 * y - 1;
+      process(2 * x - 1, 2 * y - 1);
+
+    }
+    void ControlsWidget::process(float iMouseX, float iMouseY)
+    {
+
+      // Store the new mouse location
+      //
+      mMouseX = iMouseX;
+      mMouseY = iMouseY;
+
+      // Format into a string for transmission
+      //
+      const QString message = QString("M %1 %2\n").arg(static_cast<int>(iMouseX * 200)).arg(static_cast<int>(iMouseY * 200));
+
+      // Send the message
+      //
+      if (mEnabled)
+      {
+        emit changeRobotSpeed(message);
+      }
 
       // Redraw
       //
-      ::glDraw();
+      glDraw();
     }
     void ControlsWidget::initializeGL()
     {
@@ -60,6 +78,18 @@ namespace ardadv
       ::glDisable(GL_CULL_FACE);
       ::glDisable(GL_LIGHTING);
 
+    }
+    void ControlsWidget::enableRobotControl()
+    {
+      mEnabled = true;
+      process(mMouseX, mMouseY);
+    }
+    void ControlsWidget::disableRobotControl()
+    {
+      const QString message = "M 0 0\n";
+      emit changeRobotSpeed(message);
+      mEnabled = false;
+      glDraw();
     }
     void ControlsWidget::paintGL()
     {
@@ -126,13 +156,17 @@ namespace ardadv
     }
     void ControlsWidget::drawMouse() const
     {
-
-      // Draw the mouse point as a big vertes
-      //
       ::glColor3f(1,0,0);
       ::glPointSize(5);
       ::glBegin(GL_POINTS);
-      ::glVertex2f(mMouseX, mMouseY);
+      if (mEnabled)
+      {
+        ::glVertex2f(mMouseX, mMouseY);
+      }
+      else
+      {
+        ::glVertex2f(0, 0);
+      }
       ::glEnd();
     }
   }

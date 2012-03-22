@@ -15,8 +15,8 @@
 
 ## Setup the library parameters
 #
-set(Vendor_SRCS  AFMotor.cpp SPI.cpp)
-set(Vendor_HDRS  AFMotor.h SPI.h)
+set(Vendor_SRCS  AFMotor.cpp SPI.cpp SimpleMessageSystem.cpp)
+set(Vendor_HDRS  AFMotor.h SPI.h SimpleMessageSystem.h)
 set(Vendor_BOARD uno)
 
 ## Generate the library

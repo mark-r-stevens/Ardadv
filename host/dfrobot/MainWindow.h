@@ -54,6 +54,30 @@ namespace ardadv
       //
       void line(const QString& str);
 
+    signals:
+
+      //! @brief Enable robot control
+      //!
+      void enableRobotControl();
+
+      //! @brief Disable robot control
+      //!
+      void disableRobotControl();
+
+    protected:
+
+      //! @brief Catch key press events
+      //!
+      //! @param[in] event The event
+      //!
+      virtual void keyPressEvent(QKeyEvent* event);
+
+      //! @brief Catch key release events
+      //!
+      //! @param[in] event The event
+      //!
+      virtual void keyReleaseEvent(QKeyEvent* event);
+
     private:
 
       //! @brief The widgets
