@@ -54,13 +54,20 @@ namespace ardadv
       connect(this, SIGNAL(enableRobotControl()), mControlsWidget, SLOT(enableRobotControl()));
       connect(this, SIGNAL(disableRobotControl()), mControlsWidget, SLOT(disableRobotControl()));
 
-      // Create the serial reader
+      // Create the serial reader/writer
       //
       mSerial = new common::Serial;
       connect(mSerial,
-              SIGNAL(line(const QString&)),
+              SIGNAL(recv(const QString&)),
               this,
-              SLOT(line(const QString&)));
+              SLOT(recv(const QString&)));
+
+      // Connect the output
+      //
+      connect(mControlsWidget,
+              SIGNAL(changeRobotSpeed(const QString&)),
+              mSerial,
+              SLOT(send(const QString&)));
 
       // Set the window title
       //
@@ -69,7 +76,7 @@ namespace ardadv
       // Start the serial line running
       //
       mSerial->open("/dev/cu.usbmodem621");
-      //mSerial->start();
+      mSerial->start();
     }
     void MainWindow::keyPressEvent(QKeyEvent* event)
     {
@@ -93,7 +100,7 @@ namespace ardadv
         QDialog::keyReleaseEvent(event);
       }
     }
-    void MainWindow::line(const QString& str)
+    void MainWindow::recv(const QString& str)
     {
 
       //std::cout << "str=(" << str.toStdString() << std::endl;

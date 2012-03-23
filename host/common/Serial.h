@@ -20,6 +20,8 @@
 
 #include <common/SerialPort.h>
 
+#include <iostream>
+
 namespace ardadv
 {
   namespace common
@@ -78,10 +80,22 @@ namespace ardadv
           if (common::ReadAdrPort(fd, data, 4096) >= 0)
           {
             const QString send = data;
-            emit line(send);
+            emit recv(send);
           }
           this->msleep(100);
         }
+      }
+
+    public slots:
+
+      //! @brief Called when new data is available on the terminal
+      //!
+      //! @param[in] str The string read
+      //
+      void send(const QString& str)
+      {
+        common::WriteAdrPort(fd, str.toStdString().c_str());
+        std::cout << "Serial::send(" << str.toStdString() << ")" << std::endl;
       }
 
     signals:
@@ -90,7 +104,7 @@ namespace ardadv
       //!
       //! @param[in] str The string read
       //
-      void line(const QString& str);
+      void recv(const QString& str);
 
     private:
 

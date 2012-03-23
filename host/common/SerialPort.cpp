@@ -60,7 +60,7 @@ namespace ardadv
       return fd;
     }
 
-    int WriteAdrPort(int fd, char* psOutput)
+    int WriteAdrPort(int fd, const char* psOutput)
     {
       int iOut;
       if (fd < 1)

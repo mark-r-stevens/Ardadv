@@ -34,7 +34,7 @@ namespace ardadv
         , mLeftSpeed(0)
         {
         }
-        void Manual::left(uint8_t speed)
+        void Manual::left(int speed)
         {
 
           // Do nothing if no change
@@ -66,7 +66,7 @@ namespace ardadv
           //
           mLeftSpeed = speed;
         }
-        void Manual::right(uint8_t speed)
+        void Manual::right(int speed)
         {
           // Do nothing if no change
           //

@@ -34,7 +34,7 @@ namespace ardadv
     // return code:
     //   >= 0 = number of characters written
     //   -1 = write failed
-    int WriteAdrPort(int fd, char* psOutput);
+    int WriteAdrPort(int fd, const char* psOutput);
 
     // read string from the serial port
     // return code:

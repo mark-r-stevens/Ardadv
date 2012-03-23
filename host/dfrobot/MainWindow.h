@@ -52,7 +52,7 @@ namespace ardadv
       //!
       //! @param[in] str The string read
       //
-      void line(const QString& str);
+      void recv(const QString& str);
 
     signals:
 

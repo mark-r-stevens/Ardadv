@@ -56,15 +56,18 @@ enum
 //
 void available()
 {
-  messenger.sendCmd(kACK, "available");
   while (messenger.available())
   {
-    char buf[350] = { '\0' };
-    messenger.copyString(buf, 350);
-    if(buf[0])
-    {
-      messenger.sendCmd(kACK, buf);
-    }
+
+    // Read
+    //
+    const int left  = messenger.readInt();
+    const int right = messenger.readInt();
+
+    // command
+    //
+    manual.left(left);
+    manual.right(right);
   }
 }
 void ready()

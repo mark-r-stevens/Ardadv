@@ -51,15 +51,14 @@ enum
 //
 void available()
 {
-  messenger.sendCmd(kACK, "available");
   while (messenger.available())
   {
-    char buf[350] = { '\0' };
-    messenger.copyString(buf, 350);
-    if(buf[0])
-    {
-      messenger.sendCmd(kACK, buf);
-    }
+    const int left  = messenger.readInt();
+    const int right = messenger.readInt();
+    Serial.print("left=");
+    Serial.println(left);
+    Serial.print("right=");
+    Serial.println(right);
   }
 }
 void ready()

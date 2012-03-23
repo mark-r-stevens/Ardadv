@@ -28,6 +28,8 @@ namespace ardadv
     {
       Motor::Motor(uint8_t num, uint8_t freq) : mMotor(num, freq)
       {
+        mMotor.setSpeed(0);
+        mMotor.run(RELEASE);
       }
       void Motor::forward(uint8_t speed)
       {

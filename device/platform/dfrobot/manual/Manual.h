@@ -47,7 +47,7 @@ namespace ardadv
           //!
           //! @note positive means forward, negative backward, 0 stop
           //!
-          void left(uint8_t speed = 100);
+          void left(int speed = 100);
 
           //! @brief Set speed of the right motors
           //!
@@ -57,7 +57,7 @@ namespace ardadv
           //!
           //! @note positive means forward, negative backward, 0 stop
           //!
-          void right(uint8_t speed = 100);
+          void right(int speed = 100);
 
           //! @brief Return the part number
           //!

@@ -52,7 +52,7 @@ namespace ardadv
 
       // Format into a string for transmission
       //
-      const QString message = QString("M %1 %2\n").arg(static_cast<int>(iMouseX * 200)).arg(static_cast<int>(iMouseY * 200));
+      const QString message = QString("4,%1,%2;").arg(static_cast<int>(iMouseX * 200)).arg(static_cast<int>(iMouseY * 200));
 
       // Send the message
       //
@@ -86,7 +86,7 @@ namespace ardadv
     }
     void ControlsWidget::disableRobotControl()
     {
-      const QString message = "M 0 0\n";
+      const QString message = "4,0,0;";
       emit changeRobotSpeed(message);
       mEnabled = false;
       glDraw();
