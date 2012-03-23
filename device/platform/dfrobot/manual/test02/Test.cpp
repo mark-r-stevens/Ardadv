@@ -19,8 +19,39 @@
 
 // The platform in manual control
 //
-#include <platform/dfrobot/manual/Manual.h>
-ardadv::platform::dfrobot::manual::Manual manual;
+#include <vendor/Messenger.h>
+
+// Instantiate Messenger object with the message function and the
+// default separator (the space character)
+//
+Messenger messenger;
+
+// Create the callback function
+//
+void messageReady()
+{
+
+  // Show message contents
+  //
+  int counter = 0;
+
+  // Loop through all the available elements of the message
+  //
+  while (messenger.available())
+  {
+    // Set the pin as determined by the message
+    //
+    const int value = messenger.readInt();
+
+    // Write
+    //
+    Serial.print("message[");
+    Serial.print(counter++);
+    Serial.print("=");
+    Serial.println(value);
+
+  }
+}
 
 // Initialize the Motor pins to be output.  This is a one time call on startup.
 //
@@ -29,83 +60,27 @@ void setup()
 
   // Setup the serial connection to see output
   //
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.flush();
 
-  // set the speed to 200/255
+  // Setup messenger
   //
-  manual.setup(100);
+  messenger.attach(messageReady);
 
 }
 
 // This is called repeatedly in an event loop. The loop checks
-// runs the motor forward and then backwards and then stops.
+// for messages and prints them.
 //
 void loop() 
 {
 
-  Serial.print("tick");
-
-  manual.forward();      // turn it on going forward
-  delay(1000);
-
-  Serial.print("tock");
-  manual.backward();     // the other way
-  delay(1000);
-
-  Serial.print("tack");
-  manual.stop();      // stopped
-  delay(1000);
-
-  return;
-
-  // Ask for a command
+  // The following line is the most effective way of
+  // feeding the serial data to Messenger
   //
-  Serial.print("command> ");
-
-  // Read the command
-  //
-  char command[50];
-  for (int i = 0; i < 25; ++i)
+  while (Serial.available())
   {
-    while (Serial.available() <= 0)
-    {
-      ::delay(1);
-    }
-    command[i] = Serial.read();
-    Serial.write(command[i]);
-    if (command[i] == '>')
-    {
-      command[i + 1] = '\0';
-      break;
-    }
+    messenger.process(Serial.read());
   }
-
-  // Based on the command issue the motor command
-  //
-  Serial.print("comparing (");
-  Serial.print(command);
-  Serial.println(")");
-  if (::strcmp(command, "<direction=forward>") == 0)
-  {
-    Serial.println("manual.forward()");
-    manual.forward();
-  }
-  else if (::strcmp(command, "<direction=stop>") == 0)
-  {
-    Serial.println("manual.stop()");
-    manual.stop();
-  }
-  Serial.println(command);
-
-  //Serial.print("tock");
-  //manual.backward();
-  //delay(1000);
-
-  //Serial.print("tack");
-  //manual.stop();
-  //delay(1000);
 
 }
-
-

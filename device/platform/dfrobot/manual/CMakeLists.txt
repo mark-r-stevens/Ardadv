@@ -27,4 +27,5 @@ generate_arduino_library(Manual)
 ## Add the subdirectory
 #
 add_subdirectory(test01)
+add_subdirectory(test02)
 

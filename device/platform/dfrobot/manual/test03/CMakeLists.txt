@@ -19,12 +19,12 @@ set(ManualTest_PORT /dev/cu.usbmodem621)
    
 ## Arduino Target board
 #
-set(ManualTest02_SRCS  Test.cpp)  
-set(ManualTest02_LIBS  Manual)
-set(ManualTest02_BOARD uno)              
-set(ManualTest02_NO_AUTOLIBS True)
+set(ManualTest01_SRCS  Test.cpp)  
+set(ManualTest01_LIBS  Motor Manual Vendor)
+set(ManualTest01_BOARD uno)              
+set(ManualTest01_NO_AUTOLIBS True)
 
 ##  Target generation
 #
-generate_arduino_firmware(ManualTest02)
+generate_arduino_firmware(ManualTest01)
 
