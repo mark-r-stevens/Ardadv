@@ -29,18 +29,14 @@ namespace ardadv
       Motor::Motor(uint8_t num, uint8_t freq) : mMotor(num, freq)
       {
       }
-      bool Motor::setup(uint8_t speed)
+      void Motor::forward(uint8_t speed)
       {
         mMotor.setSpeed(speed);
-        return true;
-      }
-      void Motor::forward()
-      {
-        Serial.println("Motor::forward()");
         mMotor.run(FORWARD);
       }
-      void Motor::backward()
+      void Motor::backward(uint8_t speed)
       {
+        mMotor.setSpeed(speed);
         mMotor.run(BACKWARD);
       }
       void Motor::stop()

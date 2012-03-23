@@ -5,7 +5,7 @@ extern "C" {
 }
 
 #include "CmdMessenger.h"
-#include <Streaming.h>
+//#include <Streaming.h>
 
 //////////////////// Cmd Messenger imp ////////////////
 CmdMessenger::CmdMessenger(Stream &ccomms)

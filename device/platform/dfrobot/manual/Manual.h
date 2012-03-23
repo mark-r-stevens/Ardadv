@@ -41,25 +41,23 @@ namespace ardadv
           //!
           Manual();
 
-          //! @brief Set the internal pin
+          //! @brief Set speed of the left motors
           //!
-          //! @param[in] speed The default dfrobot speed
+          //! @param[in] speed The new  speed
+          //!
+          //! @note positive means forward, negative backward, 0 stop
+          //!
+          void left(uint8_t speed = 100);
+
+          //! @brief Set speed of the right motors
+          //!
+          //! @param[in] speed The new speed
           //!
           //! @return true if setup successfully
           //!
-          bool setup(uint8_t speed = 100);
-
-          //! @brief Move the robot forward
+          //! @note positive means forward, negative backward, 0 stop
           //!
-          void forward();
-
-          //! @brief Move the robot backward
-          //!
-          void backward();
-
-          //! @brief Stop the robot
-          //!
-          void stop();
+          void right(uint8_t speed = 100);
 
           //! @brief Return the part number
           //!
@@ -89,6 +87,10 @@ namespace ardadv
           actuators::motor::Motor mRearLeft;
           actuators::motor::Motor mRearRight;
 
+          //! @brief The left and right speeds
+          //!
+          int mLeftSpeed;
+          int mRightSpeed;
         };
       }
     }

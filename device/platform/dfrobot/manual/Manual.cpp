@@ -30,36 +30,72 @@ namespace ardadv
         , mFrontRight(2, MOTOR12_1KHZ)
         , mRearLeft  (3, MOTOR34_1KHZ)
         , mRearRight (4, MOTOR34_1KHZ)
+        , mRightSpeed(0)
+        , mLeftSpeed(0)
         {
         }
-        bool Manual::setup(uint8_t speed)
+        void Manual::left(uint8_t speed)
         {
-          mFrontLeft.setup(speed);
-          mFrontRight.setup(speed);
-          mRearLeft.setup(speed);
-          mRearRight.setup(speed);
-          return true;
+
+          // Do nothing if no change
+          //
+          if (speed == mLeftSpeed)
+          {
+            return;
+          }
+
+          // Move the motors
+          //
+          if (speed > 0)
+          {
+            mFrontLeft.forward(speed);
+            mRearLeft.forward(speed);
+          }
+          else if (speed < 0)
+          {
+            mFrontLeft.backward(-speed);
+            mRearLeft.backward(-speed);
+          }
+          else
+          {
+            mFrontLeft.stop();
+            mRearLeft.stop();
+          }
+
+          // Store the new speed
+          //
+          mLeftSpeed = speed;
         }
-        void Manual::forward()
+        void Manual::right(uint8_t speed)
         {
-          mFrontLeft.forward();
-          mFrontRight.forward();
-          mRearLeft.forward();
-          mRearRight.forward();
-        }
-        void Manual::backward()
-        {
-          mFrontLeft.backward();
-          mFrontRight.backward();
-          mRearLeft.backward();
-          mRearRight.backward();
-        }
-        void Manual::stop()
-        {
-          mFrontLeft.stop();
-          mFrontRight.stop();
-          mRearLeft.stop();
-          mRearRight.stop();
+          // Do nothing if no change
+          //
+          if (speed == mRightSpeed)
+          {
+            return;
+          }
+
+          // Move the motors
+          //
+          if (speed > 0)
+          {
+            mFrontRight.forward(speed);
+            mRearRight.forward(speed);
+          }
+          else if (speed < 0)
+          {
+            mFrontRight.backward(-speed);
+            mRearRight.backward(-speed);
+          }
+          else
+          {
+            mFrontRight.stop();
+            mRearRight.stop();
+          }
+
+          // Store the new speed
+          //
+          mRightSpeed = speed;
         }
       }
     }

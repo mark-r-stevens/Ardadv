@@ -43,21 +43,17 @@ namespace ardadv
         //!
         Motor(uint8_t motornum, uint8_t freq =  MOTOR34_8KHZ);
 
-        //! @brief Set the internal pin
+        //! @brief Move the motor forward
         //!
         //! @param[in] speed The default motor speed
         //!
-        //! @return true if setup successfully
-        //!
-        bool setup(uint8_t speed = 100);
-
-        //! @brief Move the motor forward
-        //!
-        void forward();
+        void forward(uint8_t speed = 100);
 
         //! @brief Move the motor backward
         //!
-        void backward();
+        //! @param[in] speed The default motor speed
+        //!
+        void backward(uint8_t speed = 100);
 
         //! @brief Stop the motor
         //!

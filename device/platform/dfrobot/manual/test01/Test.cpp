@@ -26,16 +26,8 @@ ardadv::platform::dfrobot::manual::Manual manual;
 //
 void setup() 
 {                
-
-  // Setup the serial connection to see output
-  //
   Serial.begin(9600);
   Serial.flush();
-
-  // set the speed to 200/255
-  //
-  manual.setup(100);
-
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -46,17 +38,22 @@ void loop()
 
   // turn it on going forward
   //
-  manual.forward();
+  manual.left(100);
+  delay(1000);
+  manual.left(-100);
   delay(1000);
 
   // the other way
   //
-  manual.backward();
+  manual.right(100);
+  delay(1000);
+  manual.right(-100);
   delay(1000);
 
   // rest
   //
-  manual.stop();
+  manual.left(0);
+  manual.right(0);
   delay(2000);
 
 }

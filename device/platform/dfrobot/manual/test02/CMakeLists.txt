@@ -15,7 +15,7 @@
 
 ## Serial upload port
 #
-set(ManualTest_PORT /dev/cu.usbmodem621)      
+set(ManualTest02_PORT /dev/cu.usbmodem621)      
    
 ## Arduino Target board
 #

@@ -26,16 +26,8 @@ ardadv::actuators::motor::Motor motor(3);
 //
 void setup() 
 {                
-
-  // Setup the serial connection to see output
-  //
   Serial.begin(9600);
   Serial.flush();
-
-  // set the speed to 200/255
-  //
-  motor.setup(200);
-
 }
 
 // This is called repeatedly in an event loop. The loop checks

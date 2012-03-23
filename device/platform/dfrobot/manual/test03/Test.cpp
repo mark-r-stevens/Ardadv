@@ -22,6 +22,60 @@
 #include <platform/dfrobot/manual/Manual.h>
 ardadv::platform::dfrobot::manual::Manual manual;
 
+// The platform in manual control
+//
+#include <vendor/CmdMessenger.h>
+
+// Instantiate Messenger object with the message function and the
+// default separator (the space character)
+//
+static const char fieldSeparator = ',';
+static const char commandSeparator = ';';
+CmdMessenger messenger(Serial, fieldSeparator, commandSeparator);
+
+// We can define up to a default of 50 cmds total, including both directions
+// (send + recieve)\ and including also the first 4 default command codes for
+// the generic error handling. If you run out of message slots, then just
+// increase the value of MAXCALLBACKS in CmdMessenger.h
+//
+// Commands we send from the Arduino to be received on the PC
+//
+enum
+{
+  kCOMM_ERROR    = 000, // Arduino report serial port comm error back to the PC
+  kACK           = 001, // Arduino acknowledges cmd was received
+  kARDUINO_READY = 002, // PC check if arduino is ready
+  kERR           = 003, // Arduino reports badly formatted cmd
+  kMOTOR         = 004, // Set Motor speeds to left/right motors
+  kSEND_CMDS_END,       // Must not delete this line
+};
+
+
+// Message data is any ASCII bytes (0-255 value). But can't contain the field
+// separator, command separator chars you decide (eg ',' and ';')
+//
+void available()
+{
+  messenger.sendCmd(kACK, "available");
+  while (messenger.available())
+  {
+    char buf[350] = { '\0' };
+    messenger.copyString(buf, 350);
+    if(buf[0])
+    {
+      messenger.sendCmd(kACK, buf);
+    }
+  }
+}
+void ready()
+{
+  messenger.sendCmd(kACK, "Arduino ready");
+}
+void unknown()
+{
+  messenger.sendCmd(kERR, "Unknown command");
+}
+
 // Initialize the Motor pins to be output.  This is a one time call on startup.
 //
 void setup() 
@@ -32,80 +86,22 @@ void setup()
   Serial.begin(9600);
   Serial.flush();
 
-  // set the speed to 200/255
+  // Make output more readable whilst debugging in Arduino Serial Monitor
   //
-  manual.setup(100);
+  messenger.print_LF_CR();
+
+  // Attach default / generic callback methods
+  //
+  messenger.attach(kARDUINO_READY, ready);
+  messenger.attach(unknown);
+  messenger.attach(kMOTOR, available);
 
 }
 
 // This is called repeatedly in an event loop. The loop checks
-// runs the motor forward and then backwards and then stops.
+// for messages and prints them.
 //
 void loop() 
 {
-
-  Serial.print("tick");
-
-  manual.forward();      // turn it on going forward
-  delay(1000);
-
-  Serial.print("tock");
-  manual.backward();     // the other way
-  delay(1000);
-
-  Serial.print("tack");
-  manual.stop();      // stopped
-  delay(1000);
-
-  return;
-
-  // Ask for a command
-  //
-  Serial.print("command> ");
-
-  // Read the command
-  //
-  char command[50];
-  for (int i = 0; i < 25; ++i)
-  {
-    while (Serial.available() <= 0)
-    {
-      ::delay(1);
-    }
-    command[i] = Serial.read();
-    Serial.write(command[i]);
-    if (command[i] == '>')
-    {
-      command[i + 1] = '\0';
-      break;
-    }
-  }
-
-  // Based on the command issue the motor command
-  //
-  Serial.print("comparing (");
-  Serial.print(command);
-  Serial.println(")");
-  if (::strcmp(command, "<direction=forward>") == 0)
-  {
-    Serial.println("manual.forward()");
-    manual.forward();
-  }
-  else if (::strcmp(command, "<direction=stop>") == 0)
-  {
-    Serial.println("manual.stop()");
-    manual.stop();
-  }
-  Serial.println(command);
-
-  //Serial.print("tock");
-  //manual.backward();
-  //delay(1000);
-
-  //Serial.print("tack");
-  //manual.stop();
-  //delay(1000);
-
+  messenger.feedinSerialData();
 }
-
-
