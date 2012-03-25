@@ -63,6 +63,24 @@ namespace ardadv
         //!
         float distance() const;
 
+        //! @brief Return the part number
+        //!
+        //! @return the part number
+        //!
+        static inline const char* PartNumber()
+        {
+          return "HY-SRF05";
+        }
+
+        //! @brief Return the vendor
+        //!
+        //! @return the vendor
+        //!
+        static inline const char* Vendor()
+        {
+          return "Virtuabotix";
+        }
+
       private:
 
         //! @brief The trigger pin
