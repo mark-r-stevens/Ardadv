@@ -15,7 +15,7 @@
 
 ## Serial upload port
 #
-set(UltrasonicTest_PORT ${PROJECT_BOARD})      
+set(UltrasonicTest_PORT ${PROJECT_PORT})      
    
 ## Arduino Target board
 #

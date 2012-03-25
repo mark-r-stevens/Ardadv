@@ -15,7 +15,7 @@
 
 ## Serial upload port
 #
-set(ManualTest03_PORT ${PROJECT_BOARD})      
+set(ManualTest03_PORT ${PROJECT_PORT})      
    
 ## Arduino Target board
 #

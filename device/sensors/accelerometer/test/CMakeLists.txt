@@ -15,7 +15,7 @@
 
 ## Serial upload port
 #
-set(AccelerometerTest_PORT ${PROJECT_BOARD})      
+set(AccelerometerTest_PORT ${PROJECT_PORT})      
    
 ## Arduino Target board
 #

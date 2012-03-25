@@ -15,7 +15,7 @@
 
 ## Serial upload port
 #
-set(ButtonTest_PORT ${PROJECT_BOARD})      
+set(ButtonTest_PORT ${PROJECT_PORT})      
 
 ## Arduino Target board
 #

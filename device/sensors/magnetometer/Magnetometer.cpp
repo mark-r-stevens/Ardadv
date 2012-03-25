@@ -40,7 +40,7 @@ namespace ardadv
     namespace magnetometer
     {
       Magnetometer::Magnetometer()
-      , mValueX(0.0f)
+      : mValueX(0.0f)
       , mValueY(0.0f)
       , mValueZ(0.0f)
       , mValid(false)

@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ardadv_sensors_Magnetometer_Magnetometer_h
-#define ardadv_sensors_Magnetometer_Magnetometer_h
+#ifndef ardadv_sensors_magnetometer_Magnetometer_h
+#define ardadv_sensors_magnetometer_Magnetometer_h
 
 #include <sensors/common/Pin.h>
 
