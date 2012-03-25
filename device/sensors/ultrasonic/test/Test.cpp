@@ -50,11 +50,9 @@ void loop()
 
   // Log debugging output
   //
-  ::Serial.print("5,");
   ::Serial.print(millis());
-  ::Serial.print(",");
-  ::Serial.print(distance, DEC);
-  ::Serial.print(";");
+  ::Serial.print(" ");
+  ::Serial.println(distance, DEC);
   ::Serial.flush();
 
   // Add a small delay

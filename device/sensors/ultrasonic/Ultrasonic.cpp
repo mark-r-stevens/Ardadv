@@ -45,7 +45,7 @@ namespace ardadv
 
         // Convert the unit-less quantity to meters
         //
-       return pulse * 100.0f / 27.6233f / 2.0f;
+       return pulse / 27.6233f / 2.0f / 100.0f;
       }
     }
   }

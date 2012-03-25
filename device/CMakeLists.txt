@@ -42,7 +42,7 @@ set(PROJECT_BOARD uno)
 
 ## Set the device 
 #
-set(PROJECT_DEVICE /dev/cu.usbmodem621)
+set(PROJECT_PORT /dev/cu.usbmodem621)
 
 ## Make sure the top level directory is set up in the include path
 #
