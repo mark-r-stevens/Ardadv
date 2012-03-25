@@ -15,11 +15,11 @@
 
 ## Serial upload port
 #
-set(ButtonTest_PORT /dev/cu.usbmodem621)      
+set(ButtonTest_PORT ${PROJECT_BOARD})      
 
 ## Arduino Target board
 #
-set(ButtonTest_BOARD uno)              
+set(ButtonTest_BOARD ${PROJECT_BOARD})         
 set(ButtonTest_SRCS  Test.cpp)  
 set(ButtonTest_LIBS  Button)
 

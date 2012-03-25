@@ -15,11 +15,11 @@
 
 ## Serial upload port
 #
-set(AccelerometerTest_PORT /dev/cu.usbmodem621)      
+set(AccelerometerTest_PORT ${PROJECT_BOARD})      
    
 ## Arduino Target board
 #
-set(AccelerometerTest_BOARD uno)              
+set(AccelerometerTest_BOARD ${PROJECT_BOARD})           
 set(AccelerometerTest_SRCS  Test.cpp)  
 set(AccelerometerTest_LIBS  Accelerometer)
 

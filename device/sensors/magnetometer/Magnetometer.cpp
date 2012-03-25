@@ -16,7 +16,7 @@
 // Code derived from:
 //   https://github.com/stevemarple/MicroMag/blob/master/MicroMag.cpp
 //
-#include <sensors/Magnetometer/Magnetometer.h>
+#include <sensors/magnetometer/Magnetometer.h>
 
 #include <Arduino.h>
 
@@ -37,11 +37,9 @@ namespace ardadv
 {
   namespace sensors
   {
-    namespace Magnetometer
+    namespace magnetometer
     {
       Magnetometer::Magnetometer()
-      : mDRDY(-1)
-      , mRESET(-1)
       , mValueX(0.0f)
       , mValueY(0.0f)
       , mValueZ(0.0f)

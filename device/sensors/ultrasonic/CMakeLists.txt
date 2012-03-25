@@ -13,17 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Serial upload port
+## Setup the library parameters
 #
-set(ManualTest03_PORT ${PROJECT_BOARD})      
-   
-## Arduino Target board
-#
-set(ManualTest03_SRCS  Test.cpp)  
-set(ManualTest03_LIBS  Manual)
-set(ManualTest03_BOARD ${PROJECT_BOARD})          
+set(Ultrasonic_SRCS  Ultrasonic.cpp)
+set(Ultrasonic_HDRS  Ultrasonic.h)
+set(Ultrasonic_BOARD ${PROJECT_BOARD})
 
-##  Target generation
+## Generate the library
 #
-generate_arduino_firmware(ManualTest03)
+generate_arduino_library(Ultrasonic)
+
+## Add the subdirectory
+#
+add_subdirectory(test)
 

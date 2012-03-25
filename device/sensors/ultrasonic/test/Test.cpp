@@ -17,12 +17,12 @@
 //
 #include "Arduino.h"
 
-// The Magnetometer
+// The Range sensor
 //
-#include <sensors/Magnetometer/Magnetometer.h>
-ardadv::sensors::magnetometer::Magnetometer magnetometer;
+#include <sensors/ultrasonic/Ultrasonic.h>
+ardadv::sensors::ultrasonic::Ultrasonic ultrasonic;
 
-// Initialize the Magnetometer pins to be output. Initialize the button to
+// Initialize the sensor pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
 void setup() 
@@ -35,37 +35,27 @@ void setup()
 
   // Initialize the Magnetometer
   //
-  typedef ardadv::sensors::magnetometer::Magnetometer Magnetometer;
-  magnetometer.setup(Magnetometer::DRDY(9),
-                     Magnetometer::RESET(8));
+  typedef ardadv::sensors::ultrasonic::Ultrasonic Ultrasonic;
+  ultrasonic.setup(Ultrasonic::Trigger(8), Ultrasonic::Echo(9));
 }
 
-// This is called repeatedly in an event loop. The loop checks
-// for the button press event. When it is pressed, the next light
-// in the sequence is turned on (and the others are turned off).
+// This is called repeatedly in an event loop.
 //
 void loop() 
 {
 
   // Update the state
   //
-  magnetometer.update();
+  const float distance = ultrasonic.distance();
 
   // Log debugging output
   //
-  if (magnetometer.isValid())
-  {
-    ::Serial.print(" Start ");
-    ::Serial.print(millis());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.x());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.y());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.z());
-    ::Serial.print(" Stop ");
-    ::Serial.flush();
-  }
+  ::Serial.print("5,");
+  ::Serial.print(millis());
+  ::Serial.print(",");
+  ::Serial.print(distance, DEC);
+  ::Serial.print(";");
+  ::Serial.flush();
 
   // Add a small delay
   //

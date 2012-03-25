@@ -17,7 +17,7 @@
 #
 set(Manual_SRCS  Manual.cpp)
 set(Manual_HDRS  Manual.h)
-set(Manual_BOARD uno)
+set(Manual_BOARD ${PROJECT_BOARD})
 set(Manual_LIBS  Motor Vendor)
 
 ## Generate the library

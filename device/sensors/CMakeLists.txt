@@ -18,4 +18,4 @@
 add_subdirectory(accelerometer)
 add_subdirectory(button)
 add_subdirectory(magnetometer)
-
+add_subdirectory(ultrasonic)

@@ -15,14 +15,13 @@
 
 ## Serial upload port
 #
-set(ManualTest02_PORT /dev/cu.usbmodem621)      
+set(ManualTest02_PORT ${PROJECT_BOARD})      
    
 ## Arduino Target board
 #
 set(ManualTest02_SRCS  Test.cpp)  
 set(ManualTest02_LIBS  Manual)
-set(ManualTest02_BOARD uno)              
-set(ManualTest02_NO_AUTOLIBS True)
+set(ManualTest02_BOARD ${PROJECT_BOARD})            
 
 ##  Target generation
 #

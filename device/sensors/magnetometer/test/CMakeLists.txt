@@ -15,14 +15,13 @@
 
 ## Serial upload port
 #
-set(MagnetometerTest_PORT /dev/cu.usbmodem621)      
+set(MagnetometerTest_PORT ${PROJECT_BOARD})      
    
 ## Arduino Target board
 #
 set(MagnetometerTest_SRCS  Test.cpp)  
 set(MagnetometerTest_LIBS  m Magnetometer Vendor m)
-set(MagnetometerTest_BOARD uno)              
-set(MagnetometerTest_NO_AUTOLIBS True)
+set(MagnetometerTest_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation
 #

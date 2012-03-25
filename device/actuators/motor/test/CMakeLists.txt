@@ -15,14 +15,13 @@
 
 ## Serial upload port
 #
-set(MotorTest_PORT /dev/cu.usbmodem621)      
+set(MotorTest_PORT ${PROJECT_BOARD})      
    
 ## Arduino Target board
 #
 set(MotorTest_SRCS  Test.cpp)  
 set(MotorTest_LIBS  m Motor Vendor m)
-set(MotorTest_BOARD uno)              
-set(MotorTest_NO_AUTOLIBS True)
+set(MotorTest_BOARD ${PROJECT_BOARD})             
 
 ##  Target generation
 #

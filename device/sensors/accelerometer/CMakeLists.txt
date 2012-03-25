@@ -17,7 +17,7 @@
 #
 set(Accelerometer_SRCS  Accelerometer.cpp)
 set(Accelerometer_HDRS  Accelerometer.h)
-set(Accelerometer_BOARD uno)
+set(Accelerometer_BOARD ${PROJECT_BOARD})
 
 ## Generate the library
 #

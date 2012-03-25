@@ -22,7 +22,7 @@ namespace ardadv
 {
   namespace sensors
   {
-    namespace Magnetometer
+    namespace magnetometer
     {
 
       //! @class Magnetometer

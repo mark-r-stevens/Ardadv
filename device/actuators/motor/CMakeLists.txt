@@ -17,7 +17,7 @@
 #
 set(Motor_SRCS  Motor.cpp)
 set(Motor_HDRS  Motor.h)
-set(Motor_BOARD uno)
+set(Motor_BOARD ${PROJECT_BOARD})
 set(Motor_LIBS  Vendor)
 
 ## Generate the library

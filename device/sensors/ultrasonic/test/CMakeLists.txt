@@ -15,15 +15,15 @@
 
 ## Serial upload port
 #
-set(ManualTest03_PORT ${PROJECT_BOARD})      
+set(UltrasonicTest_PORT ${PROJECT_BOARD})      
    
 ## Arduino Target board
 #
-set(ManualTest03_SRCS  Test.cpp)  
-set(ManualTest03_LIBS  Manual)
-set(ManualTest03_BOARD ${PROJECT_BOARD})          
+set(UltrasonicTest_SRCS  Test.cpp)  
+set(UltrasonicTest_LIBS  Ultrasonic)
+set(UltrasonicTest_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation
 #
-generate_arduino_firmware(ManualTest03)
+generate_arduino_firmware(UltrasonicTest)
 

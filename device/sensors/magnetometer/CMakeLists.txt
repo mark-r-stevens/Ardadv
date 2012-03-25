@@ -17,7 +17,7 @@
 #
 set(Magnetometer_SRCS  Magnetometer.cpp)
 set(Magnetometer_HDRS  Magnetometer.h)
-set(Magnetometer_BOARD uno)
+set(Magnetometer_BOARD ${PROJECT_BOARD})
 
 ## Generate the library
 #

@@ -17,7 +17,7 @@
 #
 set(Vendor_SRCS  AFMotor.cpp SPI.cpp CmdMessenger.cpp)
 set(Vendor_HDRS  AFMotor.h SPI.h CmdMessenger.h)
-set(Vendor_BOARD uno)
+set(Vendor_BOARD ${PROJECT_BOARD})
 
 ## Generate the library
 #

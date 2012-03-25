@@ -17,7 +17,7 @@
 #
 set(Button_SRCS  Button.cpp)
 set(Button_HDRS  Button.h)
-set(Button_BOARD uno)
+set(Button_BOARD ${PROJECT_BOARD})
 
 ## Generate the library
 #
