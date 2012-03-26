@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// Library for the HY-SRF05 Ultrasonic Sensing Module.
+// Library for SEN0038 wheel encoders
 //
 
-#ifndef ardadv_sensors_ultrasonic_Ultrasonic_h
-#define ardadv_sensors_ultrasonic_Ultrasonic_h
+#ifndef ardadv_sensors_encoders_Encoders_h
+#define ardadv_sensors_encoders_Encoders_h
 
 #include <sensors/common/Pin.h>
 
@@ -25,43 +25,40 @@ namespace ardadv
 {
   namespace sensors
   {
-    namespace ultrasonic
+    namespace encoders
     {
 
-      //! @class Ultrasonic
+      //! @class Encoders
       //!
-      //! @brief Measure flight time of the sensor and convert that to meters.
+      //! @brief Measure number of revolutions of an encoder
       //!
       //! With ideas from:
-      //!     Created by ITead studio.  Alex, Apr 20, 2010.
-      //!     iteadstudio.com.          cnobile 2011-09-17
-      //!     virtuabotix.              Joseph Dattilo, 2012-02-28
+      //!     http://www.dfrobot.com/forum/index.php?topic=354.0
+      //!     Lauren from DFRobot
       //!
-      class Ultrasonic
+      class Encoders
       {
       public:
 
         //! @brief Constructor
         //!
-        Ultrasonic();
+        Encoders();
 
         //! @brief Used to reduce ambiguity in pin assignment
         //!
-        typedef common::Pin<0> Trigger;
-        typedef common::Pin<1> Echo;
+        typedef common::Pin<0> Reader;
 
         //! @brief Setup the pins
         //!
-        //! @param[in] iTrigger Pin to send the pulse
-        //! @param[in] iEcho    Pin to read the echo
+        //! @param[in] iReader Pin to read the encoder
         //!
-        void setup(const Trigger& iTrigger, const Echo& iEcho);
+        void setup(const Reader& iReader);
 
         //! @brief Compute the distance
         //!
         //! @param[in] Return the distance in meters
         //!
-        float distance() const;
+        float distance();
 
         //! @brief Return the part number
         //!
@@ -69,7 +66,7 @@ namespace ardadv
         //!
         static inline const char* PartNumber()
         {
-          return "HY-SRF05";
+          return "SEN0038";
         }
 
         //! @brief Return the vendor
@@ -78,19 +75,18 @@ namespace ardadv
         //!
         static inline const char* Vendor()
         {
-          return "Virtuabotix";
+          return "DFROBOT";
         }
 
       private:
 
-        //! @brief The trigger pin
+        //! @brief The interrupt number associated with the pin
         //!
-        Trigger mTrigger;
+        uint8_t mInterrupt;
 
-        //! @brief The echo pin
+        //! @brief The integration
         //!
-        Echo mEcho;
-
+        int mIntegration;
       };
     }
   }

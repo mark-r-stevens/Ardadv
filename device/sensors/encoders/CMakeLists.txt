@@ -13,10 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Add the sub-directories
+## Setup the library parameters
 #
-add_subdirectory(accelerometer)
-add_subdirectory(button)
-add_subdirectory(encoders)
-add_subdirectory(magnetometer)
-add_subdirectory(ultrasonic)
+set(Encoders_SRCS  Encoders.cpp)
+set(Encoders_HDRS  Encoders.h)
+set(Encoders_BOARD ${PROJECT_BOARD})
+
+## Generate the library
+#
+generate_arduino_library(Encoders)
+
+## Add the sub directory
+#
+add_subdirectory(test)
+

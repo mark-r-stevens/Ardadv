@@ -13,10 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Add the sub-directories
+## Serial upload port
 #
-add_subdirectory(accelerometer)
-add_subdirectory(button)
-add_subdirectory(encoders)
-add_subdirectory(magnetometer)
-add_subdirectory(ultrasonic)
+set(EncodersTest_PORT ${PROJECT_PORT})      
+   
+## Arduino Target board
+#
+set(EncodersTest_SRCS  Test.cpp)  
+set(EncodersTest_LIBS  Encoders)
+set(EncodersTest_BOARD ${PROJECT_BOARD})          
+
+##  Target generation
+#
+generate_arduino_firmware(EncodersTest)
+
