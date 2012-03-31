@@ -36,6 +36,9 @@ namespace ardadv
       //!     http://www.dfrobot.com/forum/index.php?topic=354.0
       //!     Lauren from DFRobot
       //!
+      //! And
+      //!     http://www.pololu.com/docs/0J20/2.a
+      //!
       class Encoders
       {
       public:
@@ -46,19 +49,24 @@ namespace ardadv
 
         //! @brief Used to reduce ambiguity in pin assignment
         //!
-        typedef common::Pin<0> Reader;
+        static const uint8_t LeftWheelEncoder  = 50;
+        static const uint8_t RightWheelEncoder = 51;
 
-        //! @brief Setup the pins
+        //! @brief Setup the interrupt callbacks
         //!
-        //! @param[in] iReader Pin to read the encoder
-        //!
-        void setup(const Reader& iReader);
+        void setup();
 
-        //! @brief Compute the distance
+        //! @brief Compute the left distance traveled
         //!
         //! @param[in] Return the distance in meters
         //!
-        float distance();
+        float left();
+
+        //! @brief Compute the right distance traveled
+        //!
+        //! @param[in] Return the distance in meters
+        //!
+        float right();
 
         //! @brief Return the part number
         //!
@@ -80,13 +88,6 @@ namespace ardadv
 
       private:
 
-        //! @brief The interrupt number associated with the pin
-        //!
-        uint8_t mInterrupt;
-
-        //! @brief The integration
-        //!
-        int mIntegration;
       };
     }
   }

@@ -15,9 +15,14 @@
 
 // The Arduino include
 //
-#include "Arduino.h"
+#include <Arduino.h>
 
-// The Range sensor
+// The platform in manual control
+//
+#include <platform/dfrobot/manual/Manual.h>
+ardadv::platform::dfrobot::manual::Manual manual;
+
+// The wheel encoders
 //
 #include <sensors/encoders/Encoders.h>
 ardadv::sensors::encoders::Encoders encoders;
@@ -32,10 +37,22 @@ void setup()
   Serial.begin(9600);
   Serial.flush();
 
-  // Initialize the Magnetometer
+  // Initialize the encoders
   //
-  typedef ardadv::sensors::encoders::Encoders Encoders;
-  encoders.setup(Encoders::Reader(19));
+  encoders.setup();
+
+}
+
+// Log encoders
+//
+void logger()
+{
+  ::Serial.print(millis());
+  ::Serial.print(" ");
+  ::Serial.print(encoders.left(), DEC);
+  ::Serial.print(" ");
+  ::Serial.println(encoders.right(), DEC);
+  ::Serial.flush();
 }
 
 // This is called repeatedly in an event loop.
@@ -43,21 +60,17 @@ void setup()
 void loop() 
 {
 
-  // Update the state
+  // Left wheel
   //
-  const float distance = encoders.distance();
+  manual.left(150); ::delay(1000);
+  manual.left(0);   ::delay(2000);
+  logger();
 
-  // Log debugging output
+  // Right wheel
   //
-  ::Serial.print(millis());
-  ::Serial.print(" ");
-  ::Serial.println(distance, DEC);
-  ::Serial.flush();
-
-  // Add a small delay
-  //
-  ::delay(100);
-
+  manual.right(200); ::delay(1000);
+  manual.right(0);   ::delay(2000);
+  logger();
 }
 
 

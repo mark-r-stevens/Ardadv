@@ -15,6 +15,8 @@
 
 #include <sensors/encoders/Encoders.h>
 
+#include <Arduino.h>
+
 namespace ardadv
 {
   namespace sensors
@@ -23,176 +25,113 @@ namespace ardadv
     {
       namespace
       {
-        int coder[6] = {0,0,0,0,0,0};
-        void interrupt0()
+        static volatile int m1a = 0;
+        static volatile int m2a = 0;
+
+        static volatile int counts1 = 0;
+        static volatile int counts2 = 0;
+
+        static volatile int last1 = 0;
+        static volatile int last2 = 0;
+
+        // Interrupt based on wheel encoder
+        //
+        ISR(PCINT0_vect)
         {
-          coder[0] += 1;
+
+          // Get the value at the pins
+          //
+          const int m1 = (PINB >> 3) & 1;
+          const int m2 = (PINB >> 2) & 1;
+
+          // Determine which pin to update
+          //
+          if (m1 ^ last1)
+          {
+            counts1 += 1;
+          }
+          if (m2 ^ last2)
+          {
+            counts2 += 1;
+          }
+
+          // reset
+          //
+          last1 = m1;
+          last2 = m2;
         }
-        void interrupt1()
+
+        ISR(PCINT1_vect,ISR_ALIASOF(PCINT0_vect));
+        ISR(PCINT2_vect,ISR_ALIASOF(PCINT0_vect));
+
+        inline int getCountsAndResetM1()
         {
-          coder[1] += 1;
+          noInterrupts();
+          const int tmp = counts1;
+          counts1 = 0;
+          interrupts();
+          return tmp;
         }
-        void interrupt2()
+
+        inline int getCountsAndResetM2()
         {
-          coder[2] += 1;
-        }
-        void interrupt3()
-        {
-          coder[3] += 1;
-        }
-        void interrupt4()
-        {
-          coder[4] += 1;
-        }
-        void interrupt5()
-        {
-          coder[5] += 1;
+          noInterrupts();
+          const int tmp = counts2;
+          counts2 = 0;
+          interrupts();
+          return tmp;
         }
       }
       Encoders::Encoders()
-      : mInterrupt(0)
-      , mIntegration(0)
       {
       }
-      void Encoders::setup(const Reader& iReader)
+      void Encoders::setup()
       {
 
-        // There must be an easier way to do this. Interrupts are defined
-        // as numeric numbers (0 to 5). Those interrupts map to specific
-        // pins on the board. The linkage between the pin number and the
-        // interrupt is explicitly defined. For this class, the user
-        // inputs the pin where the encoder is hooked up. It can be one
-        // of 5 possibilities. Therefore, here we map those pins to
-        // the explicit interrupt numbers.
+        // Make sure the pin is set for input
         //
+        ::pinMode(LeftWheelEncoder, INPUT);
+        ::pinMode(RightWheelEncoder, INPUT);
 
-        // The pin maps to an interrupt
+        // Enable the pull-up resistor
         //
-        switch (static_cast<int>(iReader))
-        {
-          case 2:
-            mInterrupt = 0;
-            ::attachInterrupt(mInterrupt, interrupt0, CHANGE);
-            break;
-          case 3:
-            mInterrupt = 1;
-            ::attachInterrupt(mInterrupt, interrupt1, CHANGE);
-            break;
-          case 21:
-            mInterrupt = 2;
-            ::attachInterrupt(mInterrupt, interrupt2, CHANGE);
-            break;
-          case 20:
-            mInterrupt = 3;
-            ::attachInterrupt(mInterrupt, interrupt3, CHANGE);
-            break;
-          case 19:
-            mInterrupt = 4;
-            ::attachInterrupt(mInterrupt, interrupt4, CHANGE);
-            break;
-          case 18:
-          default:
-            mInterrupt = 5;
-            ::attachInterrupt(mInterrupt, interrupt5, CHANGE);
-            break;
-        }
+        ::digitalWrite(LeftWheelEncoder, HIGH);
+        ::digitalWrite(RightWheelEncoder, HIGH);
+
+        // Prevent interrupts while initializing
+        //
+        noInterrupts();
+
+        // Pin 50 for left wheel
+        //
+        PCICR |= 1 << PCIE0;
+        DDRB &= ~(1 << (3));
+        PCMSK0 |= 1 << (3);
+
+        // Pin 51 for right wheel
+        //
+        PCICR |= 1 << PCIE0;
+        DDRB &= ~(1 << (2));
+        PCMSK0 |= 1 << (2);
+
+        // Clear the interrupt flags in case they were set before for any reason.
+        // On the AVR, interrupt flags are cleared by writing a logical 1
+        // to them.
+        //
+        PCIFR |= (1 << PCIF0) | (1 << PCIF1) | (1 << PCIF2);
+
+        // re-enable interrupts
+        //
+        interrupts();
       }
-      float Encoders::distance()
+      float Encoders::left()
       {
-
-        // Grab the count
-        //
-        mIntegration = coder[mInterrupt];
-
-        // Reset
-        //
-        coder[mInterrupt] = 0;
-
-        // Normalize by the wheel base
-        //
-
-        // Return the distance traveled
-        //
-        return mIntegration;
+        return getCountsAndResetM1();
+      }
+      float Encoders::right()
+      {
+        return getCountsAndResetM2();
       }
     }
   }
 }
-
-#ifdef NOT
-
-
-
-#define LEFT 0
-#define RIGHT 1
-
-
-
-
-long coder[2] = {
-                 0,0};
-int lastSpeed[2] = {
-                    0,0};
-
-
-
-
-
-
-
-
-void setup(){
-
-  Serial.begin(9600);                            //init the Serial port to print the data
-  attachInterrupt(LEFT, LwheelSpeed, CHANGE);    //init the interrupt mode for the digital pin 2
-  attachInterrupt(RIGHT, RwheelSpeed, CHANGE);   //init the interrupt mode for the digital pin 3
-
-}
-
-
-
-
-void loop(){
-
-  static unsigned long timer = 0;                //print manager timer
-
-  if(millis() - timer > 100){
-    Serial.print("Coder value: ");
-    Serial.print(coder[LEFT]);
-    Serial.print("[Left Wheel] ");
-    Serial.print(coder[RIGHT]);
-    Serial.println("[Right Wheel]");
-
-    lastSpeed[LEFT] = coder[LEFT];   //record the latest speed value
-    lastSpeed[RIGHT] = coder[RIGHT];
-    coder[LEFT] = 0;                 //clear the data buffer
-    coder[RIGHT] = 0;
-    timer = millis();
-  }
-
-}
-
-
-
-
-
-
-
-
-void LwheelSpeed()
-{
-  coder[LEFT] ++;  //count the left wheel encoder interrupts
-}
-
-
-
-
-
-
-
-
-void RwheelSpeed()
-{
-  coder[RIGHT] ++; //count the right wheel encoder interrupts
-}
-#endif

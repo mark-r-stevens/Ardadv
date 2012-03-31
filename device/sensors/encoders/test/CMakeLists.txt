@@ -20,7 +20,7 @@ set(EncodersTest_PORT ${PROJECT_PORT})
 ## Arduino Target board
 #
 set(EncodersTest_SRCS  Test.cpp)  
-set(EncodersTest_LIBS  Encoders)
+set(EncodersTest_LIBS  Encoders Manual)
 set(EncodersTest_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation

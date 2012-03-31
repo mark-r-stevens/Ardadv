@@ -53,6 +53,15 @@ namespace ardadv
           ::pinMode(iId, iMode);
         }
 
+        //! @brief Set the mode
+        //!
+        //! @param[in] iMode   The mode
+        //!
+        inline void mode(uint8_t iMode) const
+        {
+          ::pinMode(mId, iMode);
+        }
+
         //! @brief Digital write to the pin
         //!
         //! @param[in] iValue The value to write
