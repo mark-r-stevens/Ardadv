@@ -77,7 +77,6 @@ namespace ardadv
             return mRightSpeed;
           }
 
-          }
           //! @brief Return the part number
           //!
           //! @return the part number
@@ -95,7 +94,6 @@ namespace ardadv
           {
             return "DF Robot";
           }
-
 
         private:
 
