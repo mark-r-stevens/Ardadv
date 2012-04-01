@@ -25,9 +25,6 @@ namespace ardadv
     {
       namespace
       {
-        static volatile int m1a = 0;
-        static volatile int m2a = 0;
-
         static volatile int counts1 = 0;
         static volatile int counts2 = 0;
 

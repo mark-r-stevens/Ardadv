@@ -76,7 +76,7 @@ public:
   
   void attach(byte msgId, messengerCallbackFunction newFunction);
   
-  char* sendCmd(int cmdId, char *msg, boolean reqAc = false, 
+  char* sendCmd(int cmdId, const char *msg, boolean reqAc = false,
 		    char *replyBuff = NULL, int butSize = 0, int timeout = DEFAULT_TIMEOUT, 
 		    int retryCount = 10);
 

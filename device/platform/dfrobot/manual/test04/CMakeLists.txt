@@ -20,7 +20,7 @@ set(ManualTest04_PORT ${PROJECT_PORT})
 ## Arduino Target board
 #
 set(ManualTest04_SRCS  Test.cpp)  
-set(ManualTest04_LIBS  Manual)
+set(ManualTest04_LIBS  Manual Ultrasonic Encoders)
 set(ManualTest04_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation

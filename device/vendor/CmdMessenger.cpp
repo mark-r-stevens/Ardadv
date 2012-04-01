@@ -84,12 +84,15 @@ uint8_t CmdMessenger::next()
     messageState = 2;
     default:
     if (dumped)
+    {
       current = strtok_r(temppointer,seperator_tokens,&last);
+    }
     if (current != NULL)
     {
       dumped = 0;
       return 1; 
     }
+    break;
   }
   return 0;
 }
@@ -160,13 +163,16 @@ boolean CmdMessenger::blockedTillReply(int timeout)
   unsigned long start = millis();
   unsigned long time = start;
   while(!comms->available() || (start - time) > timeout )
+  {
     time = millis();
+  }
+  return true;
 }
 
 // if the arguments in the future could be passed in as int/long/float etc
 // then it might make sense to use the above writeReal????() methods
 // I've removed them for now.
-char* CmdMessenger::sendCmd(int cmdId, char *msg, boolean reqAc, 
+char* CmdMessenger::sendCmd(int cmdId, const char *msg, boolean reqAc,
 			       char *replyBuff, int butSize, int timeout, 
 			       int retryCount)
 {
@@ -262,4 +268,5 @@ uint8_t CmdMessenger::checkString(char *string)
       return 0;
     }
   } 
+  return 0;
 }
