@@ -31,15 +31,15 @@ void setup()
 
   // Setup the serial connection to see output
   //
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.flush();
 
   // Initialize the Magnetometer
   //
   typedef ardadv::sensors::ultrasonic::Ultrasonic Ultrasonic;
-  ultrasonic1.setup(Ultrasonic::Trigger(23), Ultrasonic::Echo(24));
-  ultrasonic2.setup(Ultrasonic::Trigger(25), Ultrasonic::Echo(26));
-  ultrasonic3.setup(Ultrasonic::Trigger(27), Ultrasonic::Echo(28));
+  ultrasonic1.setup(Ultrasonic::Trigger(23), Ultrasonic::Echo(22));
+  ultrasonic2.setup(Ultrasonic::Trigger(25), Ultrasonic::Echo(24));
+  ultrasonic3.setup(Ultrasonic::Trigger(27), Ultrasonic::Echo(26));
 }
 
 // This is called repeatedly in an event loop.
