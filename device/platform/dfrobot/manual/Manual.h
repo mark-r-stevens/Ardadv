@@ -59,6 +59,25 @@ namespace ardadv
           //!
           void right(int speed = 100);
 
+          //! @brief Access the left speed
+          //!
+          //! @return The left speed
+          //!
+          inline int leftSpeed() const
+          {
+            return mLeftSpeed;
+          }
+
+          //! @brief Access the right speed
+          //!
+          //! @return The right speed
+          //!
+          inline int rightSpeed() const
+          {
+            return mRightSpeed;
+          }
+
+          }
           //! @brief Return the part number
           //!
           //! @return the part number
