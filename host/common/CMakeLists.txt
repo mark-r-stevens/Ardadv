@@ -31,8 +31,8 @@ QT4_WRAP_CPP(COMMON_MOC_HDRS
 ## Add the library
 #
 add_library(Common
-  SerialPort.cpp
-  SerialPort.h
+  ArduinoSerial.cpp
+  ArduinoSerial.h
   Serial.h
   ${COMMON_MOC_HDRS}
   ${COMMON_RCC_SRCS}

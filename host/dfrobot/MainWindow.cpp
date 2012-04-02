@@ -103,73 +103,77 @@ namespace ardadv
     void MainWindow::recv(const QString& str)
     {
 
-      //std::cout << "str=(" << str.toStdString() << std::endl;
+      // Log file of valid robot messages
+      //
+      static std::ofstream ofs("Data.csv");
 
       // Add the string to the list
       //
-      mList.append(str.split(' '));
+      mList.append(str.split(','));
 
       // If there is no stop in the list, we are done
       //
-      if (mList.indexOf("Stop") == -1)
+      if (mList.indexOf("<Stop>;") == -1)
       {
         return;
       }
 
       // Try to parse what we can
       //
-      while (mList.size() > 7)
+      while (mList.size() > 10)
       {
 
         // Strip off everything until a start
         //
-        while (mList.size() > 0 && (mList.first() != "Start"))
+        while (mList.size() > 0 && (mList.first() != "<Start>"))
         {
+          std::cout << "no start" << std::endl;
           mList.pop_front();
         }
 
         // See if there is enough left
         //
-        if (mList.size() < 7)
+        if (mList.size() < 10)
         {
+          std::cout << "too few things(" << mList.size() << ")" << std::endl;
           return;
         }
 
         // Get the tokens
         //
-        const QString v0 = mList.takeFirst();
-        const int     v1 = mList.takeFirst().toInt();
-        float   v2 = mList.takeFirst().toFloat();
-        float   v3 = mList.takeFirst().toFloat();
-        float   v4 = mList.takeFirst().toFloat();
-        const QString v5 = mList.takeFirst();
+        const QString start  = mList.takeFirst();           // 0
+        float   leftSpeed    = mList.takeFirst().toFloat(); // 1
+        float   rightSpeed   = mList.takeFirst().toFloat(); // 2
+        float   leftEncoder  = mList.takeFirst().toFloat(); // 3
+        float   rightEncoder = mList.takeFirst().toFloat(); // 4
+        float   distance1    = mList.takeFirst().toFloat(); // 5
+        float   distance2    = mList.takeFirst().toFloat(); // 6
+        float   distance3    = mList.takeFirst().toFloat(); // 7
+        const QString stop   = mList.takeFirst();           // 8
+
+        std::cout << "tokens=(" << start.toStdString() << ", " << stop.toStdString() << ")" << std::endl;
 
         // Check
         //
-        if (v0 != "Start")
+        if (start != "<Start>")
         {
           return;
         }
-        if (v5 != "Stop")
+        if (stop != "<Stop>;")
         {
           return;
         }
+        std::cout << "Parsing" << std::endl;
 
-        // Normalize
+        // Output the values
         //
-        const float mag = ::sqrt(v2*v2 + v3*v3 + v4*v4);
-        v2 /= mag;
-        v3 /= mag;
-        v4 /= mag;
-
-        // Compute the heading
-        //
-        const float heading = ::atan2(v3,v2) * 180.0 / 3.14159;
-
-        // Update the display
-        //
-        std::cout << "heading (" << heading << ")" << std::endl;
-        mCameraWidget->setHeading(heading);
+        ofs << leftSpeed    << ",";
+        ofs << rightSpeed   << ",";
+        ofs << leftEncoder  << ",";
+        ofs << rightEncoder << ",";
+        ofs << distance1    << ",";
+        ofs << distance2    << ",";
+        ofs << distance3    << std::endl;
       }
     }
   }

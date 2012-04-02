@@ -40,96 +40,9 @@
 #include <sys/ioctl.h>
 #include <getopt.h>
 
-void usage(void);
-int serialport_init(const char* serialport, int baud);
-int serialport_writebyte(int fd, uint8_t b);
-int serialport_write(int fd, const char* str);
-int serialport_read_until(int fd, char* buf, char until);
 
-void usage(void) {
-    printf("Usage: arduino-serial -p <serialport> [OPTIONS]\n"
-    "\n"
-    "Options:\n"
-    "  -h, --help                   Print this help message\n"
-    "  -p, --port=serialport        Serial port Arduino is on\n"
-    "  -b, --baud=baudrate          Baudrate (bps) of Arduino\n"
-    "  -s, --send=data              Send data to Arduino\n"
-    "  -r, --receive                Receive data from Arduino & print it out\n"
-    "  -n  --num=num                Send a number as a single byte\n"
-    "  -d  --delay=millis           Delay for specified milliseconds\n"
-    "\n"
-    "Note: Order is important. Set '-b' before doing '-p'. \n"
-    "      Used to make series of actions:  '-d 2000 -s hello -d 100 -r' \n"
-    "      means 'wait 2secs, send 'hello', wait 100msec, get reply'\n"
-    "\n");
-}
+#include "ArduinoSerial.h"
 
-int main(int argc, char *argv[]) 
-{
-    int fd = 0;
-    char serialport[256];
-    int baudrate = B9600;  // default
-    char buf[256];
-    int rc,n;
-
-    if (argc==1) {
-        usage();
-        exit(EXIT_SUCCESS);
-    }
-
-    /* parse options */
-    int option_index = 0, opt;
-    static struct option loptions[] = {
-        {"help",       no_argument,       0, 'h'},
-        {"port",       required_argument, 0, 'p'},
-        {"baud",       required_argument, 0, 'b'},
-        {"send",       required_argument, 0, 's'},
-        {"receive",    no_argument,       0, 'r'},
-        {"num",        required_argument, 0, 'n'},
-        {"delay",      required_argument, 0, 'd'}
-    };
-    
-    while(1) {
-        opt = getopt_long (argc, argv, "hp:b:s:rn:d:",
-                           loptions, &option_index);
-        if (opt==-1) break;
-        switch (opt) {
-        case '0': break;
-        case 'd':
-            n = strtol(optarg,NULL,10);
-            usleep(n * 1000 ); // sleep milliseconds
-            break;
-        case 'h':
-            usage();
-            break;
-        case 'b':
-            baudrate = strtol(optarg,NULL,10);
-            break;
-        case 'p':
-            strcpy(serialport,optarg);
-            fd = serialport_init(optarg, baudrate);
-            if(fd==-1) return -1;
-            break;
-        case 'n':
-            n = strtol(optarg, NULL, 10); // convert string to number
-            rc = serialport_writebyte(fd, (uint8_t)n);
-            if(rc==-1) return -1;
-            break;
-        case 's':
-            strcpy(buf,optarg);
-            rc = serialport_write(fd, buf);
-            if(rc==-1) return -1;
-            break;
-        case 'r':
-            serialport_read_until(fd, buf, '\n');
-            printf("read: %s\n",buf);
-            break;
-        }
-    }
-
-    exit(EXIT_SUCCESS);    
-} // end main
-    
 int serialport_writebyte( int fd, uint8_t b)
 {
     int n = write(fd,&b,1);

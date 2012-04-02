@@ -18,7 +18,7 @@
 
 #include <QThread>
 
-#include <common/SerialPort.h>
+#include <common/ArduinoSerial.h>
 
 #include <iostream>
 
@@ -53,7 +53,7 @@ namespace ardadv
 
         // Open the port
         //
-        fd = common::OpenAdrPort(iPort.c_str());
+        fd = serialport_init(iPort.c_str(), 115200);
         if (fd < 0)
         {
           return false;
@@ -77,12 +77,11 @@ namespace ardadv
         //
         while (true)
         {
-          if (common::ReadAdrPort(fd, data, 4096) >= 0)
+          if (serialport_read_until(fd, data, ';') >= 0)
           {
             const QString send = data;
             emit recv(send);
           }
-          this->msleep(100);
         }
       }
 
@@ -94,8 +93,7 @@ namespace ardadv
       //
       void send(const QString& str)
       {
-        common::WriteAdrPort(fd, str.toStdString().c_str());
-        std::cout << "Serial::send(" << str.toStdString() << ")" << std::endl;
+        serialport_write(fd, str.toStdString().c_str());
       }
 
     signals:

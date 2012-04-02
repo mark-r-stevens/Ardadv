@@ -152,19 +152,18 @@ void loop()
 
   // Log the result to output for visualization via CAS
   //
-  ::Serial.print("5,");
-  ::Serial.print(leftSpeed, DEC);
-  ::Serial.print(",");
-  ::Serial.print(rightSpeed, DEC);
-  ::Serial.print(",");
-  ::Serial.print(leftEncoder, DEC);
-  ::Serial.print(",");
-  ::Serial.print(rightEncoder, DEC);
-  ::Serial.print(",");
-  ::Serial.print(distance1, DEC);
-  ::Serial.print(",");
-  ::Serial.print(distance2, DEC);
-  ::Serial.print(",");
-  ::Serial.print(distance3, DEC);
-  ::Serial.println(";");
+  ::Serial.print("5,<Start>,");
+  ::Serial.print(leftSpeed);      ::Serial.print(",");
+  ::Serial.print(rightSpeed);     ::Serial.print(",");
+  ::Serial.print(leftEncoder);    ::Serial.print(",");
+  ::Serial.print(rightEncoder);   ::Serial.print(",");
+  ::Serial.print(distance1);      ::Serial.print(",");
+  ::Serial.print(distance2);      ::Serial.print(",");
+  ::Serial.print(distance3);
+  ::Serial.println(",<Stop>;");
+  ::Serial.flush();
+
+  // Slow things down
+  //
+  ::delay(100);
 }

@@ -384,9 +384,6 @@ void AF_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
  else if (style == MICROSTEP) {
     uspers /= MICROSTEPS;
     steps *= MICROSTEPS;
-#ifdef MOTORDEBUG
-    Serial.print("steps = "); Serial.println(steps, DEC);
-#endif
   }
 
   while (steps--) {
@@ -500,12 +497,6 @@ uint8_t AF_Stepper::onestep(uint8_t dir, uint8_t style) {
   currentstep += MICROSTEPS*4;
   currentstep %= MICROSTEPS*4;
 
-#ifdef MOTORDEBUG
-  Serial.print("current step: "); Serial.println(currentstep, DEC);
-  Serial.print(" pwmA = "); Serial.print(ocra, DEC); 
-  Serial.print(" pwmB = "); Serial.println(ocrb, DEC); 
-#endif
-
   if (steppernum == 1) {
     setPWM1(ocra);
     setPWM2(ocrb);
@@ -518,7 +509,6 @@ uint8_t AF_Stepper::onestep(uint8_t dir, uint8_t style) {
   // release all
   latch_state &= ~a & ~b & ~c & ~d; // all motor pins to 0
 
-  //Serial.println(step, DEC);
   if (style == MICROSTEP) {
     if ((currentstep >= 0) && (currentstep < MICROSTEPS))
       latch_state |= a | b;
