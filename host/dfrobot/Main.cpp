@@ -35,6 +35,20 @@ int main(int argc, char *argv[])
   //
   ardadv::dfrobot::MainWindow iMainWindow;
 
+  // Check arguments
+  //
+  if (argc != 3)
+  {
+    std::cerr << "Usage: DfRobot device baud" << std::endl;
+    std::cerr << "\tdevice The serial port (e.g., /dev/cu.usbmodem621)" << std::endl;
+    std::cerr << "\tbaud   The requested data rate (e.g., 115200)" << std::endl;
+    return 0;
+  }
+
+  // Connect to the serial port
+  //
+  iMainWindow.open(argv[1], ::atoi(argv[2]));
+
   // Show the main window on the screen
   //
   iMainWindow.show();

@@ -46,14 +46,17 @@ namespace ardadv
 
       //! @brief The serial port to open
       //!
+      //! @param[in] port The serial port
+      //! @param[in] baud The data rate
+      //!
       //! @return true if port opened properly
       //!
-      inline bool open(const std::string& iPort)
+      inline bool open(const std::string& port, int baud = 115200)
       {
 
         // Open the port
         //
-        fd = serialport_init(iPort.c_str(), 115200);
+        fd = serialport_init(port.c_str(), baud);
         if (fd < 0)
         {
           return false;

@@ -46,6 +46,16 @@ namespace ardadv
       //!
       MainWindow();
 
+      //! @brief The serial port to open
+      //!
+      //! @param[in] port The serial port
+      //! @param[in] baud The data rate
+      //!
+      //! @return true if port opened properly
+      //!
+      bool open(const std::string& port = "/dev/cu.usbserial-A800fcAr",
+                int                baud = 115200);
+
     public slots:
 
       //! @brief Called when new data is available on the terminal

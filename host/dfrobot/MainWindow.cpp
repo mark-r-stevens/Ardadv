@@ -73,9 +73,10 @@ namespace ardadv
       //
       setWindowTitle(tr("DF Robot Controller"));
 
-      // Start the serial line running
-      //
-      mSerial->open("/dev/cu.usbmodem621");
+    }
+    bool MainWindow::open(const std::string& port, int baud)
+    {
+      mSerial->open(port, baud);
       mSerial->start();
     }
     void MainWindow::keyPressEvent(QKeyEvent* event)
