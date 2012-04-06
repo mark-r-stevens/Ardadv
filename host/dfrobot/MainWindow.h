@@ -53,6 +53,9 @@ namespace ardadv
       //!
       //! @return true if port opened properly
       //!
+      //! Xbee: /dev/cu.usbserial-A800fcAr
+      //! USB : /dev/cu.usbmodem621
+      //!
       bool open(const std::string& port = "/dev/cu.usbserial-A800fcAr",
                 int                baud = 115200);
 

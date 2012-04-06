@@ -42,7 +42,7 @@ namespace ardadv
       //
       QTimer *timer = new QTimer(this);
       connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-      timer->start(100);
+      timer->start(300);
     }
     CameraWidget::~CameraWidget()
     {
@@ -68,7 +68,7 @@ namespace ardadv
                       frame->width,
                       frame->height,
                       frame->widthStep,
-                      QImage::Format_RGB888).rgbSwapped();
+                      QImage::Format_RGB888).rgbSwapped().scaled(640,480);
 
       // Update the texture
       //
