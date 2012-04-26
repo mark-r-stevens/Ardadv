@@ -26,8 +26,8 @@ namespace ardadv
       namespace manual
       {
         Manual::Manual()
-        : mFrontLeft (1, MOTOR12_1KHZ)
-        , mFrontRight(2, MOTOR12_1KHZ)
+        : mFrontLeft (1, MOTOR12_8KHZ)
+        , mFrontRight(2, MOTOR12_8KHZ)
         , mRearLeft  (3, MOTOR34_1KHZ)
         , mRearRight (4, MOTOR34_1KHZ)
         , mRightSpeed(0)

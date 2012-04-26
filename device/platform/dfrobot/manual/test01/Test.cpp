@@ -39,22 +39,8 @@ void loop()
   // turn it on going forward
   //
   manual.left(100);
-  delay(5000);
-  manual.left(-100);
-  delay(5000);
-
-  // the other way
-  //
   manual.right(100);
   delay(5000);
-  manual.right(-100);
-  delay(5000);
-
-  // rest
-  //
-  manual.left(0);
-  manual.right(0);
-  delay(10000);
 
 }
 
