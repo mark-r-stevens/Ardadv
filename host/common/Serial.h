@@ -29,7 +29,7 @@ namespace ardadv
 
     //! @class Serial
     //!
-    //! @brief Capture accelerometer serial traffic
+    //! @brief Capture serial traffic
     //!
     class Serial : public QThread
     {
@@ -37,8 +37,6 @@ namespace ardadv
     public:
 
       //! @brief Constructor
-      //!
-      //! @param[in] parent the parent widget
       //!
       inline Serial() : fd(-1)
       {

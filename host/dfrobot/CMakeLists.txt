@@ -26,6 +26,7 @@ include(${QT_USE_FILE})
 #
 QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
   ControlsWidget.h
+  Camera.h
   CameraWidget.h
   MainWindow.h
 )
@@ -35,6 +36,7 @@ QT4_WRAP_CPP(ACCVIEWER_MOC_HDRS
 add_executable(DfRobot
   ControlsWidget.cpp
   ControlsWidget.h
+  Camera.h
   CameraWidget.cpp
   CameraWidget.h
   Main.cpp

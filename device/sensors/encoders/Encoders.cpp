@@ -78,6 +78,15 @@ namespace ardadv
           interrupts();
           return tmp;
         }
+
+        inline float convert(int count)
+        {
+          static const float ppr = 20.0f;
+          static const float pi = 3.1416f;
+          static const float diameter = 0.0635f;
+          static const float circumference = pi * diameter;
+          return circumference * count / ppr;
+        }
       }
       Encoders::Encoders()
       {
@@ -123,11 +132,11 @@ namespace ardadv
       }
       float Encoders::left()
       {
-        return getCountsAndResetM1();
+        return convert(getCountsAndResetM1());
       }
       float Encoders::right()
       {
-        return getCountsAndResetM2();
+        return convert(getCountsAndResetM2());
       }
     }
   }

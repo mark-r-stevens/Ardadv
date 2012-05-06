@@ -26,64 +26,31 @@ namespace ardadv
   {
     CameraWidget::CameraWidget(QWidget *parent)
     : QGLWidget(parent)
-    , capture(0)
     , mHeading(0)
     {
 
       // Set up the capture device
       //
-      capture = ::cvCaptureFromCAM(CV_CAP_ANY);
-      if ( !capture )
-      {
-        std::cerr << "ERROR: capture is NULL \n";
-      }
+      camera = new Camera(this);
 
-      // Setup the timer
+      // connect
       //
-      QTimer *timer = new QTimer(this);
-      connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-      timer->start(300);
+      connect(camera, SIGNAL(send(QImage)), this, SLOT(recv(QImage)));
+
+      // Start the thread running
+      //
+      camera->start();
+
     }
     CameraWidget::~CameraWidget()
     {
-      ::cvReleaseCapture(&capture);
     }
-    void CameraWidget::update()
-    {
-
-      // Check if there is a capture device
-      //
-      if (capture == 0)
-      {
-        return;
-      }
-
-      // Grab a frame
-      //
-      IplImage* frame = ::cvQueryFrame(capture);
-
-      // Convert that into an qt image
-      //
-      qImage = QImage((const uchar*)frame->imageData,
-                      frame->width,
-                      frame->height,
-                      frame->widthStep,
-                      QImage::Format_RGB888).rgbSwapped().scaled(640,480);
-
-      // Update the texture
-      //
-      updateTexture();
-
-      // Draw
-      //
-      glDraw();
-    }
-    void CameraWidget::updateTexture()
+    void CameraWidget::recv(QImage qimg)
     {
 
       // Convert the image to opengl format
       //
-      glImage = QGLWidget::convertToGLFormat(qImage);
+      glImage = QGLWidget::convertToGLFormat(qimg);
 
       // Setup the texture in memory
       //
@@ -219,8 +186,6 @@ namespace ardadv
       ::glVertex2f(x1,y1);
       ::glVertex2f(x2,y2);
       ::glEnd();
-      // Overlay the heading on the image
-      //
 
     }
   }

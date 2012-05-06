@@ -1,4 +1,7 @@
 FILE(REMOVE_RECURSE
+  "../msg_gen"
+  "../src/dfrobot/msg"
+  "../msg_gen"
   "CMakeFiles/rospack_genmsg_libexe"
 )
 

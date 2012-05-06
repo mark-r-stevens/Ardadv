@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   //
   QCoreApplication::setOrganizationName("RTS");
   QCoreApplication::setOrganizationDomain("redticksoftware.com");
-  QCoreApplication::setApplicationName("AccViewer");
+  QCoreApplication::setApplicationName("DFROBOT");
 
   // construct the window
   //
@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
     std::cerr << "Usage: DfRobot device baud" << std::endl;
     std::cerr << "\tdevice The serial port (e.g., /dev/cu.usbmodem621)" << std::endl;
     std::cerr << "\tbaud   The requested data rate (e.g., 115200)" << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "\tXbee: /dev/cu.usbserial-A800fcAr" << std::endl;
+    std::cerr << "\tUSB : /dev/cu.usbmodem621" << std::endl;
     return 0;
   }
 

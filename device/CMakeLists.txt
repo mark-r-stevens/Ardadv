@@ -49,6 +49,8 @@ set(PROJECT_PORT /dev/cu.usbmodem621)
 ## Make sure the top level directory is set up in the include path
 #
 include_directories(.)
+include_directories(roslib)
+include_directories(vendor)
 
 ## Add the sub directory
 #

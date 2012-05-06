@@ -39,13 +39,13 @@ namespace ardadv
 
       // Allocate the widgets
       //
-      mCameraWidget   = new CameraWidget(this);
+      //mCameraWidget   = new CameraWidget(this);
       mControlsWidget = new ControlsWidget(this);
 
       // The layout
       //
       QGridLayout *layout = new QGridLayout;
-      layout->addWidget(mCameraWidget,   0, 0);
+      //layout->addWidget(mCameraWidget,   0, 0);
       layout->addWidget(mControlsWidget, 0, 1);
       setLayout(layout);
 

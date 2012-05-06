@@ -35,19 +35,28 @@ RM = /opt/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /opt/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot
+CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build
+CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build
 
 # Utility rule file for ROSBUILD_genmsg_cpp.
 
 # Include the progress variables for this target.
 include CMakeFiles/ROSBUILD_genmsg_cpp.dir/progress.make
 
-CMakeFiles/ROSBUILD_genmsg_cpp:
+CMakeFiles/ROSBUILD_genmsg_cpp: ../msg_gen/cpp/include/dfrobot/State.h
+
+../msg_gen/cpp/include/dfrobot/State.h: ../msg/State.msg
+../msg_gen/cpp/include/dfrobot/State.h: /Users/mstevens/ros/ros_comm/clients/cpp/roscpp/scripts/genmsg_cpp.py
+../msg_gen/cpp/include/dfrobot/State.h: /Users/mstevens/ros/ros/core/roslib/scripts/gendeps
+../msg_gen/cpp/include/dfrobot/State.h: ../manifest.xml
+	$(CMAKE_COMMAND) -E cmake_progress_report /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../msg_gen/cpp/include/dfrobot/State.h"
+	/Users/mstevens/ros/ros_comm/clients/cpp/roscpp/scripts/genmsg_cpp.py /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/msg/State.msg
 
 ROSBUILD_genmsg_cpp: CMakeFiles/ROSBUILD_genmsg_cpp
+ROSBUILD_genmsg_cpp: ../msg_gen/cpp/include/dfrobot/State.h
 ROSBUILD_genmsg_cpp: CMakeFiles/ROSBUILD_genmsg_cpp.dir/build.make
 .PHONY : ROSBUILD_genmsg_cpp
 
@@ -60,6 +69,6 @@ CMakeFiles/ROSBUILD_genmsg_cpp.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_genmsg_cpp.dir/clean
 
 CMakeFiles/ROSBUILD_genmsg_cpp.dir/depend:
-	cd /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_genmsg_cpp.dir/depend
 

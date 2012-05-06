@@ -35,10 +35,10 @@ RM = /opt/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /opt/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot
+CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build
+CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build
 
 # Utility rule file for ROSBUILD_gensrv_lisp.
 
@@ -60,6 +60,6 @@ CMakeFiles/ROSBUILD_gensrv_lisp.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_gensrv_lisp.dir/clean
 
 CMakeFiles/ROSBUILD_gensrv_lisp.dir/depend:
-	cd /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build/CMakeFiles/ROSBUILD_gensrv_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build/CMakeFiles/ROSBUILD_gensrv_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_gensrv_lisp.dir/depend
 

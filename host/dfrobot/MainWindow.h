@@ -27,7 +27,7 @@ namespace ardadv
   }
   namespace dfrobot
   {
-    class CameraWidget;
+    //class CameraWidget;
     class ControlsWidget;
 
     //! @class MainWindow
@@ -95,7 +95,7 @@ namespace ardadv
 
       //! @brief The widgets
       //!
-      CameraWidget*    mCameraWidget;
+      //CameraWidget*    mCameraWidget;
       ControlsWidget*  mControlsWidget;
 
       //! @brief The listener for serial data

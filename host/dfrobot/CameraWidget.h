@@ -19,7 +19,7 @@
 #include <QtGui>
 #include <QtOpenGL>
 
-class CvCapture;
+#include <dfrobot/Camera.h>
 
 namespace ardadv
 {
@@ -75,9 +75,11 @@ namespace ardadv
 
     public slots:
 
-      //! @brief Grab a camera image
+      //! @brief Emitted when a new image is available
       //!
-      void update();
+      //! @param[in] qimg The image read
+      //
+      void recv(QImage qimg);
 
     protected:
 
@@ -95,10 +97,6 @@ namespace ardadv
 
     private:
 
-      //! @brief The current image being rendered
-      //!
-      QImage   qImage;
-
       //! @brief The image in gl format
       //!
       QImage   glImage;
@@ -107,9 +105,9 @@ namespace ardadv
       //!
       GLuint mTextureId;
 
-      //! @brief The camera image
+      //! @brief The camera widget
       //!
-      CvCapture* capture;
+      Camera* camera;
 
       //! @breif The heading
       //!

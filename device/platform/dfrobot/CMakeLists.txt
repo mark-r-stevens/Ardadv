@@ -16,4 +16,4 @@
 ## Add the sub-directories
 #
 add_subdirectory(manual)
-
+add_subdirectory(state)

@@ -35,10 +35,10 @@ RM = /opt/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /opt/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot
+CMAKE_SOURCE_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build
+CMAKE_BINARY_DIR = /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build
 
 # Utility rule file for test-results-run.
 
@@ -60,6 +60,6 @@ CMakeFiles/test-results-run.dir/clean:
 .PHONY : CMakeFiles/test-results-run.dir/clean
 
 CMakeFiles/test-results-run.dir/depend:
-	cd /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/ros/dfrobot/build/CMakeFiles/test-results-run.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build /Users/mstevens/Dev/swdev/ardadv/source/device/ros/dfrobot/build/CMakeFiles/test-results-run.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/test-results-run.dir/depend
 
