@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
   {
     if (serialport_read_until(fid, data, ';') >= 0)
     {
-      ofs << data << std::endl;
+      ofs << data;
       std::cout << data << std::endl;
     }
   }

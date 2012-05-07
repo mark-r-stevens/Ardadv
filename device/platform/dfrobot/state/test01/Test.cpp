@@ -105,11 +105,6 @@ void setup()
 
 void report()
 {
-  // Get the control speeds
-  //
-  const float leftSpeed  = manual.leftSpeed();
-  const float rightSpeed = manual.rightSpeed();
-
   // Get the range sensor estimates
   //
   const float d = ultrasonic.distance();
@@ -121,11 +116,11 @@ void report()
 
   // Adjust for forward or backward motion
   //
-  if (leftSpeed < 0)
+  if (manual.leftSpeed() < 0)
   {
     leftEncoder *= -1.0f;
   }
-  if (rightSpeed < 0)
+  if (manual.rightSpeed() < 0)
   {
     rightEncoder *= -1.0f;
   }
@@ -143,11 +138,13 @@ void report()
   // Log the result to output for visualization via CAS
   //
   ::Serial.print("5,");
-  ::Serial.print(x);      ::Serial.print(",");
-  ::Serial.print(y);      ::Serial.print(",");
-  ::Serial.print(theta);  ::Serial.print(",");
-  ::Serial.print(d);      ::Serial.print(",");
-  ::Serial.println(";");  ::Serial.flush();
+  ::Serial.print(leftEncoder,DEC);      ::Serial.print(",");
+  ::Serial.print(rightEncoder,DEC);     ::Serial.print(",");
+  ::Serial.print(x,DEC);                ::Serial.print(",");
+  ::Serial.print(y,DEC);                ::Serial.print(",");
+  ::Serial.print(theta,DEC);            ::Serial.print(",");
+  ::Serial.print(d,DEC);                ::Serial.println(";");
+  ::Serial.flush();
 
 }
 
@@ -159,13 +156,15 @@ void loop()
 
   // Wait a few
   //
+  manual.left(0);
+  manual.right(0);
   ::delay(5000);
 
   // Run forward
   //
   manual.left(150);
   manual.right(150);
-  for (int i = 0; i < 10; ++i)
+  for (int i = 0; i < 40; ++i)
   {
     report();
     ::delay(100);
@@ -173,13 +172,15 @@ void loop()
 
   // Wait a few
   //
+  manual.left(0);
+  manual.right(0);
   ::delay(5000);
 
   // Go Backwards
   //
   manual.left(-150);
   manual.right(-150);
-  for (int i = 0; i < 10; ++i)
+  for (int i = 0; i < 40; ++i)
   {
     report();
     ::delay(100);
