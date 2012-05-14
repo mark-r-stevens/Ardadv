@@ -14,9 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Code derived from:
-//   https://github.com/stevemarple/MicroMag/blob/master/MicroMag.cpp
-//
-#include <sensors/magnetometer/Magnetometer.h>
+//    http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Sensors/Gyros/3-Axis/L3G4200D_Example.zip
+//    by: Jim Lindblom
+//    SparkFun Electronics
+
+#include <sensors/gyroscope/Gyroscope.h>
 
 #include <Arduino.h>
 
@@ -24,223 +26,177 @@
 
 #include <math.h>
 
-#define MM_PERIOD_32 0
-#define MM_PERIOD_64 1
-#define MM_PERIOD_128 2
-#define MM_PERIOD_256 3
-#define MM_PERIOD_512 4
-#define MM_PERIOD_1024 5
-#define MM_PERIOD_2048 6
-#define MM_PERIOD_4096 7
+/*************************
+    L3G4200D Registers
+*************************/
+#define WHO_AM_I 0x0F
+#define CTRL_REG1 0x20
+#define CTRL_REG2 0x21
+#define CTRL_REG3 0x22
+#define CTRL_REG4 0x23
+#define CTRL_REG5 0x24
+#define REFERENCE 0x25
+#define OUT_TEMP 0x26
+#define STATUS_REG 0x27
+#define OUT_X_L 0x28
+#define OUT_X_H 0x29
+#define OUT_Y_L 0x2A
+#define OUT_Y_H 0x2B
+#define OUT_Z_L 0x2C
+#define OUT_Z_H 0x2D
+#define FIFO_CTRL_REG 0x2E
+#define FIFO_SRC_REG 0x2F
+#define INT1_CFG 0x30
+#define INT1_SRC 0x31
+#define INT1_TSH_XH 0x32
+#define INT1_TSH_XL 0x33
+#define INT1_TSH_YH 0x34
+#define INT1_TSH_YL 0x35
+#define INT1_TSH_ZH 0x36
+#define INT1_TSH_ZL 0x37
+#define INT1_DURATION 0x38
 
 namespace ardadv
 {
   namespace sensors
   {
-    namespace magnetometer
+    namespace gyroscope
     {
-      Magnetometer::Magnetometer()
-      : mValueX(0.0f)
-      , mValueY(0.0f)
-      , mValueZ(0.0f)
-      , mValid(false)
+      namespace
       {
-      }
-      bool Magnetometer::setup(const DRDY& drdy, const RESET& reset)
-      {
-
-        // Store the pins and their modes
-        //
-        mDRDY.reset(drdy,   INPUT);
-        mRESET.reset(reset, OUTPUT);
-
-        // Give the pins initial values
-        //
-        //mDRDY.digitalWrite(HIGH);
-        mRESET.digitalWrite(LOW);
-
-        // Set up the spi interface
-        //
-        SPI.begin();
-        SPI.setClockDivider(SPI_CLOCK_DIV32);
-        SPI.setDataMode(SPI_MODE0);
-        SPI.setBitOrder(MSBFIRST);
-
-        // Make one reading to switch device into low power mode
-        //
-        int16_t tmp = 0;
-        return read(0, MM_PERIOD_32, tmp, 0);
-
-      }
-      bool Magnetometer::convert(uint8_t axis, uint8_t period) const
-      {
-
-        // Check if the period is valid
-        //
-        if (period > MM_PERIOD_4096)
+        template<uint8_t T> inline int
+          readRegister(const common::Pin<T>& cs, uint8_t address)
         {
-          return false;
+          // This tells the L3G4200D we're reading;
+          address |= 0x80;
+          cs.digitalWrite(LOW);
+          SPI.transfer(address);
+          const int toRead = SPI.transfer(0x00);
+          cs.digitalWrite(HIGH);
+          return toRead;
         }
-
-        // Build the command
-        //
-        uint8_t cmd = 0;
-        cmd |= (axis + 1);
-        cmd |= (period << 4);
-
-        // Select the device (using the default SPI pins)
-        //
-        ::digitalWrite(SS, LOW);
-
-        // Pulse reset
-        //
-        pulseReset();
-
-        // Send the command byte
-        //
-        SPI.transfer(cmd);
-
-        // Done
-        //
-        return true;
-      }
-      int16_t Magnetometer::getResult() const
-      {
-        // Read 2 bytes
-        //
-        const int16_t r0 = SPI.transfer(0);
-        const int16_t r1 = SPI.transfer(0);
-
-        // De-select the device (using the default SPI pins)
-        //
-        ::digitalWrite(SS, HIGH);
-
-        // Return result as a 16 bit number
-        //
-        return (r0 << 8) | r1;
-      }
-      bool Magnetometer::read(uint8_t axis, uint8_t period, int16_t& result, uint16_t timeout) const
-      {
-        // Issue the read command for the requested axis
-        //
-        if (! convert(axis, period))
+        template<uint8_t T> inline void
+          writeRegister(const common::Pin<T>& cs, uint8_t address, uint8_t data)
         {
-          return false;
+          // This to tell the L3G4200D we're writing
+          address &= 0x7F;
+          cs.digitalWrite(LOW);
+          SPI.transfer(address);
+          SPI.transfer(data);
+          cs.digitalWrite(HIGH);
         }
-
-        // Wait for ready signal
-        //
-        // Set a default timeout which is appropriate for the selected
-        // period. See data sheet for details. Values used are 1us larger
-        // to account for +/-1 jitter.
-        //
-        if (timeout == 0)
+        template<uint8_t T> inline bool
+          setupL3G4200D(const common::Pin<T>& cs, uint8_t fullScale)
         {
-          switch (period)
-          {
-            case MM_PERIOD_32:
-              timeout = 501;
-              break;
-            case MM_PERIOD_64:
-              timeout = 1001;
-              break;
-            case MM_PERIOD_128:
-              timeout = 2001;
-              break;
-            case MM_PERIOD_256:
-              timeout = 4001;
-              break;
-            case MM_PERIOD_512:
-              timeout = 7501;
-              break;
-            case MM_PERIOD_1024:
-              timeout = 15001;
-              break;
-            case MM_PERIOD_2048:
-              timeout = 35501;
-              break;
-            case MM_PERIOD_4096:
-              timeout = 60001;
-              break;
-            default:
-              return false;
-          }
-        }
-
-        // Wait until device reports it is ready, or timeout is reached
-        //
-        const unsigned long t = micros();
-        while (!mDRDY.digitalRead())
-        {
-          if (micros() - t > timeout)
+          // Let's first check that we're communicating properly
+          // The WHO_AM_I register should read 0xD3
+          //
+          if (readRegister(cs, WHO_AM_I)!=0xD3)
           {
             return false;
           }
+
+          // Enable x, y, z and turn off power down:
+          //
+          writeRegister(cs, CTRL_REG1, 0b00001111);
+
+          // If you'd like to adjust/use the HPF, you can edit the line below
+          // to configure CTRL_REG2:
+          //
+          writeRegister(cs, CTRL_REG2, 0b00000000);
+
+          // Configure CTRL_REG3 to generate data ready interrupt on INT2
+          // No interrupts used on INT1, if you'd like to configure INT1
+          // or INT2 otherwise, consult the datasheet:
+          //
+          writeRegister(cs, CTRL_REG3, 0b00001000);
+
+          // CTRL_REG4 controls the full-scale range, among other things:
+          //
+          fullScale &= 0x03;
+          writeRegister(cs, CTRL_REG4, fullScale<<4);
+
+          // CTRL_REG5 controls high-pass filtering of outputs, use it
+          // if you'd like:
+          //
+          writeRegister(cs, CTRL_REG5, 0b00000000);
+
+          // Done
+          //
+          return true;
         }
-
-        // Get the result
-        //
-        result = getResult();
-
-        // Done
-        //
-        return true;
-      }
-      void Magnetometer::pulseReset() const
-      {
-        mRESET.digitalWrite(HIGH);
-        ::delayMicroseconds(1);
-        mRESET.digitalWrite(LOW);
-      }
-      float Magnetometer::readAxis(int axis)
-      {
-
-        // Read
-        //
-        int16_t result = 0;
-        if (! read(axis, MM_PERIOD_128, result, 0))
+        inline float normalize(int v)
         {
-          mValid = false;
-          return 0.0f;
+          static const float sensitivity = 17.50f / 1000.0f;
+          return static_cast<float>(v) * sensitivity;
         }
-
-        // Return the result
-        //
-        return result;
       }
-      void Magnetometer::update()
+      Gyroscope::Gyroscope()
+      : mValueX(0)
+      , mValueY(0)
+      , mValueZ(0)
+      {
+      }
+      bool Gyroscope::setup(const INTA& inta, const INTB& intb, const CS& cs)
       {
 
-        // Basic operation will follow these steps. Refer to the timing
-        // diagrams on the following page.
+        // Start the SPI library
         //
-        // 1. SSNOT is brought low.
-        //
-        // 2. Pulse RESET high (return to low state). You must RESET the
-        //    MicroMag3 before every measurement.
-        //
-        // 3. Data is clocked in on the MOSI line. Once eight bits are read
-        //    in, the MicroMag3 will execute the command.
-        //
-        // 4. The MicroMag3 will make the measurement. A measurement consists
-        //    of forward biasing the sensor and making a period count; then
-        //    reverse biasing the sensor and counting again; and finally,
-        //    taking the difference between the two bias directions.
-        //
-        // 5. At the end of the measurement, the DRDY line is set to high
-        //    indicating that the data is ready. In response to the next
-        //    16 SCLK pulses, data is shifted out on the MISO line.
-        //
-        // If you need to make another measurement, go to Step 2. You can
-        // send another command after the reset. In this case, keep SSNOT
-        // low. If you will not be using the MicroMag3, set SSNOT to high to
-        // disable the SPI port.
+        SPI.begin();
+        SPI.setDataMode(SPI_MODE3);
+        SPI.setClockDivider(SPI_CLOCK_DIV8);
 
-        mValid  = true;
+        // Initialize pins
+        //
+        mIntA.reset(inta, INPUT);
+        mIntB.reset(intb, INPUT);
+        mChipSelect.reset(cs, OUTPUT);
 
-        mValueX = readAxis(0);
-        mValueY = readAxis(1);
-        mValueZ = readAxis(2);
+        // Wait for the chip to warm up
+        //
+        mChipSelect.digitalWrite(HIGH);
+        ::delay(100);
+
+        // Configure L3G4200 to the full scale range
+        // 0: 250 dps
+        // 1: 500 dps
+        // 2: 2000 dps
+        //
+        return setupL3G4200D(mChipSelect, 1);
+      }
+      void Gyroscope::update()
+      {
+        // Wait until an interrupt is received
+        //
+        while(! mIntB.digitalRead());
+
+        // Intermediate values
+        //
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        // This will update x, y, and z with new values
+        //
+        x  = (readRegister(mChipSelect, 0x29) & 0xFF) << 8;
+        x |= (readRegister(mChipSelect, 0x28) & 0xFF);
+
+        y  = (readRegister(mChipSelect, 0x2B) & 0xFF) << 8;
+        y |= (readRegister(mChipSelect, 0x2A) & 0xFF);
+
+        z  = (readRegister(mChipSelect, 0x2D) & 0xFF) << 8;
+        z |= (readRegister(mChipSelect, 0x2C) & 0xFF);
+
+        // We now need to normalize the values. First account
+        // for at rest returns. The bias here was estimated
+        // by just recording values over time and computing the
+        // average.
+        //
+        // bias estimate: 52.5054, -17.3098, -12.8859
+        //
+        mValueX = normalize(x - 52.5054f);
+        mValueY = normalize(y + 17.3098f);
+        mValueZ = normalize(z + 12.8859f);
 
       }
     }

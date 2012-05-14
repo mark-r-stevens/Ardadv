@@ -18,5 +18,6 @@
 add_subdirectory(accelerometer)
 add_subdirectory(button)
 add_subdirectory(encoders)
+add_subdirectory(gyroscope)
 add_subdirectory(magnetometer)
 add_subdirectory(ultrasonic)

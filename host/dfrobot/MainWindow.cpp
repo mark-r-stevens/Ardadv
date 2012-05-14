@@ -78,6 +78,7 @@ namespace ardadv
     {
       mSerial->open(port, baud);
       mSerial->start();
+      return true;
     }
     void MainWindow::keyPressEvent(QKeyEvent* event)
     {

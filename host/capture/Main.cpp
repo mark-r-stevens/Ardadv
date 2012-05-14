@@ -17,6 +17,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 int main(int argc, char *argv[])
 {
@@ -42,8 +43,6 @@ int main(int argc, char *argv[])
   //
   std::ofstream ofs("Capture.txt");
 
-  // Read and write characters
-  //
   // The data read
   //
   char data[4096];
@@ -52,10 +51,11 @@ int main(int argc, char *argv[])
   //
   while (true)
   {
-    if (serialport_read_until(fid, data, ';') >= 0)
+    if (serialport_read_until(fid, data, 4095, '\n') >= 0)
     {
-      ofs << data;
-      std::cout << data << std::endl;
+      const float t = (static_cast<float>(clock()) / CLOCKS_PER_SEC) * 1000;
+      ofs << t << "," << data;
+      std::cout << t << "," << data;
     }
   }
 

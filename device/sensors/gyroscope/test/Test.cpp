@@ -17,12 +17,12 @@
 //
 #include "Arduino.h"
 
-// The Magnetometer
+// The Gyroscope
 //
-#include <sensors/Magnetometer/Magnetometer.h>
-ardadv::sensors::magnetometer::Magnetometer magnetometer;
+#include <sensors/Gyroscope/Gyroscope.h>
+ardadv::sensors::gyroscope::Gyroscope gyroscope;
 
-// Initialize the Magnetometer pins to be output. Initialize the button to
+// Initialize the Gyroscope pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
 void setup() 
@@ -33,11 +33,10 @@ void setup()
   Serial.begin(9600);
   Serial.flush();
 
-  // Initialize the Magnetometer
+  // Initialize the Gyroscope
   //
-  typedef ardadv::sensors::magnetometer::Magnetometer Magnetometer;
-  magnetometer.setup(Magnetometer::DRDY(9),
-                     Magnetometer::RESET(8));
+  typedef ardadv::sensors::gyroscope::Gyroscope Gyroscope;
+  gyroscope.setup(Gyroscope::INTA(7), Gyroscope::INTB(6), Gyroscope::CS(10));
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -49,23 +48,22 @@ void loop()
 
   // Update the state
   //
-  magnetometer.update();
+  gyroscope.update();
+
+  // The time
+  //
+  const unsigned long t = millis();
 
   // Log debugging output
   //
-  if (magnetometer.isValid())
-  {
-    ::Serial.print(" Start ");
-    ::Serial.print(millis());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.x());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.y());
-    ::Serial.print(" ");
-    ::Serial.print(magnetometer.z());
-    ::Serial.print(" Stop ");
-    ::Serial.flush();
-  }
+  ::Serial.print(t);
+  ::Serial.print(",");
+  ::Serial.print(gyroscope.x(), DEC);
+  ::Serial.print(",");
+  ::Serial.print(gyroscope.y(), DEC);
+  ::Serial.print(",");
+  ::Serial.println(gyroscope.z(), DEC);
+  ::Serial.flush();
 
   // Add a small delay
   //

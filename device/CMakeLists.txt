@@ -38,9 +38,9 @@ endif()
 
 ## Generate code for the specified board
 #
-#set(PROJECT_BOARD uno)
-set(PROJECT_BOARD mega2560)
-add_definitions(-D__AVR_ATmega2560__)
+set(PROJECT_BOARD uno)
+#set(PROJECT_BOARD mega2560)
+#add_definitions(-D__AVR_ATmega2560__)
 
 ## Set the device 
 #

@@ -60,7 +60,7 @@ int serialport_write(int fd, const char* str)
     return 0;
 }
 
-int serialport_read_until(int fd, char* buf, char until)
+int serialport_read_until(int fd, char* buf, int size, char until)
 {
     char b[1];
     int i=0;
@@ -72,7 +72,7 @@ int serialport_read_until(int fd, char* buf, char until)
             continue;
         }
         buf[i] = b[0]; i++;
-    } while( b[0] != until );
+    } while (( b[0] != until ) && (i < size));
 
     buf[i] = 0;  // null terminate the string
     return 0;

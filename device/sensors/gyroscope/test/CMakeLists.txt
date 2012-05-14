@@ -15,15 +15,15 @@
 
 ## Serial upload port
 #
-set(MagnetometerTest_PORT ${PROJECT_PORT})      
+set(GyroscopeTest_PORT ${PROJECT_PORT})      
    
 ## Arduino Target board
 #
-set(MagnetometerTest_SRCS  Test.cpp)  
-set(MagnetometerTest_LIBS  m Magnetometer Vendor m)
-set(MagnetometerTest_BOARD ${PROJECT_BOARD})          
+set(GyroscopeTest_SRCS  Test.cpp)  
+set(GyroscopeTest_LIBS  m Gyroscope Vendor m)
+set(GyroscopeTest_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation
 #
-generate_arduino_firmware(MagnetometerTest)
+generate_arduino_firmware(GyroscopeTest)
 

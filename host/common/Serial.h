@@ -78,7 +78,7 @@ namespace ardadv
         //
         while (true)
         {
-          if (serialport_read_until(fd, data, ';') >= 0)
+          if (serialport_read_until(fd, data, 4095, '\n') >= 0)
           {
             const QString send = data;
             emit recv(send);

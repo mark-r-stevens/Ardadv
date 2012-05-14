@@ -15,13 +15,13 @@
 
 ## Setup the library parameters
 #
-set(Magnetometer_SRCS  Magnetometer.cpp)
-set(Magnetometer_HDRS  Magnetometer.h)
-set(Magnetometer_BOARD ${PROJECT_BOARD})
+set(Gyroscope_SRCS  Gyroscope.cpp)
+set(Gyroscope_HDRS  Gyroscope.h)
+set(Gyroscope_BOARD ${PROJECT_BOARD})
 
 ## Generate the library
 #
-generate_arduino_library(Magnetometer)
+generate_arduino_library(Gyroscope)
 
 ## Add the subdirectory
 #
