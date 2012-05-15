@@ -22,6 +22,22 @@
 #include <sensors/Gyroscope/Gyroscope.h>
 ardadv::sensors::gyroscope::Gyroscope gyroscope;
 
+// The servo pins
+//
+const int panPin  = 8;
+const int tiltPin = 9;
+
+// The servo library
+//
+#include  <vendor/Servo.h>
+Servo pan;
+Servo tilt;
+
+// Used to turn the servo back and forth
+//
+int adjust = 1;
+int angle  = 0;
+
 // Initialize the Gyroscope pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
@@ -37,6 +53,12 @@ void setup()
   //
   typedef ardadv::sensors::gyroscope::Gyroscope Gyroscope;
   gyroscope.setup(Gyroscope::INTA(7), Gyroscope::INTB(6), Gyroscope::CS(10));
+
+  // Set up the servo
+  //
+  pan.attach(panPin);
+  tilt.attach(tiltPin);
+
 }
 
 // This is called repeatedly in an event loop. The loop checks
@@ -46,29 +68,54 @@ void setup()
 void loop() 
 {
 
-  // Update the state
+  // Sample the requested area of the view sphere
   //
-  gyroscope.update();
+  tilt.write(90);
+  for (bool done = false; ! done; angle += adjust)
+  {
 
-  // The time
-  //
-  const unsigned long t = millis();
+    // Set the pan
+    //
+    pan.write(angle);
 
-  // Log debugging output
-  //
-  ::Serial.print(t);
-  ::Serial.print(",");
-  ::Serial.print(gyroscope.x(), DEC);
-  ::Serial.print(",");
-  ::Serial.print(gyroscope.y(), DEC);
-  ::Serial.print(",");
-  ::Serial.println(gyroscope.z(), DEC);
-  ::Serial.flush();
+    // Update the state
+    //
+    gyroscope.update();
 
-  // Add a small delay
-  //
-  ::delay(100);
+    // The time
+    //
+    const unsigned long t = millis();
 
+    // Log debugging output
+    //
+    ::Serial.print(t);
+    ::Serial.print(",");
+    ::Serial.print(angle);
+    ::Serial.print(",");
+    ::Serial.print(gyroscope.x(), DEC);
+    ::Serial.print(",");
+    ::Serial.print(gyroscope.y(), DEC);
+    ::Serial.print(",");
+    ::Serial.println(gyroscope.z(), DEC);
+    ::Serial.flush();
+
+    // Adjust the pattern if we are at an end
+    //
+    if (angle >= 179)
+    {
+      adjust = -1;
+      done = true;
+    }
+    else if (angle <= 1)
+    {
+      adjust = +1;
+      done = true;
+    }
+
+    // Add a small delay
+    //
+    ::delay(10);
+  }
 }
 
 
