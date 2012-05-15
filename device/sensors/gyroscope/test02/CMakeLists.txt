@@ -15,15 +15,15 @@
 
 ## Serial upload port
 #
-set(GyroscopeTest_PORT ${PROJECT_PORT})      
+set(GyroscopeTest02_PORT ${PROJECT_PORT})      
    
 ## Arduino Target board
 #
-set(GyroscopeTest_SRCS  Test.cpp)  
-set(GyroscopeTest_LIBS  m Gyroscope Vendor m)
-set(GyroscopeTest_BOARD ${PROJECT_BOARD})          
+set(GyroscopeTest02_SRCS  Test.cpp)  
+set(GyroscopeTest02_LIBS  m Gyroscope Vendor m)
+set(GyroscopeTest02_BOARD ${PROJECT_BOARD})          
 
 ##  Target generation
 #
-generate_arduino_firmware(GyroscopeTest)
+generate_arduino_firmware(GyroscopeTest02)
 

@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
   {
     if (serialport_read_until(fid, data, 4095, '\n') >= 0)
     {
-      const float t = (static_cast<float>(clock()) / CLOCKS_PER_SEC) * 1000;
-      ofs << t << "," << data;
-      std::cout << t << "," << data;
+      //const float t = (static_cast<float>(clock()) / CLOCKS_PER_SEC) * 1000;
+      ofs << data;
+      std::cout << data;
     }
   }
 

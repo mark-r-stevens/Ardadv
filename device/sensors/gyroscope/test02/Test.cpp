@@ -33,11 +33,6 @@ const int tiltPin = 9;
 Servo pan;
 Servo tilt;
 
-// Used to turn the servo back and forth
-//
-int adjust = 1;
-int angle  = 0;
-
 // Initialize the Gyroscope pins to be output. Initialize the button to
 // be input. This is a one time call on startup.
 //
@@ -56,8 +51,8 @@ void setup()
 
   // Set up the servo
   //
-  pan.attach(panPin);
-  tilt.attach(tiltPin);
+  pan.attach(9);
+  tilt.attach(8);
 
 }
 
@@ -68,49 +63,54 @@ void setup()
 void loop() 
 {
 
+  // Used to turn the servo back and forth
+  //
+  int adjust = 1;
+  int angle  = 0;
+
+  // Default location
+  //
+  angle = 0;
+  tilt.write(90);
+  pan.write(angle);
+  ::delay(100);
+
   // Sample the requested area of the view sphere
   //
-  tilt.write(90);
-  for (bool done = false; ! done; angle += adjust)
+  while (true)
   {
-
-    // Set the pan
-    //
-    pan.write(angle);
 
     // Update the state
     //
     gyroscope.update();
 
-    // The time
-    //
-    const unsigned long t = millis();
-
     // Log debugging output
     //
-    ::Serial.print(t);
+    ::Serial.print(millis());
     ::Serial.print(",");
     ::Serial.print(angle);
-    ::Serial.print(",");
-    ::Serial.print(gyroscope.x(), DEC);
-    ::Serial.print(",");
-    ::Serial.print(gyroscope.y(), DEC);
     ::Serial.print(",");
     ::Serial.println(gyroscope.z(), DEC);
     ::Serial.flush();
 
     // Adjust the pattern if we are at an end
     //
-    if (angle >= 179)
+    if (angle >= 175)
     {
       adjust = -1;
-      done = true;
     }
-    else if (angle <= 1)
+    else if (angle <= 5)
     {
-      adjust = +1;
-      done = true;
+      adjust = 1;
     }
+
+    // Update the angle
+    //
+    angle += adjust;
+
+    // Set the pan
+    //
+    pan.write(angle);
 
     // Add a small delay
     //
