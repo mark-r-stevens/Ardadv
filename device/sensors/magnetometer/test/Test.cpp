@@ -36,8 +36,7 @@ void setup()
   // Initialize the Magnetometer
   //
   typedef ardadv::sensors::magnetometer::Magnetometer Magnetometer;
-  magnetometer.setup(Magnetometer::DRDY(9),
-                     Magnetometer::RESET(8));
+  magnetometer.setup(Magnetometer::DRDY(9), Magnetometer::RESET(8), Magnetometer::CS(10));
 }
 
 // This is called repeatedly in an event loop. The loop checks

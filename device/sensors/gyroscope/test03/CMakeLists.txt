@@ -13,18 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Setup the library parameters
+## Serial upload port
 #
-set(Gyroscope_SRCS  Gyroscope.cpp)
-set(Gyroscope_HDRS  Gyroscope.h)
-set(Gyroscope_BOARD ${PROJECT_BOARD})
+set(GyroscopeTest03_PORT ${PROJECT_PORT})      
+   
+## Arduino Target board
+#
+set(GyroscopeTest03_SRCS  Test.cpp)  
+set(GyroscopeTest03_LIBS  m Gyroscope Magnetometer Vendor m)
+set(GyroscopeTest03_BOARD ${PROJECT_BOARD})          
 
-## Generate the library
+##  Target generation
 #
-generate_arduino_library(Gyroscope)
+generate_arduino_firmware(GyroscopeTest03)
 
-## Add the subdirectory
-#
-add_subdirectory(test01)
-add_subdirectory(test02)
-add_subdirectory(test03)

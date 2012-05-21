@@ -135,21 +135,22 @@ namespace ardadv
       : mValueX(0)
       , mValueY(0)
       , mValueZ(0)
+      , mValid(false)
       {
       }
-      bool Gyroscope::setup(const INTA& inta, const INTB& intb, const CS& cs)
+      bool Gyroscope::setup(const DRDY& drdy, const RESET& reset, const CS& cs)
       {
 
         // Start the SPI library
         //
-        SPI.begin();
         SPI.setDataMode(SPI_MODE3);
         SPI.setClockDivider(SPI_CLOCK_DIV8);
+        SPI.setBitOrder(MSBFIRST);
 
         // Initialize pins
         //
-        mIntA.reset(inta, INPUT);
-        mIntB.reset(intb, INPUT);
+        mReset.reset(reset, INPUT);
+        mDataReady.reset(drdy, INPUT);
         mChipSelect.reset(cs, OUTPUT);
 
         // Wait for the chip to warm up
@@ -162,13 +163,73 @@ namespace ardadv
         // 1: 500 dps
         // 2: 2000 dps
         //
-        return setupL3G4200D(mChipSelect, 1);
+        const bool rtn = setupL3G4200D(mChipSelect, 1);
+
+        // Calibrate
+        //
+        calibrate();
+
+        // Done
+        //
+        return rtn;
+      }
+      void Gyroscope::pulseReset() const
+      {
+        mReset.digitalWrite(HIGH);
+        ::delayMicroseconds(1);
+        mReset.digitalWrite(LOW);
+      }
+      void Gyroscope::calibrate()
+      {
+        mOffsetX = 0;
+        mOffsetY = 0;
+        mOffsetZ = 0;
+        float mSumX = 0;
+        float mSumY = 0;
+        float mSumZ = 0;
+        for (int i = 0; i < 50; ++i)
+        {
+          update();
+          mSumX += mValueX;
+          mSumY += mValueY;
+          mSumZ += mValueZ;
+        }
+        mOffsetX = mSumX / 50;
+        mOffsetY = mSumY / 50;
+        mOffsetZ = mSumZ / 50;
       }
       void Gyroscope::update()
       {
-        // Wait until an interrupt is received
+
+        // Set valid
         //
-        while(! mIntB.digitalRead());
+        mValid = false;
+
+        // Setup the SPI parameters
+        //
+        SPI.setDataMode(SPI_MODE3);
+        SPI.setClockDivider(SPI_CLOCK_DIV8);
+        SPI.setBitOrder(MSBFIRST);
+
+        // Select the device
+        //
+        mChipSelect.digitalWrite(LOW);
+        ::delayMicroseconds(1);
+
+        // Ping the chip
+        //
+        pulseReset();
+
+        // Wait until an interrupt is received saying the data is ready
+        //
+        const unsigned long t = micros();
+        while (! mDataReady.digitalRead())
+        {
+          if (micros() - t > 100)
+          {
+            return;
+          }
+        }
 
         // Intermediate values
         //
@@ -192,11 +253,13 @@ namespace ardadv
         // by just recording values over time and computing the
         // average.
         //
-        // bias estimate: 52.5054, -17.3098, -12.8859
+        mValueX = normalize(x - mOffsetX);
+        mValueY = normalize(y - mOffsetY);
+        mValueZ = normalize(z - mOffsetZ);
+
+        // The data is valid
         //
-        mValueX = normalize(x - 52.5054f);
-        mValueY = normalize(y + 17.3098f);
-        mValueZ = normalize(z + 12.8859f);
+        mValid = true;
 
       }
     }

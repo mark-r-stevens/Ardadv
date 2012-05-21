@@ -36,7 +36,7 @@ void setup()
   // Initialize the Gyroscope
   //
   typedef ardadv::sensors::gyroscope::Gyroscope Gyroscope;
-  gyroscope.setup(Gyroscope::INTA(7), Gyroscope::INTB(6), Gyroscope::CS(10));
+  gyroscope.setup(Gyroscope::DRDY(6), Gyroscope::RESET(7), Gyroscope::CS(10));
 }
 
 // This is called repeatedly in an event loop. The loop checks

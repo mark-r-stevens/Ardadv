@@ -46,25 +46,26 @@ namespace ardadv
       , mValid(false)
       {
       }
-      bool Magnetometer::setup(const DRDY& drdy, const RESET& reset)
+      bool Magnetometer::setup(const DRDY& drdy, const RESET& reset, const CS& ssnot)
       {
-
-        // Store the pins and their modes
-        //
-        mDRDY.reset(drdy,   INPUT);
-        mRESET.reset(reset, OUTPUT);
-
-        // Give the pins initial values
-        //
-        //mDRDY.digitalWrite(HIGH);
-        mRESET.digitalWrite(LOW);
 
         // Set up the spi interface
         //
-        SPI.begin();
         SPI.setClockDivider(SPI_CLOCK_DIV32);
         SPI.setDataMode(SPI_MODE0);
         SPI.setBitOrder(MSBFIRST);
+
+        // Store the pins and their modes
+        //
+        mDataReady.reset(drdy,   INPUT);
+        mReset.reset(reset, OUTPUT);
+        mChipSelect.reset(ssnot, OUTPUT);
+
+        // Give the pins initial values
+        //
+        mDataReady.digitalWrite(HIGH);
+        mReset.digitalWrite(LOW);
+        mChipSelect.digitalWrite(HIGH);
 
         // Make one reading to switch device into low power mode
         //
@@ -90,7 +91,7 @@ namespace ardadv
 
         // Select the device (using the default SPI pins)
         //
-        ::digitalWrite(SS, LOW);
+        mChipSelect.digitalWrite(LOW);
 
         // Pulse reset
         //
@@ -106,6 +107,10 @@ namespace ardadv
       }
       int16_t Magnetometer::getResult() const
       {
+        // Select the device (using the default SPI pins)
+        //
+        mChipSelect.digitalWrite(LOW);
+
         // Read 2 bytes
         //
         const int16_t r0 = SPI.transfer(0);
@@ -113,7 +118,7 @@ namespace ardadv
 
         // De-select the device (using the default SPI pins)
         //
-        ::digitalWrite(SS, HIGH);
+        mChipSelect.digitalWrite(HIGH);
 
         // Return result as a 16 bit number
         //
@@ -170,7 +175,7 @@ namespace ardadv
         // Wait until device reports it is ready, or timeout is reached
         //
         const unsigned long t = micros();
-        while (!mDRDY.digitalRead())
+        while (!mDataReady.digitalRead())
         {
           if (micros() - t > timeout)
           {
@@ -188,9 +193,9 @@ namespace ardadv
       }
       void Magnetometer::pulseReset() const
       {
-        mRESET.digitalWrite(HIGH);
+        mReset.digitalWrite(HIGH);
         ::delayMicroseconds(1);
-        mRESET.digitalWrite(LOW);
+        mReset.digitalWrite(LOW);
       }
       float Magnetometer::readAxis(int axis)
       {
@@ -198,7 +203,7 @@ namespace ardadv
         // Read
         //
         int16_t result = 0;
-        if (! read(axis, MM_PERIOD_128, result, 0))
+        if (! read(axis, MM_PERIOD_32, result, 0))
         {
           mValid = false;
           return 0.0f;
@@ -214,7 +219,7 @@ namespace ardadv
         // Basic operation will follow these steps. Refer to the timing
         // diagrams on the following page.
         //
-        // 1. SSNOT is brought low.
+        // 1. CS is brought low.
         //
         // 2. Pulse RESET high (return to low state). You must RESET the
         //    MicroMag3 before every measurement.
@@ -232,15 +237,24 @@ namespace ardadv
         //    16 SCLK pulses, data is shifted out on the MISO line.
         //
         // If you need to make another measurement, go to Step 2. You can
-        // send another command after the reset. In this case, keep SSNOT
-        // low. If you will not be using the MicroMag3, set SSNOT to high to
+        // send another command after the reset. In this case, keep CS
+        // low. If you will not be using the MicroMag3, set CS to high to
         // disable the SPI port.
 
         mValid  = true;
 
+        mChipSelect.digitalWrite(LOW);
+        ::delay(2);
+
+        SPI.setClockDivider(SPI_CLOCK_DIV32);
+        SPI.setDataMode(SPI_MODE0);
+        SPI.setBitOrder(MSBFIRST);
+
         mValueX = readAxis(0);
         mValueY = readAxis(1);
         mValueZ = readAxis(2);
+
+        mChipSelect.digitalWrite(HIGH);
 
       }
     }

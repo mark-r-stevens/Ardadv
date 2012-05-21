@@ -67,8 +67,8 @@ namespace ardadv
 
         //! @brief Pin definitions (using SCI interface)
         //!
-        typedef common::Pin<0>  INTA;
-        typedef common::Pin<1>  INTB;
+        typedef common::Pin<0>  RESET;
+        typedef common::Pin<1>  DRDY;
         typedef common::Pin<2>  CS;
 
         //! @brief Constructor
@@ -77,13 +77,13 @@ namespace ardadv
 
         //! @brief Set the internal pin values
         //!
-        //! @param[in] INT1 Interrupt for data read
-        //! @param[in] INT2 Interrupt for data read
-        //! @param[in] CS   Chip select to read data
+        //! @param[in] drdy  Interrupt for data read
+        //! @param[in] reset Reset the chip
+        //! @param[in] CS    Chip select to read data
         //!
         //! @return true if setup successfully
         //!
-        bool setup(const INTA& int1, const INTB& int2, const CS& cs);
+        bool setup(const DRDY& drdy, const RESET& reset, const CS& cs);
 
         //! @brief Update the state
         //!
@@ -116,6 +116,15 @@ namespace ardadv
           return mValueZ;
         }
 
+        //! @brief Mark if the reading is valid or not
+        //!
+        //! @return true if valid
+        //!
+        inline bool isValid() const
+        {
+          return mValid;
+        }
+
         //! @brief Return the part number
         //!
         //! @return the part number
@@ -134,12 +143,23 @@ namespace ardadv
           return "STMicroelectronics";
         }
 
+      protected:
+
+        //! @brief Pulse the reset
+        //!
+        void pulseReset() const;
+
+        //! @brief Calibrate while sitting still to find the
+        //!        offset
+        //!
+        void calibrate();
+
       private:
 
         //! @brief The pins
         //!
-        INTA  mIntA;
-        INTB  mIntB;
+        RESET mReset;
+        DRDY  mDataReady;
         CS    mChipSelect;
 
         //! @brief The pin values
@@ -148,6 +168,15 @@ namespace ardadv
         float mValueY;
         float mValueZ;
 
+        //! @brief The offsets
+        //!
+        float mOffsetX;
+        float mOffsetY;
+        float mOffsetZ;
+
+        //! @brief Indicate if valid
+        //!
+        bool mValid;
       };
     }
   }

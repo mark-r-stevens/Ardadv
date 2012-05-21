@@ -17,10 +17,19 @@
 //
 #include "Arduino.h"
 
+// The SPI Library
+//
+#include <vendor/Spi.h>
+
 // The Gyroscope
 //
 #include <sensors/Gyroscope/Gyroscope.h>
 ardadv::sensors::gyroscope::Gyroscope gyroscope;
+
+// The Magnetometer
+//
+#include <sensors/Magnetometer/Magnetometer.h>
+ardadv::sensors::magnetometer::Magnetometer magnetometer;
 
 // The servo pins
 //
@@ -44,10 +53,20 @@ void setup()
   Serial.begin(9600);
   Serial.flush();
 
+  // Setup the spi library
+  //
+  ::pinMode(SS, OUTPUT);
+  SPI.begin();
+
   // Initialize the Gyroscope
   //
   typedef ardadv::sensors::gyroscope::Gyroscope Gyroscope;
-  gyroscope.setup(Gyroscope::DRDY(6), Gyroscope::RESET(7), Gyroscope::CS(10));
+  gyroscope.setup(Gyroscope::DRDY(6), Gyroscope::RESET(7), Gyroscope::CS(5));
+
+  // Initialize the Magnetometer
+  //
+  typedef ardadv::sensors::magnetometer::Magnetometer Magnetometer;
+  magnetometer.setup(Magnetometer::DRDY(3), Magnetometer::RESET(2), Magnetometer::CS(4));
 
   // Set up the servo
   //
@@ -80,17 +99,35 @@ void loop()
   while (true)
   {
 
-    // Update the state
+    // Grab the time
+    //
+    const unsigned long t = millis();
+
+    // Update the gyroscope
     //
     gyroscope.update();
 
+    // Update the magnetometer
+    //
+    magnetometer.update();
+
+    // Convert the magnetometer heading
+    //
+    float heading = 0.0f;
+    if (magnetometer.isValid())
+    {
+      heading = ::atan2(magnetometer.y(), magnetometer.x()) * 180.0f / 3.14159f;
+    }
+
     // Log debugging output
     //
-    ::Serial.print(millis());
+    ::Serial.print(t);
     ::Serial.print(",");
     ::Serial.print(angle);
     ::Serial.print(",");
-    ::Serial.println(gyroscope.z(), DEC);
+    ::Serial.print(gyroscope.z(), DEC);
+    ::Serial.print(",");
+    ::Serial.println(heading, DEC);
     ::Serial.flush();
 
     // Adjust the pattern if we are at an end
