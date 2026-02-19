@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pennygame"
+version = "0.1.0"
+description = "A starter project for the Penny Game."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Mark-r-Stevens" }
+]
+dependencies = []
+
+[project.scripts]
+pennygame = "pennygame.game:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
